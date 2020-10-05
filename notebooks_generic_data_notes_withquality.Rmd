@@ -1,0 +1,77 @@
+---
+title: "Data cleaning notes for XXXX"
+author: "XXXX"
+output: html_document
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+```{r setup, include=FALSE}
+rm(list = ls())
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Set country
+```{r echo=FALSE}
+#  Set Country
+
+countries<-"sao_tome_e_principe"  # could also be a vector: c("country1","country2")
+print(paste("country = ",countries))
+```
+
+## Run cleaning functions
+
+```{r warning=FALSE, results=FALSE, message=FALSE}
+source("~/data-cleaning/notebooks/generic_run.R")
+
+for (country in countries) {
+  print(paste("**** Cleaning ", country, " ****", sep=""))
+  new_columns = cleaning_run(country)
+}
+
+```
+
+## List of Main Issues to Note
+1. No symptoms listed. 
+2. Date of symptom onset (patcourse_dateonset) is identical to the report_date, probably not real. I removed them to limit confusion (for now).
+3. New variable "Estado" was added (2020-07-10) that tells which patients recovered. 
+
+## New columns
+These columns are currently not considered by the country mapping but could be useful:
+```{r, echo=FALSE}
+
+new_columns
+
+```
+
+## Quality Control
+
+```{r, echo=FALSE}
+source("~/data-cleaning/notebooks/utils/generic_quality.R")
+ 
+clean<-as.data.frame(read.csv(paste("~/data-cleaning/data/cleanCSV/",country,"_clean.csv",sep=""),sep=";",stringsAsFactors = F))
+ 
+control_quality(clean)
+
+```
+
+## Variable Results Tables
+
+```{r,echo=FALSE}
+clean<-as.data.frame(read.csv(paste("~/data-cleaning/data/cleanCSV/",country,"_clean.csv",sep=""),sep=";"))
+
+for(var in 2:length(names(clean))){
+  print(names(clean)[var])
+  
+  print(paste("# of unique responses:", dim(table(as.factor(as.character(clean[,var])),useNA="always"))))
+  
+  ifelse(dim(table(as.factor(as.character(clean[,var])),useNA="always"))>50,
+  print(table(as.factor(as.character(clean[,var])),useNA="always")[1:50]),
+  print(table(as.factor(as.character(clean[,var])),useNA="always")))
+}
+```
+
+## Functions used to generate clean columns
+
+```{r, echo=FALSE}
+clean_columns
+```
