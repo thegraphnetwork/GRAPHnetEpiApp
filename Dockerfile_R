@@ -1,0 +1,15 @@
+FROM rocker/shiny-verse
+
+#update all packages
+RUN apt-get update
+
+#upgrade
+RUN apt-get upgrade -y
+
+#install additional packages
+RUN apt install gpg-agent -y unixodbc apt-utils curl
+
+
+
+#copy app to image
+COPY shinyapp/ /srv/shiny-server/second_app
