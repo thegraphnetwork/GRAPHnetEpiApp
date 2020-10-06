@@ -1,0 +1,28 @@
+version: "3.7"
+volumes:
+  pgdata:
+
+services:
+  r_container:
+    container_name: r_container
+    build:
+      context: "."
+      dockerfile: Dockerfile_R
+    ports:
+        - "3838:3838"
+    depends_on:
+      - postgresql
+
+  postgresql:
+    container_name: postgresql
+    build:
+      context: "."
+      dockerfile: "Dockerfile-postgis"
+    env_file:
+      - .env_db
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
