@@ -1,53 +1,24 @@
-Covid Dashboard from Renku team
+# The Graph Network Shiny App
 
-https://renkulab.shinyapps.io/COVID-19-Epidemic-Forecasting/_w_7786c661/_w_4e56a4c8/?tab=ecdc_pred&country=Sao%20Tome%20and%20Principe
+This application provides an interactive analytical COVID-19 dashboard for the African continent.
 
-Shiny Ressources
+## Deploying the App
+The application can be run locally or from Docker containers.
 
-https://docs.rstudio.com/shinyapps.io/
+to start the containers, you need to have docker and docker-compose installed and run the following commands:
 
-https://info201-s17.github.io/book/shiny.html
+```bash
+docker-compose build
+```  
 
-https://rstudio.github.io/shinydashboard/
+after the containers are built they can be started with
 
-https://github.com/grabear/awesome-rshiny/blob/master/README.md
+```bash
+docker-compose up -d
+```
 
-Downloading Reports
+To stop the containers you can
 
-https://shiny.rstudio.com/articles/generating-reports.html
-
-Data vizualisation
-
-https://github.com/d3/d3/wiki/Gallery
-
-https://www.ae.be/blog-en/combining-the-power-of-r-and-d3-js/
-
-https://plotly.com/r/
-
-https://github.com/ropensci/plotly
-
-https://rstudio.github.io/leaflet/
-
-
-
-Standalone App
-
-https://www.youtube.com/watch?v=ARrbbviGvjc
-
-https://github.com/wleepang/DesktopDeployR
-
-R in Electron
-
-https://github.com/ColumbusCollaboratory/electron-quick-start
-
-R in Vue
-
-Shiny Proxy
-
-https://www.shinyproxy.io/
-
-
-
-UI 
-
-https://github.com/dreamRs/esquisse
+```bash
+docker-compose down
+```

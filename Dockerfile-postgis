@@ -1,5 +1,5 @@
 FROM kartoza/postgis:12.0
 
-ADD postgres_setup/* /docker-entrypoint-initdb.d/
+ADD postgis_setup/* /docker-entrypoint-initdb.d/
 #ADD dev_dumps /dumps
 #ADD sql /docker-entrypoint-sql
