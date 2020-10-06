@@ -12,4 +12,4 @@ RUN apt install gpg-agent -y unixodbc apt-utils curl
 
 
 #copy app to image
-COPY shinyapp/ /srv/shiny-server/second_app
+COPY shinyapp/ /srv/shiny-server/shiny_app

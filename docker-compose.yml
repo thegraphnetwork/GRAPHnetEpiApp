@@ -1,13 +1,19 @@
 version: "3.7"
-services:
+volumes:
+  pgdata:
 
-  R-container:
-    container_name: R-container
-    dockerfile: Dockerfile_R
+services:
+  r_container:
+    container_name: r_container
+    build:
+      context: "."
+      dockerfile: Dockerfile_R
     ports:
         - "3838:3838"
+    depends_on:
+      - postgresql
 
-  Postgresql:
+  postgresql:
     container_name: postgresql
     build:
       context: "."
