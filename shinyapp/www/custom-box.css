@@ -1,0 +1,14 @@
+.custom-box:hover{
+	-moz-box-shadow: 0 0 10px #ccc;
+	-webkit-box-shadow: 0 0 10px #ccc;
+	box-shadow: 0 0 10px #ccc;
+	}
+
+.custom-box{
+	background-color:red;
+	cursor:pointer;
+	}
+
+.alertbox{
+	background-color:#F5F5F5;
+	}
