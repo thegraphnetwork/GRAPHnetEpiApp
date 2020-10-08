@@ -7,7 +7,51 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 #install additional packages
-RUN apt install gpg-agent -y unixodbc apt-utils curl
+RUN apt install gpg-agent -y unixodbc apt-utils curl \
+    tzdata \
+    libudunits2-dev \
+    libsodium-dev \
+    graphviz \
+    dirmngr \
+    gpg-agent \
+    nano \
+    vim \
+    gawk \
+    less \
+    libcurl4-openssl-dev \
+    libxml2-dev \
+    libjpeg-turbo8-dev \
+    gdal-bin \
+    proj-bin \
+    lbzip2 \
+    libfftw3-dev \
+    libgdal-dev \
+    libgeos-dev \
+    libgsl0-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    libhdf4-alt-dev \
+    libhdf5-dev \
+    libjq-dev \
+#    liblwgeom-dev \
+    libpq-dev \
+    libproj-dev \
+    libprotobuf-dev \
+    python3-dev\
+    libnetcdf-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    netcdf-bin \
+    protobuf-compiler \
+    sqlite3 \
+    tk-dev \
+    unixodbc-dev \
+    software-properties-common \
+    cron
+
+# install the R dependencies
+COPY install.R /tmp/
+RUN R -f /tmp/install.R
 
 
 
