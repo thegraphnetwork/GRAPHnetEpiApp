@@ -8,9 +8,7 @@
 #
 #############################################
 
-country <- "country_name"
-
-cleaning_run <- function(country) {
+function(country) {
   # This function runs all the necessary cleaning code for a given country (parameter)
   
     #############################################
@@ -24,24 +22,11 @@ cleaning_run <- function(country) {
     # Load Raw Data
     #############################################
 
-    #path_name <- paste0("~/data-cleaning/data/", country, "/")
-    #latest_report_date <- max(as.Date(gsub(".csv", "", gsub(paste0(country, "_"), "", list.files(path_name))), "%Y_%m_%d"), na.rm = T)
-    #(latest_report_date <- gsub("-", "_", as.character(latest_report_date)))
-    #file_name <- paste0(path_name, country, "_", latest_report_date, ".csv")
-    #raw <- as.data.frame(read_csv(file_name))
-    
-    
-  # If the file name has a date 
-    
-    library(glue)
-    
-    path_name <-  paste0("~/data-cleaning/data/", country, "/") 
-    
-    file_name <- list.files(path_name)
-    
-    raw <- read_csv(file = glue("{path_name}{file_name}"), na = "NA")
-    
-    raw <- as.data.frame(raw)
+    path_name <- paste0("~/data-cleaning/data/", country, "/")
+    latest_report_date <- max(as.Date(gsub(".csv", "", gsub(paste0(country, "_"), "", list.files(path_name))), "%Y_%m_%d"), na.rm = T)
+    (latest_report_date <- gsub("-", "_", as.character(latest_report_date)))
+    file_name <- paste0(path_name, country, "_", latest_report_date, ".csv")
+    raw <- as.data.frame(read_csv(file_name))
    
     # clean up raw column names 
     colnames(raw) <- trimws(colnames(raw), whitespace = "[ \t\r\n]")
@@ -140,31 +125,30 @@ cleaning_run <- function(country) {
     # Save raw & clean data to new csv files    #
     #############################################
     
-    latest_report_date <- "2020-07-21"
     # Save raw csv file for archiving
     (raw_csv_name <- paste0("~/data-cleaning/data/archive/", country, "_", latest_report_date, "_raw.csv"))
-    write.csv2(raw, raw_csv_name, row.names = F)
+    write.csv(raw, raw_csv_name, row.names = F)
     
     # Save clean csv file for archiving
     (clean_csv_archive_name <- paste0("~/data-cleaning/data/archive/", country, "_", latest_report_date, "_clean.csv"))
-    write.csv2(clean, clean_csv_archive_name, row.names = F)
+    write.csv(clean, clean_csv_archive_name, row.names = F)
     
     # Save clean csv file for further processing
     (clean_csv_name <- paste0("~/data-cleaning/data/cleanCSV/", country, "_clean.csv"))
-    write.csv2(clean, clean_csv_name, row.names = F)
+    write.csv(clean, clean_csv_name, row.names = F)
     
     #############################################
     
     # --------------------------------------
     # Report new columns
     
-    raw_filled <- raw[!sapply(raw, function(x) any(is.na(x)))] # only take the columns which are not completely null
-    new_columns <- colnames(raw_filled)[!((colnames(raw_filled) %in% columns_used) | (colnames(raw_filled) %in% columns_unused))]
+    # raw_filled <- raw[!sapply(raw, function(x) any(is.na(x)))] # only take the columns which are not completely null
+    # new_columns <- colnames(raw_filled)[!((colnames(raw_filled) %in% columns_used) | (colnames(raw_filled) %in% columns_unused))]
     # 
-     if(length(new_columns) == 0) {
-       new_columns <- "No new unused columns"
-       }
+    # if(length(new_columns) == 0) {
+    #   new_columns <- "No new unused columns"
+    #   }
     # 
-     return(new_columns)
+    # return(new_columns)
 
 }
