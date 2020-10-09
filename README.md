@@ -22,3 +22,10 @@ To stop the containers you can
 ```bash
 docker-compose down
 ```
+
+## To Know more
+### Working with containers
+* [Getting started with Docker](https://docs.docker.com/get-started/overview/)
+* [Overview of Docker Compose](https://docs.docker.com/compose/)
+* [Docker desktop ( for Mac and Windows users)](https://docs.docker.com/desktop/)
+* [Using Docker as Shiny server](https://github.com/rocker-org/shiny)

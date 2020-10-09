@@ -54,6 +54,5 @@ COPY install.R /tmp/
 RUN R -f /tmp/install.R
 
 
-
 #copy app to image
 COPY shinyapp/ /srv/shiny-server/shiny_app
