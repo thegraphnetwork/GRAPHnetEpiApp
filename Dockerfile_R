@@ -55,4 +55,7 @@ RUN R -f /tmp/install.R
 
 
 #copy app to image
-COPY shinyapp/ /srv/shiny-server/shiny_app
+COPY shinyapp/ /srv/shiny-server/shinyapp
+
+# Make all app files readable
+RUN chmod -R +r /srv/shiny-server/
