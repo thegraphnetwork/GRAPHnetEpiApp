@@ -37,7 +37,7 @@ RUN apt-get update && apt install gpg-agent -y unixodbc apt-utils curl \
     libpq-dev \
     libproj-dev \
     libprotobuf-dev \
-#    python3-dev\
+    python3-pip\
     libnetcdf-dev \
     libsqlite3-dev \
     libssl-dev \
