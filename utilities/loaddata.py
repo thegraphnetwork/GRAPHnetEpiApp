@@ -3,6 +3,7 @@
 Script for loading the CSVs into Postgre
 """
 import pandas as pd
+from pandas.errors import ParserError
 from sqlalchemy import create_engine
 
 import inquirer
@@ -35,8 +36,16 @@ def insert_into_db(pth):
     """
     csvs = glob.glob(os.path.join(pth,'*_clean.csv'))
     for csv in csvs:
-        print (f'loading {csv}')
-        df = pd.read_csv(csv)
+        print (f'loading {os.path.split(csv)[-1]}')
+        try:
+            df = pd.read_csv(csv, encoding='utf8')
+        except ParserError as e:
+            print(f"Problem parsing {os.path.split(csv)[-1]}")
+            print(e)
+        except UnicodeDecodeError as ue:
+            print(f"Encoding of {os.path.split(csv)[-1]} is not UTF-8")
+            print(ue)
+
 
 
 
