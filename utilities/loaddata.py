@@ -2,26 +2,45 @@
 """
 Script for loading the CSVs into Postgre
 """
-import ibis
+import pandas as pd
+from sqlalchemy import create_engine
+
 import inquirer
 import os
+import glob
 from dotenv import load_dotenv
 load_dotenv('../.env_db')
+PGUSER = os.getenv('POSTGRES_USER')
+PGPASS = os.getenv('POSTGRES_PASSWORD')
+PGHOST = 'localhost'
+PGDB = os.getenv('POSTGRES_DB')
 
-pg_con = ibis.postgres.connect(
-    user=os.getenv('SHINYAPP_SUPERUSER_USERNAME'),
-    password=os.getenv('SHINYAPP_SUPERUSER_PASSWORD'),
-    host='localhost',
-    port=5432,
-    database=os.getenv('SHINYAPP_DBNAME'),
-)
+# Create connection
+pg_con = create_engine(f"postgresql://{PGUSER}:{PGPASS}@{PGHOST}/{PGDB}")
+
 
 
 questions = [
     inquirer.Path('data_dir',
-                  message='Where are the clean CSVs located?',
+                  message="Enter directory where the clean CSVs located(don't forget the trailing '/')",
                   path_type=inquirer.Path.DIRECTORY,
                   ),
 ]
 
+def insert_into_db(pth):
+    """
+    Insert CSV files into database
+    :param pth: Path to directory containing the CSVs
+    :return:
+    """
+    csvs = glob.glob(os.path.join(pth,'*_clean.csv'))
+    for csv in csvs:
+        print (f'loading {csv}')
+        df = pd.read_csv(csv)
+
+
+
+
 answers = inquirer.prompt(questions)
+
+insert_into_db(answers['data_dir'])

@@ -2,3 +2,4 @@ ibis
 python-dotenv
 inquirer
 pandas
+sqlalchemy
