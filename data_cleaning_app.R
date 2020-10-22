@@ -5,11 +5,12 @@
 ##################
 
 # load libraries
-library(shiny)
-library(readr)
-library(rmarkdown)
 library(DT)
+library(readr)
 library(visdat)
+library(rmarkdown)
+library(visdat)
+library(shiny)
 
 # turn off scientific notation
 options(scipen = 999)
@@ -18,11 +19,12 @@ options(scipen = 999)
 rm(list = ls())
 
 # loading sources
-cleaning <- source("~/data-cleaning/scripts/generic_run_csv.R")$value
-quality <- source("~/data-cleaning/scripts/data_quality_report.R")$value
+cleaning <- source("generic_run_csv.R")$value
+quality <- source("data_quality_report.R")$value
 
 # create list of countries
-map_files <- list.files("~/data-cleaning/notebooks/maps/")
+
+map_files <- list.files("maps/")
 countries <- gsub(".R", "", gsub("map_", "", map_files[grep("map_", map_files)]))
 countries_names <- sort(toupper(gsub("_", " ", countries)))
 
@@ -99,7 +101,7 @@ server <- function(input, output, session) {
     
     # global reactive values
     df <- reactive({
-        df <- as.data.frame(read_csv(paste0("~/data-cleaning/data/cleanCSV/",
+        df <- as.data.frame(read_csv(paste0("../data-platform/data/cleanCSV/",
                                             tolower(gsub(" ", "_", input$country)),
                                             "_clean.csv")))
         df <- df[, !(names(df) %in% drops)]

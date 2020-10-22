@@ -1,5 +1,6 @@
 # Import packages:
 library(shiny)
+library(shinyWidgets)
 library(shinydashboard)
 library(shinythemes)
 library(shinycssloaders)
@@ -14,6 +15,8 @@ library(stringi)
 library(lubridate)
 library(yaml)
 library(RColorBrewer)
+
+options(shiny.maxRequestSize=1000*1024^2)
 
 contries_list <- c("All countries",
   "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire",

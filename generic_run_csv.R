@@ -22,10 +22,11 @@ function(country) {
     # Load Raw Data
     #############################################
 
-    path_name <- paste0("~/data-cleaning/data/", country, "/")
+    path_name <- paste0(country, "/") #paste0("~/data-cleaning/data/", country, "/")
     latest_report_date <- max(as.Date(gsub(".csv", "", gsub(paste0(country, "_"), "", list.files(path_name))), "%Y_%m_%d"), na.rm = T)
     (latest_report_date <- gsub("-", "_", as.character(latest_report_date)))
-    file_name <- paste0(path_name, country, "_", latest_report_date, ".csv")
+    file_name <- paste0(path_name, country, "_",
+                        latest_report_date, ".csv")
     raw <- as.data.frame(read_csv(file_name))
    
     # clean up raw column names 

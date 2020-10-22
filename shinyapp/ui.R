@@ -4,7 +4,10 @@ header <- dashboardHeader(title="WHO Dashboard", disable = T)
 sidebar <- dashboardSidebar(disable = TRUE)
 
 body <- dashboardBody(style = "background-color: #fcfcfc;",
+                      tags$link(rel = "stylesheet", type = "text/css", href = "custom-primary.css"),
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-box.css"), 
+                      tags$link(rel = "stylesheet", type = "text/css", href = "custom-style.css"), 
+                      tags$link(rel = "stylesheet", type = "text/css", href = "custom-progressbar.css"), 
                       fluidPage(shinyjs::useShinyjs(),
                                 tags$script(src = "plugins/scripts.js"),
                                 tags$head(
@@ -12,21 +15,22 @@ body <- dashboardBody(style = "background-color: #fcfcfc;",
                                               type = "text/css", 
                                               href = "plugins/font-awesome-4.7.0/css/font-awesome.min.css")
                                 ),
+                                div(
+                                    img(src = "images/who-logo.png", height = 100, width = 290),
+                                    hr()
+                                ),
                                 navbarPage(title = "WHO Dashboard", windowTitle = "Main", id = "navbar", selected = NULL,
-                                           fluid = T, collapsible=TRUE, position = "fixed-top",
-                                           theme = "style/style.css",
+                                           fluid = T, collapsible=TRUE, 
                                            footer = includeHTML("footer.html"),
                                            tabPanel(title = "Main",
-                                                    br(),
-                                                    br(),
+                                                    
                                                     fluidRow(
                                                         column(width=12,align="left",style='padding-left:30px;',
-                                                                    div(style="display:inline-block;vertical-align:bottom;",
-                                                                        br(),
-                                                                        uiOutput("select_country")
-                                                                    )
-                                                                  
-                                                    )
+                                                               div(style="display:inline-block;vertical-align:bottom;",
+                                                                   uiOutput("select_country")
+                                                               )
+                                                               
+                                                        )
                                                     ),
                                                     fluidRow(tags$div(class = "line",style="height: 5px;"),
                                                              column(width=12,align="center",
@@ -46,8 +50,8 @@ body <- dashboardBody(style = "background-color: #fcfcfc;",
                                                                     ),
                                                                     box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
                                                                         h1("Some info",
-                                                                            #textOutput("released"),
-                                                                            align = "center"),
+                                                                           #textOutput("released"),
+                                                                           align = "center"),
                                                                         tags$b(h4("Placeholder",align = "center")),
                                                                         p("-",style = "color: white")
                                                                     )
@@ -123,6 +127,35 @@ body <- dashboardBody(style = "background-color: #fcfcfc;",
                                                                     )
                                                              )
                                                     )
+                                           ),
+                                           tabPanel("Data",
+                                                    h2("Importing data",align="center"),
+                                                    
+                                                    #Importing data
+                                                    box(width=12,title="Main file",status="primary",
+                                                        solidHeader = TRUE, collapsible = F,
+                                                        column(width = 4,
+                                                               # Input: Select a file ----
+                                                               
+                                                               fileInput("file_data1", "Choose .CSV file", buttonLabel = "Import",
+                                                                         multiple = FALSE, placeholder = "Select a file",
+                                                                         accept = c("text/csv",
+                                                                                    "text/comma-separated-values,text/plain",
+                                                                                    ".csv",".xlsx")),
+                                                               
+                                                               checkboxInput("header", "Header", TRUE),
+                                                               #checkboxInput("preview", "Visualizar ao abrir", TRUE),
+                                                               
+                                                               uiOutput("clean_data")
+                                                        ),
+                                                        #municipal
+                                                        column(width = 8,
+                                                               tabsetPanel(id="view_data1",
+                                                                           tabPanel("Data",br(),
+                                                                                    DT::DTOutput('arq_data1_imported')),
+                                                                           tabPanel("Variables",column(width = 8,br(),
+                                                                                                       DT::DTOutput('var_data1'))))
+                                                        ))
                                            ),
                                            tabPanel("Downloads")
                                 )
