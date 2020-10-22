@@ -26,30 +26,46 @@ questions = [
                   message="Enter directory where the clean CSVs located(don't forget the trailing '/')",
                   path_type=inquirer.Path.DIRECTORY,
                   ),
+    inquirer.Text('table_name',
+                  message="Type the name of the table in which to insert the data",
+                  default='line_list'
+                  )
 ]
 
-def insert_into_db(pth):
+def load_csvs(pth):
     """
-    Insert CSV files into database
+    Generator that loads CSV files with pandas reporting any parsing error
     :param pth: Path to directory containing the CSVs
-    :return:
+    :return: DataFrame with the contents of the CSVs
     """
     csvs = glob.glob(os.path.join(pth,'*_clean.csv'))
     for csv in csvs:
-        print (f'loading {os.path.split(csv)[-1]}')
+        cname = os.path.split(csv)[-1]
+        print (f'loading {cname}')
         try:
             df = pd.read_csv(csv, encoding='utf8')
         except ParserError as e:
-            print(f"Problem parsing {os.path.split(csv)[-1]}")
+            print(f"Problem parsing {cname}")
             print(e)
         except UnicodeDecodeError as ue:
-            print(f"Encoding of {os.path.split(csv)[-1]} is not UTF-8")
+            print(f"Encoding of {cname} is not UTF-8")
             print(ue)
+        except Exception as oe:
+            print(f"Unclassified error when reading {cname}")
+            print(oe)
+        yield df
 
-
-
+def insert_into_db(csvg):
+    '''
+    Pulls dataframes from the load_csvs generator and attempts to insert
+    it into the database
+    :param csvg: Generator yieldind dataframes
+    :return:
+    '''
+    for df in csvg:
+        df.to_sql('line_list', con=pg_con, if_exists='append', index=False, method='multi')
 
 
 answers = inquirer.prompt(questions)
-
-insert_into_db(answers['data_dir'])
+csvgen = load_csvs(answers['data_dir'])
+insert_into_db(csvgen)

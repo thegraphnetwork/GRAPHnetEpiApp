@@ -13,6 +13,7 @@ CREATE TABLE country (
 
 -- Table: line_list
 CREATE TABLE line_list (
+id serial NOT NULL,
 patinfo_ID VARCHAR(50),
 report_date DATE,
 patinfo_first_name VARCHAR(50),
@@ -76,8 +77,8 @@ name_first VARCHAR(50),
 name_last VARCHAR(50),
 expo_visit_healthcare VARCHAR(50),
 lab_otherres VARCHAR(50),
-PRIMARY KEY (patinfo_ID),
 country_id INT
+CONSTRAINT line_list_pk PRIMARY KEY(id)
 );
 
 -- foreign keys
