@@ -77,17 +77,17 @@ name_first VARCHAR(50),
 name_last VARCHAR(50),
 expo_visit_healthcare VARCHAR(50),
 lab_otherres VARCHAR(50),
-country_id INT
+country_id INT,
 CONSTRAINT line_list_pk PRIMARY KEY(id)
 );
 
 -- foreign keys
 -- Reference: line_list_country (table: line_list)
-ALTER TABLE line_list ADD CONSTRAINT line_list_country
-    FOREIGN KEY (country_id)
-    REFERENCES country (id)
-    NOT DEFERRABLE
-    INITIALLY IMMEDIATE
-;
+-- ALTER TABLE line_list ADD CONSTRAINT line_list_country
+--     FOREIGN KEY (country_id)
+--     REFERENCES country (id)
+--     NOT DEFERRABLE
+--     INITIALLY IMMEDIATE
+-- ;
 
 -- End of file.
