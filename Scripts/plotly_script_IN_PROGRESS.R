@@ -12,30 +12,15 @@ library(pacman) # installs and/or loads everything
 # NOTE TO MYSELF: CHECK WHICH WILL BE MAINTAINED IN THE END
 p_load(char = c("lubridate", # for date manipulation
                 "MMWRweek", # for epiweek manipulation
-                "knitr", # for kniting this markdown
                 "sf", "rnaturalearth", # for map creation
                 "zoo", # for rolling averages (e.g. 7 day rolling average)
-                "ggnewscale", # for calibrating multiple scales
-                "ggrepel", # avoiding overlap on geom_text and geom_label aesthetics
-                "viridis", # palettes
-                "pander", # for generating tables that output to both pdf and docx
-                "kableExtra", # for some tables. Only outputs to pdf
-                "visdat", # for visualizing data frames
                 "janitor", # for some handy cleaning functions not in tidyverse
-                "formattable", "flextable", # for pretty tables
-                "webshot", "htmltools", "magick", # for taking screenshots of pretty tables
-                "see", "htmlwidgets", 
                 "treemapify", # for ggplot treemaps
-                "grid", "gridExtra", "ggpubr", # for grids
-                "png", # for importing PNGs as rasters
-                "ggspatial", # to add cross, scale-bar and other important annotations in maps
                 "raster", # to succesfully import and extract population from the raster file
                 "rgdal", # for several spatial functions
-                "ggcharts", 
                 "RColorBrewer", # for palettes
-                "ggforce", # for automatic facetting in facet plots
-                "ggridges",
-                "plotly",
+                "leaflet", # for interactive maps
+                "plotly", # for interactive plots
                 "tidyverse"), # for everything, comes at the end to prevent masking of crucial functions
        update = FALSE)
 
@@ -430,25 +415,40 @@ centroids_df <- data.frame(coordinates(africa_map)) %>%
 # Inserting centroids into continental map
 africa_union <- cbind(africa_map, centroids_df)
 
-# Importing 
-asia_map <- ne_countries(continent = "asia", returnclass = "sf") %>% 
-  mutate(iso_code = adm0_a3_is) %>% 
-  st_set_crs(4326)  
-
-europe_map <- ne_countries(continent = "europe", returnclass = "sf") %>% 
-  mutate(iso_code = adm0_a3_is) %>% 
-  st_set_crs(4326)  
-
 # join africa geoms with the COVID info about countries
 africa_map <- africa_union %>% 
-  st_as_sf() %>%
+  st_as_sf() %>% 
+  st_set_crs(4326) %>%
   mutate(name_long = case_when(name_long == "Cape Verde" ~ "Cabo Verde",
                                TRUE ~ name_long)) %>%
   rename(Country = name_long) %>%
   left_join(all_country_tab, by = "Country")
 
-# find the centroid of each country
-africa_points <- cbind(africa_map, st_coordinates(st_centroid(africa_map$geometry)))
+# Inserting breaks for choropleth maps
+africa_map <- africa_map %>%
+  mutate(cases_quintile = cut(Cases, 
+                              quantile(africa_map$Cases, 
+                                       probs = seq(0, 1, length.out = 6), na.rm = TRUE), 
+                              include.lowest = TRUE),
+         deaths_quintile = cut(Deaths, 
+                               quantile(africa_map$Deaths, 
+                                        probs = seq(0, 1, length.out = 6), na.rm = TRUE), 
+                               include.lowest = TRUE),
+         cases_per_m_quintile = cut(`Cases per million`, 
+                                    quantile(africa_map$`Cases per million`, 
+                                             probs = seq(0, 1, length.out = 6), na.rm = TRUE), 
+                                    include.lowest = TRUE),
+         deaths_per_m_quintile = cut(`Deaths per million`, 
+                                     quantile(africa_map$`Deaths per million`, 
+                                              probs = seq(0, 1, length.out = 6), na.rm = TRUE), 
+                                     include.lowest = TRUE))
+
+# creating palletes for variables
+pallete.cases <- colorFactor(palette = "YlOrRd", africa_map$cases_quintile)
+pallete.deaths <- colorFactor(palette = "YlOrRd", africa_map$deaths_quintile)
+pallete.cases_per_m <- colorFactor(palette = "YlOrRd", africa_map$cases_per_m_quintile)
+pallete.deaths_per_m <- colorFactor(palette = "YlOrRd", africa_map$deaths_per_m_quintile)
+
 
 
 ##########################################################################
@@ -684,7 +684,6 @@ plot_ly(growth_rate_tab, x = ~Reporting_Date) %>%
 
 
 
-
 ################################################################
 ##                                                            ##
 ##      REGIONAL CASE and DEATH PER MILLION COMPARISONS       ##
@@ -730,3 +729,86 @@ plot_ly(df_regional_comparison, x = ~Reporting_Date, y = ~Cases_per_million,
     )
   )
 
+
+
+######################################################
+##                                                  ##
+##      Map of cumulative cases continent-wide      ##
+##                                                  ##
+######################################################
+
+# interactive map for continental Africa
+leaflet(africa_map) %>%
+  addTiles() %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+              opacity = 1.0, fillOpacity = 0.75,
+              fillColor = ~pallete.cases_per_m(cases_per_m_quintile),
+              highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                  bringToFront = TRUE),
+              popup = ~paste0("<b>", "Country: ", "</b>", name, "<br>",
+                              "<b>", "Region: ", "</b>", Region, "<br>",
+                              "<b>", "Cases: ", "</b>", format(Cases,
+                                                               decimal.mark = ".",
+                                                               big.mark = ","), "<br>",
+                              "<b>", "Deaths: ", "</b>", format(Deaths,
+                                                                decimal.mark = ".",
+                                                                big.mark = ","), "<br>",
+                              "<b>", "Cases per million: ", "</b>", format(round(`Cases per million`, 2),
+                                                                           decimal.mark = ".",
+                                                                           big.mark = ","), "<br>",
+                              "<b>", "Deaths per million: ", "</b>", format(round(`Deaths per million`, 2), 
+                                                                            decimal.mark = ".", 
+                                                                            big.mark = ","), "<br>")) %>%  
+  addLegend("bottomright", 
+            pal = pallete.cases_per_m,
+            values = ~cases_per_m_quintile,
+            title = ~paste0("Confirmed COVID-19 cases per million"),
+            opacity = 1) %>% 
+  addLayersControl(
+    baseGroups = c("Map", "Satellite"),
+    options = layersControlOptions(collapsed = TRUE)
+    )
+
+
+
+######################################################
+##                                                  ##
+##      Map of cumulative deaths continent-wide     ##
+##                                                  ##
+######################################################
+
+# interactive map for continental Africa
+leaflet(africa_map) %>%
+  addTiles() %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+              opacity = 1.0, fillOpacity = 0.75,
+              fillColor = ~pallete.deaths_per_m(deaths_per_m_quintile),
+              highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                  bringToFront = TRUE),
+              popup = ~paste0("<b>", "Country: ", "</b>", name, "<br>",
+                              "<b>", "Region: ", "</b>", Region, "<br>",
+                              "<b>", "Cases: ", "</b>", format(Cases,
+                                                               decimal.mark = ".",
+                                                               big.mark = ","), "<br>",
+                              "<b>", "Deaths: ", "</b>", format(Deaths,
+                                                                decimal.mark = ".",
+                                                                big.mark = ","), "<br>",
+                              "<b>", "Cases per million: ", "</b>", format(round(`Cases per million`, 2),
+                                                                           decimal.mark = ".",
+                                                                           big.mark = ","), "<br>",
+                              "<b>", "Deaths per million: ", "</b>", format(round(`Deaths per million`, 2), 
+                                                                            decimal.mark = ".", 
+                                                                            big.mark = ","), "<br>")) %>%  
+  addLegend("bottomright", 
+            pal = pallete.deaths_per_m,
+            values = ~deaths_per_m_quintile,
+            title = ~paste0("COVID-19 deaths per million"),
+            opacity = 1) %>% 
+  addLayersControl(
+    baseGroups = c("Map", "Satellite"),
+    options = layersControlOptions(collapsed = TRUE)
+  )
