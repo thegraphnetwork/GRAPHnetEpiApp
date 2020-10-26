@@ -10,6 +10,7 @@ library(readr)
 library(rmarkdown)
 library(DT)
 library(visdat)
+library(dplyr)
 
 # turn off scientific notation
 options(scipen = 999)
@@ -18,13 +19,17 @@ options(scipen = 999)
 rm(list = ls())
 
 # loading sources
-cleaning <- source("~/data-cleaning/scripts/generic_run_csv.R")$value
-quality <- source("~/data-cleaning/scripts/data_quality_report.R")$value
+#cleaning <- source(here::here("Scripts", "generic_run_csv.R"), local = T)#$value
+#quality <- source(here::here("Scripts", "data_quality_report.R"))$value
+map <- source(here::here("Scripts", "map_kenya.R"), local = T)$value
+anonym <- source(here:here("Scripts", "anonymisation.R"), local = T)$value
 
 # create list of countries
-map_files <- list.files("~/data-cleaning/notebooks/maps/")
-countries <- gsub(".R", "", gsub("map_", "", map_files[grep("map_", map_files)]))
-countries_names <- sort(toupper(gsub("_", " ", countries)))
+map_files <- list.files(here::here("scripts"))
+countries <- tools::file_path_sans_ext(stringr::str_remove_all(map_files[grepl("map_", map_files)], "map_"))
+#countries <- gsub(".R", "", gsub("map_", "", map_files[grep("map_", map_files)]))
+#countries_names <- sort(toupper(gsub("_", " ", countries)))
+countries_names <- sort(toupper(countries))
 
 # remove specific empty columns
 drops <- c("patinfo_first_name",
@@ -96,13 +101,14 @@ ui <- fluidPage(
 
 # define server logic
 server <- function(input, output, session) {
+   
+    # Anonimyzation of the datasets and storage of data 
+    anonyms <- observe({anonym(tolower(input$country))})
+    
     
     # global reactive values
-    df <- reactive({
-        df <- as.data.frame(read_csv(paste0("~/data-cleaning/data/cleanCSV/",
-                                            tolower(gsub(" ", "_", input$country)),
-                                            "_clean.csv")))
-        df <- df[, !(names(df) %in% drops)]
+    df <- reactive({df <- as.data.frame(read_csv(here::here("data/CleanCSV", glue::glue("{input$country}_clean.csv")))) %>%
+        select(-drops)
     })
     
     num_cols <- reactive({
@@ -114,6 +120,7 @@ server <- function(input, output, session) {
         toupper(gsub("_", " ", input$country))
     })
     
+    # Needs to be adapted
     observe({
         file1 = input$file1
         if (is.null(file1)) {
@@ -132,7 +139,7 @@ server <- function(input, output, session) {
         
         cleaning_reactive <- reactiveValues()
         country <- tolower(gsub(" ", "_", input$country))
-        cleaning_reactive$cleaning_out <- cleaning(country)
+        cleaning_reactive$cleaning_out <- cleaning_run(input$country)
         showModal(modalDialog(paste0("Cleaning for ", input$country, " done!")))
         })
     

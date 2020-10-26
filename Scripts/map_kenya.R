@@ -14,7 +14,7 @@
 
 # Load utility functions
 library(here)
-source(here("notebooks/utils","utils.R"))
+source(here("Scripts","utils.R"))
 
 
 # --------------------------------------
@@ -27,7 +27,7 @@ columns_used = list()
 # map variables 
 
 clean_columns[['patinfo_ID']] = function(df) toupper(as.character(df[, "Case ID"]))
-columns_used = append(columns_used,"patinfo_ID")
+columns_used = append(columns_used,"Case ID")
 # Anonymized patient ID, convert to character string (some countries include letters in the ID)
 
 #clean_columns[['report_date']] = function(df) as.Date(df[,'report_date'], '%Y-%m-%d')
@@ -40,7 +40,7 @@ clean_columns[['name_last']] = keep_empty
 
 clean_columns[['patinfo_ageonset_years']] = function(df){
   cleaned <- dplyr::case_when(
-  
+    
     nchar(df[,"Age (Years)"]) > 4 ~ "0",
     nchar(df[,"Age (Years)"]) <= 2 ~ as.character(df[,"Age (Years)"]),
     TRUE ~ NA_character_)
@@ -342,8 +342,8 @@ clean_columns[['patcourse_presHCF']] = function(df) {
          "self isolation", "Self Isolation", "Yes", "6684806", "Self-isolated")
   cleaned <- ifelse(df[,"DateAdmission"] %in% x, NA_character_, as.character(df[,"DateAdmission"]))
   cleaned2 <- dplyr::case_when(nchar(cleaned) == 5 ~ lubridate::as_date(as.numeric(cleaned), origin = "1899-12-30"), 
-  nchar(cleaned)  > 5 ~ lubridate::dmy(cleaned),
-  TRUE ~ NA_real_)
+                               nchar(cleaned)  > 5 ~ lubridate::dmy(cleaned),
+                               TRUE ~ NA_real_)
   return(cleaned2)
 }  
 columns_used = append(columns_used,"DateAdmission")
@@ -545,7 +545,7 @@ columns_used = append(columns_used,"Lab results")
 clean_columns[['Lab_resdate']] = function(df) {
   
   return(lubridate::ymd(df[,'Date of lab confirmation']))
-  }
+}
 columns_used = append(columns_used,"Date of lab confirmation")
 # Date when COVID19 Lab result was returned, character, YYYY-MM-DD
 
@@ -581,7 +581,7 @@ columns_unused = list()
 
 # You can use the following line of code to produce the list of intentionally unused columns
 # given that you have a raw dataframe of which you already use all columns you want:
- colnames(df)[!colnames(df) %in% columns_used]
+colnames(df)[!colnames(df) %in% columns_used]
 # BUT THIS HAS TO BE HARDCODED the unused columns!
 # the following code puts this list in a format you can copy to hardcode above:
 cat(paste(paste0('"', colnames(df)[!colnames(df) %in% columns_used], '"'), collapse = ", "), "\n")
