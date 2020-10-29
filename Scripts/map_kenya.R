@@ -238,24 +238,24 @@ clean_columns[['patinfo_resadmin3']] = function(df){
 columns_used = append(columns_used,"Sub county")
 # Place of residence admin level 3 (Health Zone/Town), factor
 
-clean_columns[['patinfo_resadmin4']] = function(df){
-  no_name <- c("N/A", "N", "No Data", "No data", "Not indicated",
-               "HARDEEP@FWWL.COM")
-  ifelse(df[,"Village/Estate"] %in% no_name, NA_character_, toupper(df[,"Village/Estate"]))
-}
+#clean_columns[['patinfo_resadmin4']] = function(df){
+#  no_name <- c("N/A", "N", "No Data", "No data", "Not indicated",
+#               "HARDEEP@FWWL.COM")
+#  ifelse(df[,"Village/Estate"] %in% no_name, NA_character_, toupper(df[,"Village/Estate"]))
+#}
 
-columns_used = append(columns_used,"Village/Estate")
+#columns_used = append(columns_used,"Village/Estate")
 # Place of residence admin level 4 (Village), factor
 
-clean_columns[['report_orginst']] = function(df){
-  no_name <- c("no", "No", "NO", "No Data", "18/07/2020", "DEAD", 
-               "Died at home", "Died at Home", "died on the way to hospital",
-               "Discharged", "In quarantine", "n", "N", "n/a", "N/A", "Outspan isolation", "paedetrician",
-               "Sef Isolation", "self isolating", "self isolation", 
-               "self Isolation", "Self isolation", "Self Isolation", "YES")
-  ifelse(df[,"Health facility Name"] %in% no_name, NA_character_, toupper(df[,"Health facility Name"]))
+#clean_columns[['report_orginst']] = function(df){
+#  no_name <- c("no", "No", "NO", "No Data", "18/07/2020", "DEAD", 
+#               "Died at home", "Died at Home", "died on the way to hospital",
+#               "Discharged", "In quarantine", "n", "N", "n/a", "N/A", "Outspan isolation", "paedetrician",
+#               "Sef Isolation", "self isolating", "self isolation", 
+#               "self Isolation", "Self isolation", "Self Isolation", "YES")
+#  ifelse(df[,"Health facility Name"] %in% no_name, NA_character_, toupper(df[,"Health facility Name"]))
   
-}
+#}
 columns_used = append(columns_used,"Health facility Name")
 # Reporting health facility/institution, factor
 

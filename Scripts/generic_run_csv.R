@@ -7,7 +7,7 @@
 #   Generic cleaning code
 #
 #############################################
-country<-"kenya" # May be added as a reactive 
+#country<-"kenya" # May be added as a reactive 
 
 #latest_report_date <- "2020_07_29"
 
@@ -18,6 +18,8 @@ cleaning_run <- function(country) {
   #############################################
   # Load Libraries ############################
   #############################################
+  country <- tolower(country)
+  
   
   library(readr)
   library(DescTools)
@@ -36,7 +38,7 @@ cleaning_run <- function(country) {
   
   #file <- list.files(path_name)
   
-  raw <- as.data.frame(read_csv(here("data/anonymized", "kenya.csv")))
+  raw <- as.data.frame(read_csv(here("data/anonymized", glue::glue("{country}.csv"))))
   
   # clean up raw column names 
   colnames(raw) <- trimws(colnames(raw), whitespace = "[ \t\r\n]")
@@ -146,7 +148,7 @@ cleaning_run <- function(country) {
   
   # Save clean csv file for further processing
   #(clean_csv_name <- here("data/cleanCSV", glue::glue("{country}_clean.csv")))
-  write.csv2(clean,here::here("data/CleanCSV", glue::glue("{country}_clean.csv")),row.names = F)  # write.csv2 defaults to sep = ";"
+  write.csv(clean,here::here("data/CleanCSV", glue::glue("{country}_clean.csv")),row.names = F)  # write.csv2 defaults to sep = ";"
   
   return(clean)
   #############################################

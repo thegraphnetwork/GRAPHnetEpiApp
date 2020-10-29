@@ -3,6 +3,8 @@ anonym <- function(country){
 library(readxl)
 library(readr)
 library(dplyr)
+  
+country <- tolower(country)
 # current date in proper format for anonymised file name
 curdate_strg <- gsub("-", "_", as.character(Sys.Date()))
 

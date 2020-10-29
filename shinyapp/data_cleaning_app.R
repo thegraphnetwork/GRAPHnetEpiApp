@@ -19,10 +19,9 @@ options(scipen = 999)
 rm(list = ls())
 
 # loading sources
-#cleaning <- source(here::here("Scripts", "generic_run_csv.R"), local = T)#$value
+cleaning <- source(here::here("Scripts", "generic_run_csv.R"), local = T)$value
 #quality <- source(here::here("Scripts", "data_quality_report.R"))$value
-map <- source(here::here("Scripts", "map_kenya.R"), local = T)$value
-anonym <- source(here:here("Scripts", "anonymisation.R"), local = T)$value
+anonym <- source(here::here("Scripts", "anonymisation.R"), local = T)$value
 
 # create list of countries
 map_files <- list.files(here::here("scripts"))
@@ -101,13 +100,17 @@ ui <- fluidPage(
 
 # define server logic
 server <- function(input, output, session) {
+    
+    
    
     # Anonimyzation of the datasets and storage of data 
-    anonyms <- observe({anonym(tolower(input$country))})
+     observe({
+         req(input$country)
+         anonym(tolower(input$country))}) # May consider adding an action button to trigger anonimization
     
     
     # global reactive values
-    df <- reactive({df <- as.data.frame(read_csv(here::here("data/CleanCSV", glue::glue("{input$country}_clean.csv")))) %>%
+    df <- reactive({df <- as.data.frame(read_csv(here::here("data/CleanCSV", glue::glue("{tolower(input$country)}_clean.csv")))) %>%
         select(-drops)
     })
     
@@ -204,7 +207,7 @@ server <- function(input, output, session) {
     
     output$report <- downloadHandler(
         # For PDF output, change this to "report.pdf"
-        filename = "report.doc",
+        filename = "report.docx", # We may consider a UI here
         content = function(file) {
             # Copy the report file to a temporary directory before processing it, in
             # case we don't have write permissions to the current working dir (which
