@@ -32,107 +32,108 @@ body <- dashboardBody(style = "background-color: #fcfcfc;",
                                                                
                                                         )
                                                     ),
-                                                    fluidRow(tags$div(class = "line",style="height: 5px;"),
-                                                             column(width=12,align="center",
-                                                                    #br(),
-                                                                    box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1(textOutput("confirmedCases"),
-                                                                           align = "center"),
-                                                                        tags$b(h4("Confirmed cases",align = "center")),
-                                                                        p(textOutput("newCases"),
-                                                                          align = "center")
-                                                                    ),
-                                                                    box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1(textOutput("Deaths"),
-                                                                           align = "center"),
-                                                                        tags$b(h4("Deaths",align = "center")),
-                                                                        p(textOutput("newDeaths"))
-                                                                    ),
-                                                                    box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1("Some info",
-                                                                           #textOutput("released"),
-                                                                           align = "center"),
-                                                                        tags$b(h4("Placeholder",align = "center")),
-                                                                        p("-",style = "color: white")
-                                                                    )
-                                                             ),
-                                                             column(width = 12,
-                                                                    br(),
-                                                                    box(width = 6, height = "600px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        tabsetPanel(
-                                                                            tabPanel(title = "Charts",
-                                                                                     h1("We can fit a time series here",
-                                                                                        #textOutput("plot_series_title"),
-                                                                                        align = "center")
-                                                                                     #,plotlyOutput('plot_serie')
-                                                                            ),
-                                                                            tabPanel(title = "Table",
-                                                                                     h1("We can fit a table here",
-                                                                                        #textOutput("tabela_municipios_title"),
-                                                                                        align = "center")
-                                                                                     #,dataTableOutput('tabela_municipios')
-                                                                            )
-                                                                        )
-                                                                    ),
-                                                                    
-                                                                    
-                                                                    box(width = 6, height = "600px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        leafletOutput("map",height = "580px")
-                                                                    )
-                                                                    
-                                                             ),
-                                                             column(width = 12,
-                                                                    hr(),
-                                                                    br(),
-                                                                    box(width = 6, height = "700px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1("Cases by district",align = "center")
-                                                                        #,plotlyOutput("ranking_plot_Unidade", height = "600px")
-                                                                    ),
-                                                                    box(width = 6, height = "700px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1("Some statistics here",align = "center")
-                                                                        #,plotlyOutput("ranking_plot_infeccao", height = "600px")
-                                                                    )
-                                                                    
-                                                             ),
-                                                             column(width = 12,
-                                                                    hr(),
-                                                                    br(),
-                                                                    box(width = 12,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1("Profile",align = "center"),
-                                                                        tabsetPanel(
-                                                                            tabPanel(title = "Infected",
-                                                                                     br(),
-                                                                                     box(width = 4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                                         h2("Sex",align = "center")
-                                                                                         #,plotlyOutput("donnut_sex")
-                                                                                     ),
-                                                                                     box(width = 4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                                         h2("Color skin",align = "center")
-                                                                                         #,plotlyOutput("donnut_race")
-                                                                                     ),
-                                                                                     box(width = 4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                                         h2("Age",align = "center")
-                                                                                         #,plotlyOutput("histogram_age")
-                                                                                     )
-                                                                            )
-                                                                        )
-                                                                    )
-                                                             ),
-                                                             column(width = 12,
-                                                                    hr(),
-                                                                    br(),
-                                                                    box(width = 12,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                        h1("Quantitative",align = "center")
-                                                                        #,dataTableOutput("table_1")
-                                                                    )
-                                                             )
+                                                    fluidRow(
+                                                        tags$div(class = "line",style="height: 5px;"),
+                                                        # column(width=12,align="center",
+                                                        #        #br(),
+                                                        #        box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                        #            h1(textOutput("confirmedCases"),
+                                                        #               align = "center"),
+                                                        #            tags$b(h4("Confirmed cases",align = "center")),
+                                                        #            p(textOutput("newCases"),
+                                                        #              align = "center")
+                                                        #        ),
+                                                        #        box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                        #            h1(textOutput("Deaths"),
+                                                        #               align = "center"),
+                                                        #            tags$b(h4("Deaths",align = "center")),
+                                                        #            p(textOutput("newDeaths"))
+                                                        #        ),
+                                                        #        box(width=4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                        #            h1("Some info",
+                                                        #               #textOutput("released"),
+                                                        #               align = "center"),
+                                                        #            tags$b(h4("Placeholder",align = "center")),
+                                                        #            p("-",style = "color: white")
+                                                        #        )
+                                                        # ),
+                                                        column(width = 12,
+                                                               br(),
+                                                               box(width = 6, height = "600px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   tabsetPanel(
+                                                                       tabPanel(title = "Charts",
+                                                                                h1("We can fit a time series here",
+                                                                                   #textOutput("plot_series_title"),
+                                                                                   align = "center")
+                                                                                #,plotlyOutput('plot_serie')
+                                                                       ),
+                                                                       tabPanel(title = "Table",
+                                                                                h1("We can fit a table here",
+                                                                                   #textOutput("tabela_municipios_title"),
+                                                                                   align = "center")
+                                                                                #,dataTableOutput('tabela_municipios')
+                                                                       )
+                                                                   )
+                                                               ),
+                                                               
+                                                               
+                                                               box(width = 6, height = "600px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   leafletOutput("map",height = "580px")
+                                                               )
+                                                               
+                                                        ),
+                                                        column(width = 12,
+                                                               hr(),
+                                                               br(),
+                                                               box(width = 6, height = "700px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h1("Cases by district",align = "center")
+                                                                   #,plotlyOutput("ranking_plot_Unidade", height = "600px")
+                                                               ),
+                                                               box(width = 6, height = "700px", id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h1("Some statistics here",align = "center")
+                                                                   #,plotlyOutput("ranking_plot_infeccao", height = "600px")
+                                                               )
+                                                               
+                                                        ),
+                                                        column(width = 12,
+                                                               hr(),
+                                                               br(),
+                                                               box(width = 12,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h1("Profile",align = "center"),
+                                                                   tabsetPanel(
+                                                                       tabPanel(title = "Infected",
+                                                                                br(),
+                                                                                box(width = 4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                                    h2("Sex",align = "center")
+                                                                                    #,plotlyOutput("donnut_sex")
+                                                                                ),
+                                                                                box(width = 4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                                    h2("Color skin",align = "center")
+                                                                                    #,plotlyOutput("donnut_race")
+                                                                                ),
+                                                                                box(width = 4,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                                    h2("Age",align = "center")
+                                                                                    #,plotlyOutput("histogram_age")
+                                                                                )
+                                                                       )
+                                                                   )
+                                                               )
+                                                        ),
+                                                        column(width = 12,
+                                                               hr(),
+                                                               br(),
+                                                               box(width = 12,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h1("Quantitative",align = "center")
+                                                                   #,dataTableOutput("table_1")
+                                                               )
+                                                        )
                                                     )
                                            ),
                                            tabPanel("Data",
                                                     h2("Importing data",align="center"),
                                                     
                                                     #Importing data
-                                                    box(width=12,title="Main file",status="primary",
+                                                    box(width=12, title="Main file", status="primary",
                                                         solidHeader = TRUE, collapsible = F,
                                                         column(width = 4,
                                                                # Input: Select a file ----
@@ -155,7 +156,20 @@ body <- dashboardBody(style = "background-color: #fcfcfc;",
                                                                                     DT::DTOutput('arq_data1_imported')),
                                                                            tabPanel("Variables",column(width = 8,br(),
                                                                                                        DT::DTOutput('var_data1'))))
-                                                        ))
+                                                        )),
+                                                    
+                                                    #Importing GPKG files
+                                                    box(width=12, title="GPKG file", status="primary",
+                                                        solidHeader = TRUE, collapsible = F,
+                                                        column(width = 4,
+                                                               # Input: Select a file ----
+                                                               
+                                                               fileInput("file_data2", "Choose .GPKG file", buttonLabel = "Import",
+                                                                         multiple = FALSE, placeholder = "Select a file",
+                                                                         accept = c(".gpkg")),
+                                                               uiOutput("combine_data")
+                                                        )
+                                                    )
                                            ),
                                            tabPanel("Downloads")
                                 )
