@@ -1,0 +1,27 @@
+﻿Variable Name,Description,Data Type
+Country,Country Name,String
+ISO_Code,3 Character ISO Abreviation,String
+ADM1_PCODE,Admin 1 ID from Humanitarian Data Exchange,String
+Region,Admin 1 Name,String
+EP_0t9,Percent of the Population between the ages of 0 and 9,Float
+EP_10t19,Percent of the Population between the ages of 10 and 19,Float
+EP_20t29,Percent of the Population between the ages of 20 and 29,Float
+EP_30t39,Percent of the Population between the ages of 30 and 39,Float
+EP_40t49,Percent of the Population between the ages of 40 and 49,Float
+EP_50t59,Percent of the Population between the ages of 50 and 59,Float
+EP_60t69,Percent of the Population between the ages of 60 and 69,Float
+EP_60t69,Percent of the Population between the ages of 70 and 79,Float
+EP_80P,Percent of the Population over the age of 80,Float
+EP_BPL,Percent of the Population with an International Wealth Index score below 35,Float
+EP_Cancer,Percentage of the Population with Cancer,Float
+EP_HyTen,Percent of the Population with Hypertension,Float
+EP_ISD,Percentage of the Population with Ischemic Heart Disease,Float
+EP_Diab,Percentage of the Population with Diabetes,Float
+EP_COPD,Percent of the Population with Chronic Obstructive Pulmonary Disease,Float
+EP_Male,Percent of the Population that is Male,Float
+EP_Female,Percent of the Population that is Female,Float
+Gt35K_RTO,Percent of the population (in decimal format) of the population that is further than 35km from a medical facility,Float
+MRI_RIDX,Raw Mortality Risk Index Calculation before factoring in distance from medical facility,Float
+MRI_RIDX2,Raw Mortality Risk Index Calculation including distance from medical facility,Float
+MRI_IDX,Normalized Mortality Risk Index including distance from medical facility between 0 and 100 based on the maximum and minimum raw value.,Float
+Area_PCT,Can Ignore this Field,Float
