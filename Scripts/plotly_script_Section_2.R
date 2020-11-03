@@ -62,33 +62,9 @@ clean_csv_path = paste0(in_path, "cleanCSV/")
 ##                    ##
 ########################
 
-# Creating a palette of colors for visual identity
-my_palette <- c("#56bfa3", "#f79f57" ,"#7570B3","#56B4E9",  # greenblue, lightorange, purplepastel, lightblue
-                "#3758a6" , "#CC79A7" , "#91142c", "#7abcd6", # darkblue, pinkpurple, wine, teal
-                "#a3b0c4", "#870476", "#479444", "#3cd6d6" ) # grey, royalpurple, darkgreen, cyan
-
-# Setting a theme for all graphs for visual identity
-my_theme <- theme_classic() +
-  theme(text = element_text(color = "gray20", size = 12.5),
-        rect = element_blank(), # transparent background
-        plot.title = (element_text(face = "bold", hjust = 0.5, size = 11)),
-        plot.subtitle = (element_text( hjust = 0.5, size = 8, color = alpha("black", 0.7))),
-        plot.caption = element_text(size = 6.5, color = "gray50", hjust = 1),
-        legend.position = "bottom",
-        legend.text = element_text(size = 8),
-        legend.key.size = unit(1,"line"),
-        axis.title = element_text( color = alpha("black", 0.8), size = 9),
-        axis.text = element_text(color = alpha("gray20", 0.7), size = 7 ),
-        axis.line = element_line(color = "gray40", size = 0.5),
-        axis.line.y = element_blank(),
-        panel.grid.major = element_line(color = alpha("gray50", 0.1), size = 0.25), 
-        strip.background = element_rect(fill=alpha("#0070c0", 1), color = "transparent"),
-        strip.text = element_text(face = "bold", colour = "white"),
-        panel.spacing.x = unit(3, "mm"), 
-        title = element_text(face = "bold"))
-
-# setting our theme as default
-theme_set(my_theme)
+# Define the number of colors to prevent error in plots
+nb.cols <- length(unique(df_daily$resadmin1_correct))
+mycolors <- colorRampPalette(brewer.pal(8, "Set3"))(nb.cols)
 
 # turning off annoying scientific notation
 options(scipen = 999)
@@ -934,7 +910,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_reported, 
            legendgroup = ~resadmin1_correct_reported,
            hoverinfo = "text+x", 
-           text = ~paste0("Reported cases in ", resadmin1_correct_reported, ": ", reported_this_day)) %>%
+           text = ~paste0("<b>Reported cases in ", resadmin1_correct_reported, ": </b>", reported_this_day)) %>%
   add_trace(data = df_daily_national,
             y = ~reported_7day_avg, 
             name = "7-day rolling average", 
@@ -942,7 +918,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dash"),
             hoverinfo = "text+x",
-            text = ~paste("7-day rolling avg.: ", round(reported_7day_avg, 2))) %>%
+            text = ~paste("<b>7-day rolling avg.: </b>", round(reported_7day_avg, 2))) %>%
   add_trace(data = df_daily_national,
             y = ~reported_14day_avg, 
             name = "14-day rolling average", 
@@ -950,7 +926,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dot"),
             hoverinfo = "text+x",
-            text = ~paste("14-day rolling avg.: ", round(reported_14day_avg, 2))) %>%
+            text = ~paste("<b>14-day rolling avg.: </b>", round(reported_14day_avg, 2))) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
          title = paste0("Daily COVID-19 reported cases in ", my_country, 
@@ -969,7 +945,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_confirmed, 
            legendgroup = ~resadmin1_correct_confirmed,
            hoverinfo = "text+x", 
-           text = ~paste0("Confirmed cases in ", resadmin1_correct_confirmed, ": ", confirmed_this_day)) %>%
+           text = ~paste0("<b>Confirmed cases in ", resadmin1_correct_confirmed, ": </b>", confirmed_this_day)) %>%
   add_trace(data = df_daily_national,
             y = ~confirmed_7day_avg, 
             name = "7-day rolling average", 
@@ -977,7 +953,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dash"),
             hoverinfo = "text+x",
-            text = ~paste("7-day rolling avg.: ", round(confirmed_7day_avg, 2))) %>%
+            text = ~paste("<b>7-day rolling avg.: </b>", round(confirmed_7day_avg, 2))) %>%
   add_trace(data = df_daily_national,
             y = ~confirmed_14day_avg, 
             name = "14-day rolling average", 
@@ -985,7 +961,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dot"),
             hoverinfo = "text+x",
-            text = ~paste("14-day rolling avg.: ", round(confirmed_14day_avg, 2))) %>%
+            text = ~paste("<b>14-day rolling avg.: </b>", round(confirmed_14day_avg, 2))) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
          title = paste0("Daily COVID-19 confirmed cases in ", my_country, 
@@ -1004,7 +980,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_deaths, 
            legendgroup = ~resadmin1_correct_deaths,
            hoverinfo = "text+x", 
-           text = ~paste0("Deaths in ", resadmin1_correct_deaths, ": ", deaths_this_day)) %>%
+           text = ~paste0("<b>Deaths in ", resadmin1_correct_deaths, ": </b>", deaths_this_day)) %>%
   add_trace(data = df_daily_national,
             y = ~deaths_7day_avg, 
             name = "7-day rolling average", 
@@ -1012,7 +988,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dash"),
             hoverinfo = "text+x",
-            text = ~paste("7-day rolling avg.: ", round(deaths_7day_avg, 2))) %>%
+            text = ~paste("<b>7-day rolling avg.: </b>", round(deaths_7day_avg, 2))) %>%
   add_trace(data = df_daily_national,
             y = ~deaths_14day_avg, 
             name = "14-day rolling average", 
@@ -1020,7 +996,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dot"),
             hoverinfo = "text+x",
-            text = ~paste("14-day rolling avg.: ", round(deaths_14day_avg, 2))) %>%
+            text = ~paste("<b>14-day rolling avg.: </b>", round(deaths_14day_avg, 2))) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
          title = paste0("Daily COVID-19 deaths in ", my_country, 
@@ -1039,7 +1015,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_discharges, 
            legendgroup = ~resadmin1_correct_discharges,
            hoverinfo = "text+x", 
-           text = ~paste0("Discharges in ", resadmin1_correct_discharges, ": ", discharges_this_day)) %>%
+           text = ~paste0("<b>Discharges in ", resadmin1_correct_discharges, ": </b>", discharges_this_day)) %>%
   add_trace(data = df_daily_national,
             y = ~discharges_7day_avg, 
             name = "7-day rolling average", 
@@ -1047,7 +1023,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dash"),
             hoverinfo = "text+x",
-            text = ~paste("7-day rolling avg.: ", round(discharges_7day_avg, 2))) %>%
+            text = ~paste("<b>7-day rolling avg.: </b>", round(discharges_7day_avg, 2))) %>%
   add_trace(data = df_daily_national,
             y = ~discharges_14day_avg, 
             name = "14-day rolling average", 
@@ -1055,7 +1031,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dot"),
             hoverinfo = "text+x",
-            text = ~paste("14-day rolling avg.: ", round(discharges_14day_avg, 2))) %>%
+            text = ~paste("<b>14-day rolling avg.: </b>", round(discharges_14day_avg, 2))) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
          title = paste0("Daily COVID-19 discharges in ", my_country, 
@@ -1076,7 +1052,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_reported, 
            legendgroup = ~resadmin1_correct_reported,
            hoverinfo = "text+x", 
-           text = ~paste0("Reported cases (%) in ", resadmin1_correct_reported, ": ", 
+           text = ~paste0("<b>Reported cases (%) in ", resadmin1_correct_reported, ": </b>", 
                           round(reported_prop, 2), "%")) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
@@ -1098,7 +1074,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_confirmed, 
            legendgroup = ~resadmin1_correct_confirmed,
            hoverinfo = "text+x", 
-           text = ~paste0("Confirmed cases (%) in ", resadmin1_correct_confirmed, ": ", 
+           text = ~paste0("<b>Confirmed cases (%) in ", resadmin1_correct_confirmed, ": </b>", 
                           round(confirmed_prop, 2), "%")) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
@@ -1121,7 +1097,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_deaths, 
            legendgroup = ~resadmin1_correct_deaths,
            hoverinfo = "text+x", 
-           text = ~paste0("Deaths (%) in ", resadmin1_correct_deaths, ": ", 
+           text = ~paste0("<b>Deaths (%) in ", resadmin1_correct_deaths, ": </b>", 
                           round(deaths_prop, 2), "%")) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
@@ -1144,7 +1120,7 @@ df_epi_curve %>%
            color = ~resadmin1_correct_discharges, 
            legendgroup = ~resadmin1_correct_discharges,
            hoverinfo = "text+x", 
-           text = ~paste0("Discharges (%) in ", resadmin1_correct_discharges, ": ", 
+           text = ~paste0("<b>Discharges (%) in ", resadmin1_correct_discharges, ": </b>", 
                           round(discharges_prop, 2), "%")) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
@@ -1210,9 +1186,9 @@ for (i in 1:length(regions_reported)) {
                                         # needed to show both y-axis data and x-axis report date
                                         hoverinfo = "text+x", 
                                         # presenting real and log-transformed values
-                                        text = ~paste0("Reported cases in ", resadmin1_correct, ": ", 
+                                        text = ~paste0("<b>Reported cases in ", resadmin1_correct, ": </b>", 
                                                        reported_this_day,
-                                                       "<br>Reported cases (log) in ", resadmin1_correct, ": ", 
+                                                       "<br><b>Reported cases (log) in ", resadmin1_correct, ": </b>", 
                                                        round(reported_log, 2))) %>%
     # adding trend curve to the plot (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_reported[i]),
@@ -1222,11 +1198,14 @@ for (i in 1:length(regions_reported)) {
               mode = "lines",
               line = list(color = "black", dash = "dash"),
               hoverinfo = "text+x",
-              text = ~paste0("Reported cases trend: ", round(reported_trend, 2),
-                             "<br>Reported cases trend (log): ", round(reported_trend_log, 2))) %>%
+              text = ~paste0("<b>Reported cases trend: </b>", round(reported_trend, 2),
+                             "<br><b>Reported cases trend (log): </b>", round(reported_trend_log, 2))) %>%
     # adding a marker to the plot that indicates peak count (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_reported[i],
-                                         reported_log == max(reported_log, na.rm = TRUE)),
+                                         reported_log == max(reported_log, na.rm = TRUE)) %>%
+                # keeping the marker only at the last peak (useful when there are more than one peak - important
+                # when counts are low)
+                slice_max(report_date),
               y = ~reported_log, 
               name = "Reported cases trend (log)",
               type = "scatter",
@@ -1234,8 +1213,9 @@ for (i in 1:length(regions_reported)) {
               # making the marker easy to visualize
               marker = list(size = 5, color = "red", line = list(width = 2, color = "black")),
               hoverinfo = "text+x",
-              text = ~paste0("Peak of reported cases: ", reported_this_day,
-                             "<br>Peak of reported cases (log): ", round(reported_log, 2))) %>%
+              text = ~paste0("<b>Date: </b>",report_date,
+                             "<br><b>Peak of reported cases: </b>", reported_this_day,
+                             "<br><b>Peak of reported cases (log): </b>", round(reported_log, 2))) %>%
     layout(hovermode = "x unified",
            # this is the title for the whole plot, not for each subplot
            title = paste0("Daily reported cases for each region in ", my_country),
@@ -1304,9 +1284,9 @@ for (i in 1:length(regions_confirmed)) {
                                          # needed to show both y-axis data and x-axis report date
                                          hoverinfo = "text+x", 
                                          # presenting real and log-transformed values
-                                         text = ~paste0("Confirmed cases in ", resadmin1_correct, ": ", 
+                                         text = ~paste0("<b>Confirmed cases in ", resadmin1_correct, ": </b>", 
                                                         confirmed_this_day,
-                                                        "<br>Confirmed cases (log) in ", resadmin1_correct, ": ", 
+                                                        "<br><b>Confirmed cases (log) in ", resadmin1_correct, ": </b>", 
                                                         round(confirmed_log, 2))) %>%
     # adding trend curve to the plot (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_confirmed[i]),
@@ -1316,11 +1296,14 @@ for (i in 1:length(regions_confirmed)) {
               mode = "lines",
               line = list(color = "black", dash = "dash"),
               hoverinfo = "text+x",
-              text = ~paste0("Confirmed cases trend: ", round(confirmed_trend, 2),
-                             "<br>Confirmed cases trend (log): ", round(confirmed_trend_log, 2))) %>%
+              text = ~paste0("<b>Confirmed cases trend: </b>", round(confirmed_trend, 2),
+                             "<br><b>Confirmed cases trend (log): </b>", round(confirmed_trend_log, 2))) %>%
     # adding a marker to the plot that indicates peak count (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_confirmed[i],
-                                         confirmed_log == max(confirmed_log, na.rm = TRUE)),
+                                         confirmed_log == max(confirmed_log, na.rm = TRUE)) %>%
+                # keeping the marker only at the last peak (useful when there are more than one peak - important
+                # when counts are low)
+                slice_max(report_date),
               y = ~confirmed_log, 
               name = "Confirmed cases trend (log)",
               type = "scatter",
@@ -1328,8 +1311,9 @@ for (i in 1:length(regions_confirmed)) {
               # making the marker easy to visualize
               marker = list(size = 5, color = "red", line = list(width = 2, color = "black")),
               hoverinfo = "text+x",
-              text = ~paste0("Peak of confirmed cases: ", confirmed_this_day,
-                             "<br>Peak of confirmed cases (log): ", round(confirmed_log, 2))) %>%
+              text = ~paste0("<b>Date: </b>",report_date,
+                             "<br>Peak of confirmed cases: </b>", confirmed_this_day,
+                             "<br><b>Peak of confirmed cases (log): </b>", round(confirmed_log, 2))) %>%
     layout(hovermode = "x unified",
            # this is the title for the whole plot, not for each subplot
            title = paste0("Daily confirmed cases for each region in ", my_country),
@@ -1398,9 +1382,9 @@ for (i in 1:length(regions_deaths)) {
                                       # needed to show both y-axis data and x-axis report date
                                       hoverinfo = "text+x", 
                                       # presenting real and log-transformed values
-                                      text = ~paste0("Deaths in ", resadmin1_correct, ": ", 
+                                      text = ~paste0("<b>Deaths in ", resadmin1_correct, ": </b>", 
                                                      deaths_this_day,
-                                                     "<br>Deaths (log) in ", resadmin1_correct, ": ", 
+                                                     "<br><b>Deaths (log) in ", resadmin1_correct, ": </b>", 
                                                      round(deaths_log, 2))) %>%
     # adding trend curve to the plot (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_deaths[i]),
@@ -1410,11 +1394,14 @@ for (i in 1:length(regions_deaths)) {
               mode = "lines",
               line = list(color = "black", dash = "dash"),
               hoverinfo = "text+x",
-              text = ~paste0("Deaths trend: ", round(deaths_trend, 2),
-                             "<br>Deaths trend (log): ", round(deaths_trend_log, 2))) %>%
+              text = ~paste0("<b>Deaths trend: </b>", round(deaths_trend, 2),
+                             "<br><b>Deaths trend (log): </b>", round(deaths_trend_log, 2))) %>%
     # adding a marker to the plot that indicates peak count (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_deaths[i],
-                                         deaths_log == max(deaths_log, na.rm = TRUE)),
+                                         deaths_log == max(deaths_log, na.rm = TRUE)) %>%
+                # keeping the marker only at the last peak (useful when there are more than one peak - important
+                # when counts are low)
+                slice_max(report_date),
               y = ~deaths_log, 
               name = "Deaths trend (log)",
               type = "scatter",
@@ -1422,8 +1409,9 @@ for (i in 1:length(regions_deaths)) {
               # making the marker easy to visualize
               marker = list(size = 5, color = "red", line = list(width = 2, color = "black")),
               hoverinfo = "text+x",
-              text = ~paste0("Peak of deaths: ", deaths_this_day,
-                             "<br>Peak of deaths (log): ", round(deaths_log, 2))) %>%
+              text = ~paste0("<b>Date: </b>",report_date,
+                             "<br>Peak of deaths: </b>", deaths_this_day,
+                             "<br><b>Peak of deaths (log): </b>", round(deaths_log, 2))) %>%
     layout(hovermode = "x unified",
            # this is the title for the whole plot, not for each subplot
            title = paste0("Daily deaths for each region in ", my_country),
@@ -1482,19 +1470,19 @@ for (i in 1:length(regions_discharges)) {
   regions_discharges_list[[i]] <- plot_ly(data = df_daily %>% filter(resadmin1_correct == regions_discharges[i]),
                                           x = ~report_date,
                                           y = ~discharges_log, 
+                                          # standardizing all subplots to the same color
+                                          color = I("darkgreen"),
                                           name = ~paste0("Discharges (log)"),
                                           # use this to leave just one legend instead of several 
                                           # (one for each region)
                                           showlegend = show_legend,
-                                          # standardizing all subplots to the same color
-                                          color = I("darkgreen"),
                                           type = "bar",
                                           # needed to show both y-axis data and x-axis report date
                                           hoverinfo = "text+x", 
                                           # presenting real and log-transformed values
-                                          text = ~paste0("Discharges in ", resadmin1_correct, ": ", 
+                                          text = ~paste0("<b>Discharges in ", resadmin1_correct, ": </b>", 
                                                          discharges_this_day,
-                                                         "<br>Discharges (log) in ", resadmin1_correct, ": ", 
+                                                         "<br><b>Discharges (log) in ", resadmin1_correct, ": </b>", 
                                                          round(discharges_log, 2))) %>%
     # adding trend curve to the plot (returns real count and log transformed count)
     add_trace(data = df_daily %>% filter(resadmin1_correct == regions_discharges[i]),
@@ -1504,11 +1492,15 @@ for (i in 1:length(regions_discharges)) {
               mode = "lines",
               line = list(color = "black", dash = "dash"),
               hoverinfo = "text+x",
-              text = ~paste0("Discharges trend: ", round(discharges_trend, 2),
-                             "<br>Discharges trend (log): ", round(discharges_trend_log, 2))) %>%
+              text = ~paste0("<b>Discharges trend: </b>", round(discharges_trend, 2),
+                             "<br><b>Discharges trend (log): </b>", round(discharges_trend_log, 2))) %>%
     # adding a marker to the plot that indicates peak count (returns real count and log transformed count)
-    add_trace(data = df_daily %>% filter(resadmin1_correct == regions_discharges[i],
-                                         discharges_log == max(discharges_log, na.rm = TRUE)),
+    add_trace(data = df_daily %>% 
+                filter(resadmin1_correct == regions_discharges[i],
+                       discharges_log == max(discharges_log, na.rm = TRUE)) %>%
+                # keeping the marker only at the last peak (useful when there are more than one peak - important
+                # when counts are low)
+                slice_max(report_date),
               y = ~discharges_log, 
               name = "Discharges trend (log)",
               type = "scatter",
@@ -1516,8 +1508,9 @@ for (i in 1:length(regions_discharges)) {
               # making the marker easy to visualize
               marker = list(size = 5, color = "red", line = list(width = 2, color = "black")),
               hoverinfo = "text+x",
-              text = ~paste0("Peak of discharges: ", discharges_this_day,
-                             "<br>Peak of discharges (log): ", round(discharges_log, 2))) %>%
+              text = ~paste0("<b>Date: </b>",report_date,
+                             "<br><b>Peak of discharges: </b>", discharges_this_day,
+                             "<br><b>Peak of discharges (log): </b>", round(discharges_log, 2))) %>%
     layout(hovermode = "x unified",
            # this is the title for the whole plot, not for each subplot
            title = paste0("Daily discharges for each region in ", my_country),
@@ -1535,4 +1528,471 @@ for (i in 1:length(regions_discharges)) {
 
 # plotting all regions of my_country as a unique facetted plot
 subplot(regions_discharges_list, nrows = 3, shareX = TRUE, shareY = TRUE) 
+
+
+########################################################
+########################################################
+##                                                    ##
+##      4 CUMULATIVE CASES AND DEATHS PER REGION      ##
+##                                                    ##
+##                TIME SERIES SECTION                 ##
+##                                                    ##
+########################################################
+########################################################
+
+####################################################
+##      Time Series of cumulative reported cases  ##
+####################################################
+
+# interactive time series plot: reported cases
+df_daily %>% 
+  filter(resadmin1_correct != "No Info") %>%
+  plot_ly(x = ~report_date) %>%
+  add_lines(y = ~cum_reported, 
+            color = ~resadmin1_correct,
+            colors = mycolors,
+            hoverinfo = "text+x", 
+            # presenting reported cases info
+            text = ~paste0("<b>Region: </b>", resadmin1_correct,
+                           "<br><b>Reported cases: </b>", cum_reported,
+                           "<br><b>Incidence of reported cases: </b>", paste0(round(incidence_reported, 2), 
+                                                                       " per 100,000"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Reported cases across regions in ", my_country),
+         yaxis = list(title = "Cumulative number of reported cases"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")
+         )
+  )
+
+# interactive time series plot: confirmed cases
+df_daily %>% 
+  filter(resadmin1_correct != "No Info") %>%
+  plot_ly(x = ~report_date) %>%
+  add_lines(y = ~cum_confirmed, 
+            color = ~resadmin1_correct,
+            colors = mycolors,
+            hoverinfo = "text+x", 
+            # presenting confirmed cases info
+            text = ~paste0("<b>Region: </b>", resadmin1_correct,
+                           "<br><b>Confirmed cases: </b>", cum_confirmed,
+                           "<br><b>Incidence of confirmed cases: </b>", paste0(round(incidence_confirmed, 2), 
+                                                                        " per 100,000"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Confirmed cases across regions in ", my_country),
+         yaxis = list(title = "Cumulative number of confirmed cases"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")
+         )
+  )
+
+# interactive time series plot: deaths
+df_daily %>% 
+  filter(resadmin1_correct != "No Info") %>%
+  plot_ly(x = ~report_date) %>%
+  add_lines(y = ~cum_deaths, 
+            color = ~resadmin1_correct,
+            colors = mycolors,
+            hoverinfo = "text+x", 
+            # presenting deaths cases info
+            text = ~paste0("<b>Region: </b>", resadmin1_correct,
+                           "<br><b>Deaths: </b>", cum_deaths,
+                           "<br><b>Mortality: </b>", paste0(round(mortality, 2), 
+                                                     " per 100,000"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Deaths across regions in ", my_country),
+         yaxis = list(title = "Cumulative number of deaths cases"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")
+         )
+  )
+
+# interactive time series plot: incidence of reported cases
+df_daily %>% 
+  filter(resadmin1_correct != "No Info") %>%
+  plot_ly(x = ~report_date) %>%
+  add_lines(y = ~incidence_reported, 
+            color = ~resadmin1_correct,
+            colors = mycolors,
+            hoverinfo = "text+x", 
+            # presenting reported cases info
+            text = ~paste0("<b>Region: </b>", resadmin1_correct,
+                           "<br><b>Reported cases: </b>", cum_reported,
+                           "<br><b>Incidence of reported cases: </b>", paste0(round(incidence_reported, 2), 
+                                                                       " per 100,000"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Incidence of reported cases across regions in ", my_country),
+         yaxis = list(title = "Incidence of reported cases per 100,000"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")
+         )
+  )
+
+# interactive time series plot: incidence of confirmed cases
+df_daily %>% 
+  filter(resadmin1_correct != "No Info") %>%
+  plot_ly(x = ~report_date) %>%
+  add_lines(y = ~incidence_confirmed, 
+            color = ~resadmin1_correct,
+            colors = mycolors,
+            hoverinfo = "text+x", 
+            # presenting confirmed cases info
+            text = ~paste0("<b>Region: </b>", resadmin1_correct,
+                           "<br><b>Confirmed cases: </b>", cum_confirmed,
+                           "<br><b>Incidence of confirmed cases: </b>", paste0(round(incidence_confirmed, 2), 
+                                                                        " per 100,000"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Incidence of confirmed cases across regions in ", my_country),
+         yaxis = list(title = "Incidence of confirmed cases per 100,000"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")
+         )
+  )
+
+# interactive time series plot: mortality
+df_daily %>% 
+  filter(resadmin1_correct != "No Info") %>%
+  plot_ly(x = ~report_date) %>%
+  add_lines(y = ~mortality, 
+            color = ~resadmin1_correct,
+            colors = mycolors,
+            hoverinfo = "text+x", 
+            # presenting confirmed cases info
+            text = ~paste0("<b>Region: </b>", resadmin1_correct,
+                           "<br><b>Deaths: </b>", cum_deaths,
+                           "<br><b>Mortality: </b>", paste0(round(mortality, 2), 
+                                                     " per 100,000"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Mortality across regions in ", my_country),
+         yaxis = list(title = "Mortality per 100,000"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")
+         )
+  )
+
+
+######################################################
+######################################################
+##                                                  ##
+##      5 NATIONAL WEEKLY GROWTH RATE OVER TIME     ##
+##                                                  ##
+##              GROWTH RATES SECTION                ##
+##                                                  ##
+######################################################
+######################################################
+
+###############################################
+##      Growth rate of  cases and deaths     ##
+###############################################
+
+# growth rate of reported cases df
+df_growth_rate <- df_daily_national %>% 
+  mutate(epiweek = MMWRweek(report_date)$MMWRweek,
+         reported_past_7 = rollsum(reported_this_day, 7, 
+                                   fill = na.fill(reported_this_day, 0)),
+         confirmed_past_7 = rollsum(confirmed_this_day, 7, 
+                                    fill = na.fill(confirmed_this_day, 0)),
+         deaths_past_7 = rollsum(deaths_this_day, 7, 
+                                 fill = na.fill(deaths_this_day, 0))) %>% 
+  select(report_date, epiweek, reported_past_7:deaths_past_7) %>% 
+  group_by(epiweek) %>% 
+  # take the last day of each epiweek
+  slice(which.max(report_date)) %>% 
+  ungroup() %>% 
+  # reported cases in the past week vs cases two weeks ago
+  mutate(diff_reported = reported_past_7 - lag(reported_past_7, 1), 
+         week_growth_reported = diff_reported / lag(reported_past_7, 1),
+         week_growth_reported_perc = 100 * week_growth_reported, 
+         # formula to convert weeklygrowth to daily growth equivalent
+         growth_reported = (((week_growth_reported + 1) ^ (1/7)) - 1), 
+         growth_reported_perc = growth_reported * 100,
+         # confirmed cases in the past week vs cases two weeks ago
+         diff_confirmed = confirmed_past_7 - lag(confirmed_past_7, 1), 
+         week_growth_confirmed = diff_confirmed / lag(confirmed_past_7, 1),
+         week_growth_confirmed_perc = 100 * week_growth_confirmed, 
+         growth_confirmed = (((week_growth_confirmed + 1) ^ (1/7)) - 1), 
+         growth_confirmed_perc = growth_confirmed * 100,
+         # deaths in the past week vs cases two weeks ago
+         diff_deaths = deaths_past_7 - lag(deaths_past_7, 1), 
+         week_growth_deaths = diff_deaths / lag(deaths_past_7, 1),
+         week_growth_deaths_perc = 100 * week_growth_deaths, 
+         growth_deaths = (((week_growth_deaths + 1) ^ (1/7)) - 1), 
+         growth_deaths_perc = growth_deaths * 100)
+
+# growth rate of reported cases plot
+df_growth_rate %>% 
+  plot_ly(x = ~report_date)%>%
+  add_ribbons(ymin = 0,
+              ymax = max(df_growth_rate$week_growth_reported_perc[df_growth_rate$week_growth_reported_perc != Inf], 
+                         na.rm = TRUE),
+              color = I("red"),
+              opacity = 0.8,
+              hoverinfo = "none",
+              showlegend = FALSE) %>%
+  add_ribbons(ymin = min(df_growth_rate$week_growth_reported_perc[df_growth_rate$week_growth_reported_perc != Inf], 
+                         na.rm = TRUE),
+              ymax = 0,
+              color = I("green"),
+              opacity = 0.8,
+              hoverinfo = "none",
+              showlegend = FALSE) %>%
+  add_lines(y = ~week_growth_reported_perc, 
+            color = I("black"),
+            hoverinfo = "text", 
+            text = ~paste0("<b>Date of reporting: </b>", report_date,
+                           "<br><b>Epidemiological week: </b>", epiweek,
+                           "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_reported_perc, 2), "%"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Week-on-week growth rate of new COVID-19 reported cases in ", my_country),
+         yaxis = list(title = "Average daily growth rate (%) each week"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")))
+
+# growth rate of confirmed cases plot
+df_growth_rate %>% 
+  plot_ly(x = ~report_date)%>%
+  add_ribbons(ymin = 0,
+              ymax = max(df_growth_rate$week_growth_confirmed_perc[df_growth_rate$week_growth_confirmed_perc != Inf], 
+                         na.rm = TRUE),
+              color = I("red"),
+              opacity = 0.8,
+              hoverinfo = "none",
+              showlegend = FALSE) %>%
+  add_ribbons(ymin = min(df_growth_rate$week_growth_confirmed_perc[df_growth_rate$week_growth_confirmed_perc != Inf], 
+                         na.rm = TRUE),
+              ymax = 0,
+              color = I("green"),
+              opacity = 0.8,
+              hoverinfo = "none",
+              showlegend = FALSE) %>%
+  add_lines(y = ~week_growth_confirmed_perc, 
+            color = I("black"),
+            hoverinfo = "text", 
+            text = ~paste0("<b>Date of reporting: </b>", report_date,
+                           "<br><b>Epidemiological week: </b>", epiweek,
+                           "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_confirmed_perc, 2), "%"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Week-on-week growth rate of new COVID-19 confirmed cases in ", my_country),
+         yaxis = list(title = "Average daily growth rate (%) each week"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")))
+
+# growth rate of deaths plot
+df_growth_rate %>% 
+  plot_ly(x = ~report_date)%>%
+  add_ribbons(ymin = 0,
+              ymax = max(df_growth_rate$week_growth_deaths_perc[df_growth_rate$week_growth_deaths_perc != Inf], 
+                         na.rm = TRUE),
+              color = I("red"),
+              opacity = 0.8,
+              hoverinfo = "none",
+              showlegend = FALSE) %>%
+  add_ribbons(ymin = min(df_growth_rate$week_growth_deaths_perc[df_growth_rate$week_growth_deaths_perc != Inf], 
+                         na.rm = TRUE),
+              ymax = 0,
+              color = I("green"),
+              opacity = 0.8,
+              hoverinfo = "none",
+              showlegend = FALSE) %>%
+  add_lines(y = ~week_growth_deaths_perc, 
+            color = I("black"),
+            hoverinfo = "text", 
+            text = ~paste0("<b>Date of reporting: </b>", report_date,
+                           "<br><b>Epidemiological week: </b>", epiweek,
+                           "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_deaths_perc, 2), "%"))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Week-on-week growth rate of new COVID-19 deaths in ", my_country),
+         yaxis = list(title = "Average daily growth rate (%) each week"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")))
+
+
+##########################################################
+##########################################################
+##                                                      ##
+##      6 DISTRIBUTION OF CASES BY ORIGIN OVER TIME     ##
+##                                                      ##
+##                TIME SERIES SECTION                   ##
+##                                                      ##
+##########################################################
+##########################################################
+
+###########################################################
+##      Epicurve of reported cases by travel history     ##
+###########################################################
+
+# Expand dates per travel history category
+all_dates_origin <- df2 %>%
+  filter(!is.na(expo_travel)) %>%
+  filter(is_reported == 1) %>%
+  complete(report_date = seq.Date(min(report_date, na.rm = TRUE), 
+                                  max(report_date, na.rm = TRUE), by = "day")) %>%
+  tidyr::expand(report_date, expo_travel, resadmin1_correct) %>%
+  filter(!is.na(expo_travel))
+
+# Calculate daily reported cases
+reported_travel_hist <- df2 %>%
+  # filtering out missing data 
+  filter(!is.na(expo_travel)) %>%
+  # summarise the number of reported each day in each region
+  group_by(resadmin1_correct, report_date, expo_travel) %>%
+  summarise(reported_this_day = sum(is_reported, na.rm = T)) %>%
+  # add in new rows so that all dates are covered
+  full_join(all_dates_origin) %>%
+  arrange(report_date, resadmin1_correct)
+
+# Calculate daily confirmed cases
+confirmed_travel_hist <-  df2 %>%
+  # filtering out missing data 
+  filter(!is.na(expo_travel)) %>%
+  # summarise the number of confirmed cases each day in each region
+  group_by(resadmin1_correct, report_date, expo_travel) %>%
+  summarise(confirmed_this_day = sum(is_reported[report_classif == "CONFIRMED"], na.rm = T)) %>%
+  # add in new rows so that all dates are covered
+  full_join(all_dates_origin) %>%
+  arrange(report_date, resadmin1_correct)
+
+# Calculate daily deaths
+deaths_travel_hist <- df2 %>%
+  # filtering out missing data 
+  filter(!is.na(expo_travel)) %>%
+  # summarise the number of deaths each day in each region
+  group_by(resadmin1_correct, report_date, expo_travel) %>%
+  summarise(deaths_this_day = sum(is_reported[patcourse_status == "DEAD"], na.rm = T)) %>%
+  # add in new rows so that all dates are covered
+  full_join(all_dates_origin) %>%
+  arrange(report_date, resadmin1_correct)
+
+# Calculate daily discharges as above
+discharges_travel_hist <- df2 %>% 
+  # filtering out missing data 
+  filter(!is.na(expo_travel)) %>%
+  # summarise the number of deaths each day in each region
+  group_by(resadmin1_correct, report_date, expo_travel) %>%
+  summarise(discharges_this_day = sum(is_reported[!is.na(patcourse_datedischarge)], na.rm = T)) %>%
+  # add in new rows so that all dates are covered
+  full_join(all_dates_origin) %>%
+  arrange(report_date, resadmin1_correct)
+
+# national epicurve per travel history
+df_origin_reported <- inner_join(reported_travel_hist, confirmed_travel_hist,
+                                 by= c("report_date", "resadmin1_correct", "expo_travel"))  %>% 
+  right_join(deaths_travel_hist,
+             by= c("report_date", "resadmin1_correct", "expo_travel")) %>% 
+  left_join(discharges_travel_hist,
+            by= c("report_date", "resadmin1_correct", "expo_travel")) %>%
+  # grouping and summarising national level data
+  group_by(expo_travel, report_date) %>%
+  summarise(reported_this_day = sum(reported_this_day, na.rm = TRUE),
+            confirmed_this_day = sum(confirmed_this_day, na.rm = TRUE),
+            deaths_this_day = sum(deaths_this_day, na.rm = TRUE),
+            discharges_this_day = sum(discharges_this_day, na.rm = TRUE)) %>%
+  group_by(report_date) %>%
+  # creating relative counts
+  mutate(reported_prop = round((reported_this_day/ sum(reported_this_day) * 100), 1),
+         confirmed_prop = round((confirmed_this_day/ sum(confirmed_this_day) * 100), 1),
+         deaths_prop = round((deaths_this_day/ sum(deaths_this_day) * 100), 1),
+         discharges_prop = round((discharges_this_day/ sum(discharges_this_day) * 100), 1)) %>%
+  # cases past week, to smooth out the curve
+  # slightly less honest to the data, but yields better insights.
+  group_by(expo_travel) %>%
+  mutate(reported_trend = rollmean(x = reported_this_day, k = 7, align = "right",  
+                                   fill = na.fill(reported_this_day, NA)),
+         confirmed_trend = rollmean(x = confirmed_this_day, k = 7, align = "right",  
+                                    fill = na.fill(confirmed_this_day, NA)),
+         deaths_trend = rollmean(x = deaths_this_day, k = 7, align = "right",  
+                                 fill = na.fill(deaths_this_day, NA)),
+         discharges_trend = rollmean(x = discharges_this_day, k = 7, align = "right",  
+                                     fill = na.fill(discharges_this_day, NA))) %>%
+  # grouping by report date
+  group_by(report_date) %>%
+  # defining past week proportion of cases/deaths/discharges
+  mutate(reported_past_week_prop = round((reported_trend/ sum(reported_trend) * 100), 1),
+         confirmed_past_week_prop = round((confirmed_trend/ sum(confirmed_trend) * 100), 1),
+         deaths_past_week_prop = round((deaths_trend/ sum(deaths_trend) * 100), 1),
+         discharges_past_week_prop = round((discharges_trend/ sum(discharges_trend) * 100), 1),
+         expo_travel = fct_recode(expo_travel,
+                                  "Positive travel history" = "Y",
+                                  "Negative travel history" = "N"))
+
+# interactive plot of absolute reported cases vs travel history
+df_origin_reported %>%
+  plot_ly(x = ~report_date,
+          y = ~reported_this_day, 
+          type = "bar",
+          color = ~expo_travel, 
+          colors = mycolors,
+          legendgroup = ~expo_travel,
+          hoverinfo = "text+x",
+          text = ~paste0("<b>Date of reporting: </b>", report_date,
+                         "<br><b>Reported cases: </b>", reported_this_day)) %>%
+  layout(barmode = "stack",
+         hovermode = "x unified",
+         title = paste0("Classification of new reported cases by travel history over time in ", my_country),
+         yaxis = list(title = "Absolute number of reported cases"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")))
+
+# interactive plot of absolute confirmed cases vs travel history
+df_origin_reported %>%
+  plot_ly(x = ~report_date,
+          y = ~confirmed_this_day, 
+          type = "bar",
+          color = ~expo_travel, 
+          colors = mycolors,
+          legendgroup = ~expo_travel,
+          hoverinfo = "text+x",
+          text = ~paste0("<b>Date of reporting: </b>", report_date,
+                         "<br><b>Confirmed cases: </b>", confirmed_this_day)) %>%
+  layout(barmode = "stack",
+         hovermode = "x unified",
+         title = paste0("Classification of new confirmed cases by travel history over time in ", my_country),
+         yaxis = list(title = "Absolute number of confirmed cases"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")))
+
+# interactive plot of absolute deaths vs travel history
+df_origin_reported %>%
+  plot_ly(x = ~report_date,
+          y = ~deaths_this_day, 
+          type = "bar",
+          color = ~expo_travel, 
+          colors = mycolors,
+          legendgroup = ~expo_travel,
+          hoverinfo = "text+x",
+          text = ~paste0("<b>Date of reporting: </b>", report_date,
+                         "<br><b>Deaths: </b>", deaths_this_day)) %>%
+  layout(barmode = "stack",
+         hovermode = "x unified",
+         title = paste0("Classification of new deaths by travel history over time in ", my_country),
+         yaxis = list(title = "Absolute number of deaths"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date")))
+
+
+
 
