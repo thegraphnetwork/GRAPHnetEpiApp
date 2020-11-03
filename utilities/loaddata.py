@@ -4,7 +4,7 @@ Script for loading the CSVs into Postgre
 """
 import pandas as pd
 from pandas.errors import ParserError
-from sqlalchemy import create_engine, Table, MetaData
+from sqlalchemy import create_engine, Table, MetaData, Column
 
 import inquirer
 import os
@@ -29,6 +29,13 @@ questions = [
                   message="Type the name of the table in which to insert the data",
                   default='line_list'
                   )
+]
+alter_table_questions = [
+    inquirer.Confirm(
+        'add_column',
+        message="Do you want to add this column to the line_list table?",
+        default=False,
+    )
 ]
 
 
@@ -69,6 +76,10 @@ def load_csvs(pth):
             print(oe)
             continue
 
+def add_new_column(table_name, column_name, column_type):
+    pg_con.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type};")
+    pg_con.commit()
+
 
 def insert_into_db(csvg, table_name):
     '''
@@ -78,11 +89,19 @@ def insert_into_db(csvg, table_name):
     :return:
     '''
     table = get_table_info(table_name)
+    db_cols = [col.name for col in table.columns]
     for df in csvg:
         df.columns = [c.lower() for c in df.columns]  # make sure all column names are lowercase
         for c in df.columns:
-            if c not in list(table.columns):
-                print(f"Missing column: {c}")
+            if c not in db_cols:
+                print(f"Existing columns: {db_cols}\nMissing column: {c}\n Type: {df[c].dtype}")
+                coltype = 'NUMERIC' if str(df[c].dtype) == 'float64' else 'VARCHAR(128)'
+                ans = inquirer.prompt(alter_table_questions)
+                if ans['add_column']:
+                    add_new_column('line_list', column_name=c, column_type=coltype)
+                else:
+                    print(f'skipping...')
+
         # df.to_sql('line_list', con=pg_con, if_exists='append', index=False, method=None)#'multi')
 
 
