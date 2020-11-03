@@ -14,7 +14,7 @@ CREATE TABLE country (
 -- Table: line_list
 CREATE TABLE line_list (
 id serial NOT NULL,
-patinfo_ID VARCHAR(50),
+patinfo_id VARCHAR(50),
 report_date DATE,
 patinfo_first_name VARCHAR(50),
 patinfo_last_name VARCHAR(50),
