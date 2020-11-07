@@ -25,6 +25,26 @@ docker-compose down
 ```
 Once the 
 
+## Running shinyapp with Rstudio
+
+### Step 0
+If you're working on the code and need to get the app up and down easily for feedback you can still use Rstudio to launch it locally.
+If you have only worked with Renku in our project you will neet to download R & Rstudio first avilable at :
+
+https://cran.r-project.org/mirrors.html
+
+https://rstudio.com/products/rstudio/
+
+### Step 2
+Once Rstudio is setup you can select the cloned repo GRAPHnetEpiApp and launch the project.
+
+Open in the editor either ui.R / server.R or global.R and in the editor's toolbar you will find the "Run App" button, click it and _voilà_
+
+In your console, you will have a line notifying you on which adress you can open the app in your navigator. Copy the link in your adress bar and _voilà_
+
+
+
+
 ## To Know more
 ### Working with containers
 * [Getting started with Docker](https://docs.docker.com/get-started/overview/)
