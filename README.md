@@ -35,8 +35,10 @@ https://cran.r-project.org/mirrors.html
 
 https://rstudio.com/products/rstudio/
 
-### Step 2
+### Step 1
 Once Rstudio is setup you can select the cloned repo GRAPHnetEpiApp and launch the project.
+
+### Step 2
 
 Open in the editor either ui.R / server.R or global.R and in the editor's toolbar you will find the "Run App" button, click it and _voilà_
 
