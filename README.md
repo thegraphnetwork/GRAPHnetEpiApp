@@ -17,13 +17,22 @@ after the containers are built they can be started with
 ```bash
 docker-compose -p shinyapp -f docker-compose.yml --env-file .env_db up --build -d
 ```
-One the containers are up the database will be accessible from on the host on por 5432 and can beaccessed with any postgresql client.
-To stop the containers you can
+One the containers are up the database will be accessible from on the host on por 5432 and can be accessed with any postgresql client.
+To stop the containers you can use the following command:
 
 ```bash
 docker-compose down
 ```
-Once the 
+
+While the containers are up, you can also access the Shinyapp running in the container,
+by pointing your browser to [http://localhost:3838](http://localhost:3838).
+## Running the shinyapp from the terminal
+For development purposes it may be convenient to simply run the app outside the container for testing.
+
+In this case, use this command, from the root of the repository:
+```
+R -e "require(shiny); runApp('shinyapp', host='0.0.0.0', port=3838)"
+``` 
 
 ## Running shinyapp with Rstudio
 

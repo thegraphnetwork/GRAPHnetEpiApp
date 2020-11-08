@@ -25,3 +25,12 @@ install.packages("magick")
 install.packages("see")
 install.packages("viridis")
 install.packages("visdat")
+# Shinyapp
+install.packages('shinyjs')
+install.packages('officer')
+install.packages('flextable')
+install.packages('plotly')
+
+
+
+
