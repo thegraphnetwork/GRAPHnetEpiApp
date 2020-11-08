@@ -77,11 +77,11 @@ options(scipen = 999)
 
 
 
-#########################################################################################
-##                                                                                     ##
-##      Loading and formatting  faux LL reference and data for continental Africa      ##
-##                                                                                     ##
-#########################################################################################
+########################################################################################
+##                                                                                    ##
+##      Loading and formatting faux LL reference and data for continental Africa      ##
+##                                                                                    ##
+########################################################################################
 
 # Load Faux LL data
 LL_raw <- read_csv(LL_raw_path, trim_ws = T, na = c("", " ", "NA")) 
@@ -292,7 +292,6 @@ all_country_tab <- df_country %>%
   left_join(country_info) %>% 
   ungroup()
 
-
 regional_tab <- df_country %>% 
   select(Reporting_Date, Country, Cum_cases, Cum_deaths, Region, Population) %>% 
   group_by(Country) %>% 
@@ -363,6 +362,18 @@ pallete.cases_per_m <- colorFactor(palette = "YlOrRd", africa_map$cases_per_m_qu
 pallete.deaths_per_m <- colorFactor(palette = "YlOrRd", africa_map$deaths_per_m_quintile)
 
 
+###################################################
+##                                               ##
+##      SETTING COLOR THEME FOR RColorBrewer     ##
+##        NEEDED TO AVOID ERROR IN PLOTLY        ##
+##                                               ##
+###################################################
+
+# Define the number of colors to prevent error in plots
+nb.cols_1 <- length(unique(df_country$Country))
+mycolors_1 <- colorRampPalette(brewer.pal(8, "Set3"))(nb.cols_1)
+
+
 ################################################
 ##                                            ##
 ##      SECTION 1 GRAPHS, MAPS AND TABLES     ##
@@ -387,62 +398,67 @@ epi_curve_ll <- df_country %>%
          fourteen_day_death_avg = rollmean(x = Deaths_this_day, k = 14, align = "right",  
                                            fill = na.fill(Deaths_this_day, 0)))
 
-plot_ly(epi_curve_ll, x = ~Reporting_Date) %>%
-  add_bars(y = ~Cases_this_day, name = "Cases this day", 
-           hoverinfo = "text",
-           text = ~paste("Confirmed cases: ", Cases_this_day),
-           visible = TRUE) %>%
-  add_trace(y = ~seven_day_case_avg, name = "7-day rolling avg. cases", 
-            type = "scatter", mode = "lines", 
+# interactive plot for confirmd cases
+epi_curve_ll %>%
+  plot_ly(x = ~Reporting_Date) %>%
+  add_bars(y = ~Cases_this_day, 
+           colors = mycolors_1,
+           name = "Cases this day", 
+           hoverinfo = "text+x",
+           text = ~paste0("<b>Confirmed cases in ", my_country, ": </b>", Cases_this_day)) %>%
+  add_trace(y = ~seven_day_case_avg, 
+            name = "7-day rolling avg. cases", 
+            type = "scatter", 
+            mode = "lines", 
             line = list(color = "black", dash = "dash"),
-            hoverinfo = "text",
-            text = ~paste("7-day rolling avg.: ", seven_day_case_avg),
-            visible = TRUE) %>%
-  add_trace(y = ~fourteen_day_case_avg, name = "14-day rolling avg. cases", 
-            type = "scatter", mode = "lines", 
+            hoverinfo = "text+x",
+            text = ~paste("<b>7-day rolling avg.: </b>", round(seven_day_case_avg, 2))) %>%
+  add_trace(y = ~fourteen_day_case_avg, 
+            name = "14-day rolling avg. cases", 
+            type = "scatter",
+            mode = "lines", 
             line = list(color = "black", dash = "dot"),
-            hoverinfo = "text",
-            text = ~paste("14-day rolling avg.: ", fourteen_day_case_avg),
-            visible = TRUE) %>%
-  add_bars(y = ~Deaths_this_day, name = "Deaths this day", 
-           marker = list(color = "#56bfa3"),
-           hoverinfo = "text",
-           text = ~paste("Deaths: ", Deaths_this_day),
-           visible = FALSE) %>%
-  add_trace(y = ~seven_day_death_avg, name = "7-day rolling avg. deaths", 
-            type = "scatter", mode = "lines", 
-            line = list(color = "black", dash = "dash"),
-            hoverinfo = "text",
-            text = ~paste("7-day rolling avg.: ", seven_day_death_avg),
-            visible = FALSE) %>%
-  add_trace(y = ~fourteen_day_death_avg, name = "14-day rolling avg. deaths", 
-            type = "scatter", mode = "lines", 
-            line = list(color = "black", dash = "dot"),
-            hoverinfo = "text",
-            text = ~paste("14-day rolling avg.: ", seven_day_death_avg),
-            visible = FALSE) %>%
-  layout(updatemenus = list(
-    list(
-      y = 0,
-      buttons = list(
-        list(method = "restyle",
-             args = list("visible", list(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE)),
-             label = "Cases"),
-        list(method = "restyle",
-             args = list("visible", list(FALSE, FALSE, FALSE, TRUE, TRUE, TRUE)),
-             label = "Deaths")))),
-    hovermode = "x unified",
-    title = paste("Daily COVID-19 cases in", my_country),
-    yaxis = list(
-      title = "Absolute number of COVID-19 cases"),
-    xaxis = list(
-      title = "Date of Reporting",
-      type = "date",
-      tickformat = "%b %d (%a)",
-      rangeslider = list(type = "date")
-    )
+            hoverinfo = "text+x",
+            text = ~paste0("<b>14-day rolling avg.: </b>", round(fourteen_day_case_avg, 2))) %>%
+  layout(hovermode = "x unified",
+         title = paste0("Daily COVID-19 confirmed cases in", my_country),
+         yaxis = list(title = "Absolute number of COVID-19 confirmed cases"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date"))
   )
 
+# interactive plot for deaths
+epi_curve_ll %>%
+  plot_ly(x = ~Reporting_Date) %>%
+  add_bars(y = ~Deaths_this_day, 
+           colors = mycolors_1,
+           name = "Cases this day", 
+           hoverinfo = "text+x",
+           text = ~paste0("<b>Deaths in ", my_country, ": </b>", Deaths_this_day)) %>%
+  add_trace(y = ~seven_day_death_avg, 
+            name = "7-day rolling avg. cases", 
+            type = "scatter", 
+            mode = "lines", 
+            line = list(color = "black", dash = "dash"),
+            hoverinfo = "text+x",
+            text = ~paste("<b>7-day rolling avg.: </b>", round(seven_day_death_avg, 2))) %>%
+  add_trace(y = ~fourteen_day_death_avg, 
+            name = "14-day rolling avg. cases", 
+            type = "scatter", 
+            mode = "lines", 
+            line = list(color = "black", dash = "dot"),
+            hoverinfo = "text+x",
+            text = ~paste0("<b>14-day rolling avg.: </b>", round(fourteen_day_death_avg, 2))) %>%
+  layout(hovermode = "x unified",
+         title = paste0("Daily COVID-19 deaths in", my_country),
+         yaxis = list(title = "Absolute number of COVID-19 deaths"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date"))
+  )
 
 
 ##############################################
@@ -454,7 +470,7 @@ plot_ly(epi_curve_ll, x = ~Reporting_Date) %>%
 # growth rate of reported cases df
 growth_rate_tab <- df_country %>% 
   filter(Country == my_country) %>% 
-  select(Reporting_Date, Cases_past_week, Epiweek) %>% 
+  select(Reporting_Date, Epiweek, Cases_past_week) %>% 
   group_by(Epiweek) %>% 
   # take the last day of each epiweek
   slice(which.max(Reporting_Date)) %>% 
@@ -467,48 +483,54 @@ growth_rate_tab <- df_country %>%
          growth = (((1 + week_growth) ^ (1/7)) - 1), 
          growth_perc = 100 * growth)
 
-# plot
-plot_ly(growth_rate_tab, x = ~Reporting_Date) %>%
+# growth rate of confirmed cases interactive plot
+growth_rate_tab %>%
+  plot_ly(x = ~Reporting_Date) %>%
   # ribbons are polygons in the background
-  add_ribbons(x = ~Reporting_Date, ymin = 0, 
+  add_ribbons(x = ~Reporting_Date, 
+              ymin = 0, 
               # ymax needs to remove Inf or otherwise plotly will explode to a large ymax
               ymax = max(growth_rate_tab$week_growth_perc[growth_rate_tab$week_growth_perc != Inf], 
                          na.rm = TRUE),
+              color = I("red"), # red for increase in growth rate
+              opacity = 0.5,
               hoverinfo = "none", # removes the hovering text (it is not needed in here)
               showlegend = FALSE, # to remove the unneeded trace info 
-              line = list(color = "rgba(0, 0, 0, 0)"), # making contour line transparent
-              fillcolor = "rgba(247, 157, 87, 0.3)") %>% # red for increase in growth rate
-  add_ribbons(x = ~Reporting_Date, ymax = 0, 
+              line = list(color = "rgba(0, 0, 0, 0)")) %>%  # making contour line transparent
+  add_ribbons(x = ~Reporting_Date, 
+              ymax = 0, 
               ymin = min(growth_rate_tab$week_growth_perc[growth_rate_tab$week_growth_perc != Inf], 
                          na.rm = TRUE),
-              hoverinfo = "none", showlegend = FALSE, 
-              line = list(color = "rgba(0, 0, 0, 0)"), # making contour line transparent
-              fillcolor = "rgba(86, 191, 163, 0.3)") %>% # green for decrease in growth rate
-  add_trace(y = ~week_growth_perc, name = "Weekly growth rate", 
+              color = I("green"), # green for decrease in growth rate
+              opacity = 0.5,
+              hoverinfo = "none", 
+              showlegend = FALSE, 
+              line = list(color = "rgba(0, 0, 0, 0)")) %>%
+  add_trace(y = ~week_growth_perc, 
+            name = "Weekly growth rate", 
             type = "scatter", # configuring trace as scatterplot
             mode = "markers+lines", # lines + points
-            # configuring hoverinfo as text with a small title before and rounded values
-            hoverinfo = "text",
-            text = ~paste("Weekly growth rate: ", round(week_growth_perc, 2), "%")) %>%
-  layout(
-    title = paste0("Week-on-week growth rate of new COVID-19 cases in ", my_country),
-    yaxis = list(
-      title = "Average daily growth rate (%) each week"),
-    xaxis = list(
-      title = "Date of Reporting",
-      type = "date",
-      tickformat = "%b %d (%a)",
-      rangeslider = list(type = "date")
-    )
-  )
+            color = I("black"),
+            hoverinfo = "text+x",
+            text = ~paste0("<b>Date of reporting: </b>", Reporting_Date,
+                           "<br><b>Epidemiological week: </b>", Epiweek,
+                           "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_perc, 2), "%"))) %>%
+  layout(hovermode = "unified x",
+         
+         title = paste0("Week-on-week growth rate of new COVID-19 confirmed cases in ", my_country),
+         yaxis = list(title = "Average daily growth rate (%) each week"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date"))
+         )
 
 
-
-################################################################
-##                                                            ##
-##      REGIONAL CASE and DEATH PER MILLION COMPARISONS       ##
-##                                                            ##
-################################################################
+##############################################################
+##                                                          ##
+##      REGIONAL CASE AND DEATH PER MILLION COMPARISONS     ##
+##                                                          ##
+##############################################################
 
 # comparison of incidence per million inhabitants with countries of the same region
 df_regional_comparison <- df_country %>% 
@@ -516,39 +538,47 @@ df_regional_comparison <- df_country %>%
   select(Reporting_Date, Cases_per_million, Deaths_per_million, Country) %>%
   group_by(Country) 
 
-# plot
-plot_ly(df_regional_comparison, x = ~Reporting_Date, y = ~Cases_per_million, 
-        color = ~Country, type = "scatter", mode = "lines",
-        hoverinfo = "text", visible = TRUE,
-        text = ~paste("<b>Country: </b>", Country, 
-                      "<br><b>Date: </b>", Reporting_Date,
-                      "<br><b>Confirmed cases per million: </b>", round(Cases_per_million, 2))) %>%
-  add_trace(y = ~Deaths_per_million, color = ~Country, type = "scatter", mode = "lines",
-            hoverinfo = "text", visible = FALSE,
-            text = ~paste("<b>Country: </b>", Country, 
-                          "<br><b>Date: </b>", Reporting_Date,
-                          "<br><b>Deaths cases per million: </b>", round(Deaths_per_million, 2))) %>%
-  layout(updatemenus = list(
-    list(
-      y = 0,
-      buttons = list(
-        list(method = "restyle",
-             args = list("visible", list(TRUE, FALSE)),
-             label = "Cases per million"),
-        list(method = "restyle",
-             args = list("visible", list(FALSE, TRUE)),
-             label = "Deaths per million")))),
-    title = paste("Cumulative cases and deaths per million for countries in", my_region),
-    yaxis = list(
-      title = "Cases/Deaths per million"),
-    xaxis = list(
-      title = "Date of Reporting",
-      type = "date",
-      tickformat = "%b %d (%a)",
-      rangeslider = list(type = "date")
-    )
-  )
+# interactive time series plot of confirmed cases
+df_regional_comparison %>%
+  plot_ly(x = ~Reporting_Date, 
+          y = ~Cases_per_million, 
+          color = ~Country, 
+          colors = mycolors_1,
+          type = "scatter", 
+          mode = "lines",
+          hoverinfo = "text+x",
+          text = ~paste0("<b>Country: </b>", Country, 
+                         "<br><b>Date: </b>", Reporting_Date,
+                         "<br><b>Confirmed cases per million: </b>", round(Cases_per_million, 2))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Cumulative COVID-19 confirmed cases per million in countries in", my_region),
+         yaxis = list(title = "COVID-19 confirmed cases per million"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date"))
+         )
 
+# interactive time series plot of deaths
+df_regional_comparison %>%
+  plot_ly(x = ~Reporting_Date, 
+          y = ~Deaths_per_million, 
+          color = ~Country, 
+          colors = mycolors_1,
+          type = "scatter", 
+          mode = "lines",
+          hoverinfo = "text+x",
+          text = ~paste0("<b>Country: </b>", Country, 
+                         "<br><b>Date: </b>", Reporting_Date,
+                         "<br><b>Deaths per million: </b>", round(Deaths_per_million, 2))) %>%
+  layout(hovermode = "unified x",
+         title = paste0("Cumulative COVID-19 deaths per million in countries in", my_region),
+         yaxis = list(title = "COVID-19 deaths per million"),
+         xaxis = list(title = "Date of Reporting",
+                      type = "date",
+                      tickformat = "%b %d (%a)",
+                      rangeslider = list(type = "date"))
+         )
 
 
 ######################################################
@@ -590,7 +620,6 @@ leaflet(africa_map) %>%
     baseGroups = c("Map", "Satellite"),
     options = layersControlOptions(collapsed = TRUE)
     )
-
 
 
 ######################################################
