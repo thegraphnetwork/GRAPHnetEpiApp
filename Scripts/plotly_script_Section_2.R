@@ -55,17 +55,6 @@ out_path = paste0("../data-platform/data/maps_graphs_results/", my_country)
 # defining relative path to import cleanCSV
 clean_csv_path = paste0(in_path, "cleanCSV/")
 
-
-########################
-##                    ##
-##      Set Theme     ##
-##                    ##
-########################
-
-# Define the number of colors to prevent error in plots
-nb.cols <- length(unique(df_daily$resadmin1_correct))
-mycolors <- colorRampPalette(brewer.pal(8, "Set3"))(nb.cols)
-
 # turning off annoying scientific notation
 options(scipen = 999)
 
@@ -532,6 +521,18 @@ pallete.incidence_confirmed <- colorFactor(palette = "YlOrRd", df_gpkg_daily$inc
 pallete.mortality <- colorFactor(palette = "YlOrRd", df_gpkg_daily$mortality_quintile)
 
 
+###################################################
+##                                               ##
+##      SETTING COLOR THEME FOR RColorBrewer     ##
+##        NEEDED TO AVOID ERROR IN PLOTLY        ##
+##                                               ##
+###################################################
+
+# Define the number of colors to prevent error in plots
+nb.cols_2 <- length(unique(df_daily$resadmin1_correct))
+mycolors_2 <- colorRampPalette(brewer.pal(8, "Set3"))(nb.cols_2)
+
+
 #####################################################################
 ##                                                                 ##
 ##      MAPS SECTION: SEVERAL THAT COULD SUIT BEST THE REPORT      ##
@@ -918,7 +919,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dash"),
             hoverinfo = "text+x",
-            text = ~paste("<b>7-day rolling avg.: </b>", round(reported_7day_avg, 2))) %>%
+            text = ~paste0("<b>7-day rolling avg.: </b>", round(reported_7day_avg, 2))) %>%
   add_trace(data = df_daily_national,
             y = ~reported_14day_avg, 
             name = "14-day rolling average", 
@@ -926,7 +927,7 @@ df_epi_curve %>%
             mode = "lines", 
             line = list(color = "black", dash = "dot"),
             hoverinfo = "text+x",
-            text = ~paste("<b>14-day rolling avg.: </b>", round(reported_14day_avg, 2))) %>%
+            text = ~paste0("<b>14-day rolling avg.: </b>", round(reported_14day_avg, 2))) %>%
   layout(barmode = "stack",
          hovermode = "x unified",
          title = paste0("Daily COVID-19 reported cases in ", my_country, 
@@ -1550,7 +1551,7 @@ df_daily %>%
   plot_ly(x = ~report_date) %>%
   add_lines(y = ~cum_reported, 
             color = ~resadmin1_correct,
-            colors = mycolors,
+            colors = mycolors_2,
             hoverinfo = "text+x", 
             # presenting reported cases info
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
@@ -1573,7 +1574,7 @@ df_daily %>%
   plot_ly(x = ~report_date) %>%
   add_lines(y = ~cum_confirmed, 
             color = ~resadmin1_correct,
-            colors = mycolors,
+            colors = mycolors_2,
             hoverinfo = "text+x", 
             # presenting confirmed cases info
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
@@ -1596,7 +1597,7 @@ df_daily %>%
   plot_ly(x = ~report_date) %>%
   add_lines(y = ~cum_deaths, 
             color = ~resadmin1_correct,
-            colors = mycolors,
+            colors = mycolors_2,
             hoverinfo = "text+x", 
             # presenting deaths cases info
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
@@ -1619,7 +1620,7 @@ df_daily %>%
   plot_ly(x = ~report_date) %>%
   add_lines(y = ~incidence_reported, 
             color = ~resadmin1_correct,
-            colors = mycolors,
+            colors = mycolors_2,
             hoverinfo = "text+x", 
             # presenting reported cases info
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
@@ -1642,7 +1643,7 @@ df_daily %>%
   plot_ly(x = ~report_date) %>%
   add_lines(y = ~incidence_confirmed, 
             color = ~resadmin1_correct,
-            colors = mycolors,
+            colors = mycolors_2,
             hoverinfo = "text+x", 
             # presenting confirmed cases info
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
@@ -1665,7 +1666,7 @@ df_daily %>%
   plot_ly(x = ~report_date) %>%
   add_lines(y = ~mortality, 
             color = ~resadmin1_correct,
-            colors = mycolors,
+            colors = mycolors_2,
             hoverinfo = "text+x", 
             # presenting confirmed cases info
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
@@ -1738,19 +1739,23 @@ df_growth_rate %>%
               ymax = max(df_growth_rate$week_growth_reported_perc[df_growth_rate$week_growth_reported_perc != Inf], 
                          na.rm = TRUE),
               color = I("red"),
-              opacity = 0.8,
+              opacity = 0.5,
               hoverinfo = "none",
-              showlegend = FALSE) %>%
+              showlegend = FALSE,
+              line = list(color = "rgba(0, 0, 0, 0)")) %>%
   add_ribbons(ymin = min(df_growth_rate$week_growth_reported_perc[df_growth_rate$week_growth_reported_perc != Inf], 
                          na.rm = TRUE),
               ymax = 0,
               color = I("green"),
-              opacity = 0.8,
+              opacity = 0.5,
               hoverinfo = "none",
-              showlegend = FALSE) %>%
-  add_lines(y = ~week_growth_reported_perc, 
-            color = I("black"),
-            hoverinfo = "text", 
+              showlegend = FALSE, 
+              line = list(color = "rgba(0, 0, 0, 0)")) %>%
+  add_trace(y = ~week_growth_reported_perc, 
+            type = "scatter", # configuring trace as scatterplot
+            mode = "markers+lines", # lines + points
+            color = I("black"), # black line
+            hoverinfo = "text+x", 
             text = ~paste0("<b>Date of reporting: </b>", report_date,
                            "<br><b>Epidemiological week: </b>", epiweek,
                            "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_reported_perc, 2), "%"))) %>%
@@ -1939,7 +1944,7 @@ df_origin_reported %>%
           y = ~reported_this_day, 
           type = "bar",
           color = ~expo_travel, 
-          colors = mycolors,
+          colors = mycolors_2,
           legendgroup = ~expo_travel,
           hoverinfo = "text+x",
           text = ~paste0("<b>Date of reporting: </b>", report_date,
@@ -1959,7 +1964,7 @@ df_origin_reported %>%
           y = ~confirmed_this_day, 
           type = "bar",
           color = ~expo_travel, 
-          colors = mycolors,
+          colors = mycolors_2,
           legendgroup = ~expo_travel,
           hoverinfo = "text+x",
           text = ~paste0("<b>Date of reporting: </b>", report_date,
@@ -1979,7 +1984,7 @@ df_origin_reported %>%
           y = ~deaths_this_day, 
           type = "bar",
           color = ~expo_travel, 
-          colors = mycolors,
+          colors = mycolors_2,
           legendgroup = ~expo_travel,
           hoverinfo = "text+x",
           text = ~paste0("<b>Date of reporting: </b>", report_date,
@@ -1994,5 +1999,187 @@ df_origin_reported %>%
                       rangeslider = list(type = "date")))
 
 
+###############################################
+###############################################
+##                                           ##
+##      7 AGE-SEX DISTRIBUTION OF CASES      ##
+##                                           ##
+##            PYRAMID PLOTS SECTION          ##
+##                                           ##
+###############################################
+###############################################
+
+
+##########################################
+##      Age-sex distribution graphs     ##
+##########################################
+
+df_age_sex <- df %>%
+  # filtering out individuals with missing sex or age
+  filter(!is.na(patinfo_sex) & !is.na(patinfo_ageonset_years)) %>%
+  # creating age categories
+  mutate(age_group = cut(as.numeric(patinfo_ageonset_years), 
+                         breaks = c(0, 5, 9, 19, 29, 39, 49, 59, 69, 79, Inf),
+                         labels = c("< 5", "5-9", "10-19", "20-29", "30-39", "40-49",
+                                    "50-59", "60-69", "70-79", "> 80"), 
+                         right = TRUE)) %>% 
+  # for each age group and sex, sum the number of cases and the number of deaths
+  group_by(age_group, patinfo_sex) %>%
+  summarise(reported = sum(is_reported, na.rm = TRUE),
+            confirmed = sum(is_reported[report_classif == "CONFIRMED"], na.rm = TRUE),
+            deaths = sum(is_reported[patcourse_status == "DEAD"], na.rm = TRUE)) %>%
+  filter(!is.na(age_group)) %>%
+  ungroup()
+
+# long format for the stacked bar chart
+df_age_sex_long <-  df_age_sex %>% 
+  # subtract out deaths from reported count to get CASES ALONE 
+  # needed since we're going to build a STACKED bar chart.
+  mutate(`Reported cases` = reported - deaths,
+         `Confirmed cases` = confirmed - deaths,
+         Deaths = deaths,
+         patinfo_sex = recode_factor(patinfo_sex,
+                                     "M" = "Male",
+                                     "F" = "Female")) %>% 
+  pivot_longer(names_to = "classification", cols = c(`Reported cases`, 
+                                                     `Confirmed cases`, 
+                                                     Deaths)) %>% 
+  mutate(classification = fct_relevel(classification, c("Reported cases", 
+                                                        "Confirmed cases", 
+                                                        "Deaths")),
+         # in order for the pyramid to be correctly displayed, one of the groups should be negative
+         # we will hack the axis later to make it the absolute number
+         value = if_else(patinfo_sex == "Female", value * (-1), value),
+         # value to be passed to hoverinfo in plotly
+         text_value = paste0("<b>", classification, ": </b>", abs(value)),
+         # creating a variable with the absolute number of reported cases
+         color_info = paste0(patinfo_sex, " ", classification),
+         color_info = fct_relevel(color_info, c("Female Reported cases", "Female Confirmed cases", "Female Deaths",
+                                            "Male Reported cases", "Male Confirmed cases","Male Deaths")),
+         # calculating CFR
+         CFR_reported = round(deaths / reported * 100, 2),
+         CFR_confirmed = round(deaths / confirmed * 100, 2))
+
+#########################################
+##      Pyramid for reported cases     ##
+#########################################
+
+# age-sex pyramid plot of reported cases
+df_age_sex_long %>%
+  filter(classification != "Confirmed cases") %>%
+  plot_ly(x = ~value, # inverting x axis
+          y = ~age_group, # inverting x axis
+          color = ~color_info,
+          colors = c("Female Reported cases" = "#66C2A5",
+                     "Female Deaths" = "red",
+                     "Male Reported cases" = "#8DA0CB",
+                     "Male Deaths" = "red"),
+          customdata = ~text_value,
+          hoverinfo = "text",
+          text = ~paste0("<b>Sex: </b>", patinfo_sex,
+                         "<br><b>Age group: </b>", age_group,
+                         "<br>", text_value,
+                         "<br><b>CFR (based on reported cases): </b>", CFR_reported, "%")) %>%
+  # changing orientations to horizontal
+  add_bars(orientation = "h") %>%
+  layout(bargap = 0.1,
+         # needed to make bars correctly placed
+         barmode = "relative",
+         title = paste0("Age-sex distribution of all COVID-19 reported cases in ", my_country),
+         yaxis = list(title = "Age group"),
+         xaxis = list(title = "COVID-19 reported cases and deaths",
+                      # changing axis ticks and making it absolute counts
+                      tickmode = "array",
+                      # creating a sequence of values large enough to acomodate a zoom out
+                      tickvals = seq(-round_reported * 10, round_reported * 10, round_reported),
+                      # adding correct (positive) counts at axis ticks
+                      ticktext = c(seq(-round_reported * 10, 0, round_reported) * -1,
+                                   seq(round_reported, round_reported * 10, round_reported))))
+
+
+##########################################
+##      Pyramid for confirmed cases     ##
+##########################################
+
+# age-sex pyramid plot of confirmed cases
+df_age_sex_long %>%
+  filter(classification != "Reported cases") %>%
+  plot_ly(x = ~value, # inverting x axis
+          y = ~age_group, # inverting x axis
+          color = ~color_info,
+          colors = c("Female Confirmed cases" = "#66C2A5",
+                     "Female Deaths" = "red",
+                     "Male Confirmed cases" = "#8DA0CB",
+                     "Male Deaths" = "red"),
+          customdata = ~text_value,
+          hoverinfo = "text",
+          text = ~paste0("<b>Sex: </b>", patinfo_sex,
+                         "<br><b>Age group: </b>", age_group,
+                         "<br>", text_value,
+                         "<br><b>CFR (based on confirmed cases): </b>", CFR_confirmed, "%")) %>%
+  # changing orientations to horizontal
+  add_bars(orientation = "h") %>%
+  layout(bargap = 0.1,
+         # needed to make bars correctly placed
+         barmode = "relative",
+         title = paste0("Age-sex distribution of all COVID-19 confirmed cases in ", my_country),
+         yaxis = list(title = "Age group"),
+         xaxis = list(title = "COVID-19 confirmed cases and deaths",
+                      # changing axis ticks and making it absolute counts
+                      tickmode = "array",
+                      # creating a sequence of values large enough to acomodate a zoom out
+                      tickvals = seq(-round_confirmed * 10, round_confirmed * 10, round_confirmed),
+                      # adding correct (positive) counts at axis ticks
+                      ticktext = c(seq(-round_confirmed * 10, 0, round_confirmed) * -1,
+                                   seq(round_confirmed, round_confirmed * 10, round_confirmed))))
+
+
+###############################
+###############################
+##                           ##
+##      8 COMORBITIES        ##
+##                           ##
+##          SECTION          ##
+##                           ##
+###############################
+###############################
+
+df_comorb <- df %>% 
+  filter(patcourse_admit == "Y") %>% 
+  group_by(Comcond_preexist) %>% 
+  count() %>% 
+  uncount(weights = n) %>% 
+  # cleaning the diverse coding of the Comcond_preexist variable
+  # standardizing into title case
+  mutate(condition = str_to_title(Comcond_preexist)) %>% 
+  # splitting comma separated observations into a vector
+  # unnesting vectors that were separated above
+  mutate(condition = strsplit(as.character(condition), ",")) %>% 
+  unnest(condition) %>% 
+  # splitting semicolon separated observations into a vector
+  # unnesting vectors that were separated above
+  mutate(condition = strsplit(as.character(condition), ";")) %>% 
+  unnest(condition) %>% 
+  # removing blank spaces (artifacts of splitting and unnesting)
+  mutate(condition = trimws(condition)) %>% 
+  group_by(condition) %>% 
+  count() %>%
+  # arranging by descending order
+  arrange(-n) %>% 
+  # filtering out 
+  filter(condition != "Non" & !is.na(condition)) %>% 
+  filter(n > 1)
+
+# interactive bar plot of most common comorbities
+df_comorb %>%
+  plot_ly(x = ~n, # inverting x axis
+          y = ~reorder(condition, n), # inverting x axis
+          hoverinfo = "text",
+          text = ~paste0("<b>Number of cases with ", condition, ": </b>", n)) %>%
+  # changing orientations to horizontal
+  add_bars(orientation = "h") %>%
+  layout(title = paste0("Most common comorbidities reported by hospitalised patients in ", my_country),
+         yaxis = list(title = "Comorbity"),
+         xaxis = list(title = "Number of cases"))
 
 
