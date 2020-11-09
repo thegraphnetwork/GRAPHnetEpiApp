@@ -1,4 +1,3 @@
--- Created by Vertabelo (http://vertabelo.com)
 -- Last modification date: 2020-10-08 11:26:59.036
 
 -- tables
@@ -12,12 +11,13 @@ CREATE TABLE country (
 );
 
 -- Table: line_list
+
 CREATE TABLE line_list (
 id serial NOT NULL,
 patinfo_id VARCHAR(50),
 report_date DATE,
-patinfo_first_name VARCHAR(50),
-patinfo_last_name VARCHAR(50),
+--patinfo_first_name VARCHAR(50),
+--patinfo_last_name VARCHAR(50),
 patinfo_ageonset_years INT,
 patinfo_ageonset_months INT,
 patcourse_status VARCHAR(50),
@@ -73,8 +73,8 @@ lab_result VARCHAR(50),
 lab_resdate DATE,
 lab_other VARCHAR(50),
 patcourse_datedischarge DATE,
-name_first VARCHAR(50),
-name_last VARCHAR(50),
+--name_first VARCHAR(50),
+--name_last VARCHAR(50),
 expo_visit_healthcare VARCHAR(50),
 lab_otherres VARCHAR(50),
 country_id INT,
