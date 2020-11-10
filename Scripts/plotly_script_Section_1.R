@@ -590,8 +590,8 @@ df_regional_comparison %>%
 # interactive map for continental Africa
 leaflet(africa_map) %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.cases_per_m(cases_per_m_quintile),
@@ -631,8 +631,8 @@ leaflet(africa_map) %>%
 # interactive map for continental Africa
 leaflet(africa_map) %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.deaths_per_m(deaths_per_m_quintile),

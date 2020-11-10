@@ -44,7 +44,7 @@ p_load(char = c("lubridate", # for date manipulation
 ############################
 
 # defining wihch country to analyze
-my_country <- "Niger"
+my_country <- "Ivory Coast"
 
 # defining relative path to import stuff
 in_path = "/work/data-platform/data/"
@@ -81,7 +81,7 @@ options(scipen = 999)
 ################################################
 
 # Importing clean DB (UTF-8 encoding)
-df <- read.csv(paste0(clean_csv_path, "niger_clean.csv"), encoding = "UTF-8") %>%
+df <- read.csv(paste0(clean_csv_path, "niger_clean.csv"), sep = ";", encoding = "UTF-8") %>%
   # removing additional information-less rows in the df
   filter(!is.na(report_date)) %>%
   # Transforming all dates properly
@@ -139,7 +139,6 @@ for(i in seq_along(df$patinfo_resadmin1)){
     index <- dict$incorrect %in% df$patinfo_resadmin2[i]
     df$resadmin2_correct[i] <- dict$correct[dict$admin_lvl == 2 & index == TRUE]
   }
-  
 }
 
 
@@ -547,8 +546,8 @@ df_gpkg_daily %>%
   filter(report_date == max(report_date, na.rm = TRUE)) %>%
   leaflet() %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.reported(reported_quintile),
@@ -590,8 +589,8 @@ df_gpkg_daily %>%
   filter(report_date == max(report_date, na.rm = TRUE)) %>%
   leaflet() %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.confirmed(confirmed_quintile),
@@ -633,8 +632,8 @@ df_gpkg_daily %>%
   filter(report_date == max(report_date, na.rm = TRUE)) %>%
   leaflet() %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.deaths(deaths_quintile),
@@ -676,8 +675,8 @@ df_gpkg_daily %>%
   filter(report_date == max(report_date, na.rm = TRUE)) %>%
   leaflet() %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.incidence_reported(incidence_reported_quintile),
@@ -719,8 +718,8 @@ df_gpkg_daily %>%
   filter(report_date == max(report_date, na.rm = TRUE)) %>%
   leaflet() %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.incidence_confirmed(incidence_confirmed_quintile),
@@ -762,8 +761,8 @@ df_gpkg_daily %>%
   filter(report_date == max(report_date, na.rm = TRUE)) %>%
   leaflet() %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.Positron, group = "Claro") %>%
-  addProviderTiles(providers$HERE.satelliteDay, group = "Satélite") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+  addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
   addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
               opacity = 1.0, fillOpacity = 0.75,
               fillColor = ~pallete.mortality(mortality_quintile),
@@ -931,13 +930,13 @@ df_epi_curve %>%
   layout(barmode = "stack",
          hovermode = "x unified",
          title = paste0("Daily COVID-19 reported cases in ", my_country, 
-                       "<br> as of ", max(df_epi_curve$report_date, na.rm = TRUE)),
+                        "<br> as of ", max(df_epi_curve$report_date, na.rm = TRUE)),
          yaxis = list(title = "Absolute number of reported cases"),
          xaxis = list(title = "Date of Reporting",
                       type = "date",
                       tickformat = "%b %d (%a)",
                       rangeslider = list(type = "date"))
-         )
+  )
 
 # daily absolute confirmed cases plot per region
 df_epi_curve %>%
@@ -1230,7 +1229,7 @@ for (i in 1:length(regions_reported)) {
                         tickformat = "%b %d (%a)"),
            # using the annotation feature to insert the individual title for each subplot
            annotations = regions_reported_title[[i]])
-  }
+}
 
 # plotting all regions of my_country as a unique facetted plot
 subplot(regions_reported_list, nrows = 3, shareX = TRUE, shareY = TRUE) 
@@ -1328,7 +1327,7 @@ for (i in 1:length(regions_confirmed)) {
                         tickformat = "%b %d (%a)"),
            # using the annotation feature to insert the individual title for each subplot
            annotations = regions_confirmed_title[[i]])
-  }
+}
 
 # plotting all regions of my_country as a unique facetted plot
 subplot(regions_confirmed_list, nrows = 3, shareX = TRUE, shareY = TRUE) 
@@ -1557,7 +1556,7 @@ df_daily %>%
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
                            "<br><b>Reported cases: </b>", cum_reported,
                            "<br><b>Incidence of reported cases: </b>", paste0(round(incidence_reported, 2), 
-                                                                       " per 100,000"))) %>%
+                                                                              " per 100,000"))) %>%
   layout(hovermode = "unified x",
          title = paste0("Reported cases across regions in ", my_country),
          yaxis = list(title = "Cumulative number of reported cases"),
@@ -1580,7 +1579,7 @@ df_daily %>%
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
                            "<br><b>Confirmed cases: </b>", cum_confirmed,
                            "<br><b>Incidence of confirmed cases: </b>", paste0(round(incidence_confirmed, 2), 
-                                                                        " per 100,000"))) %>%
+                                                                               " per 100,000"))) %>%
   layout(hovermode = "unified x",
          title = paste0("Confirmed cases across regions in ", my_country),
          yaxis = list(title = "Cumulative number of confirmed cases"),
@@ -1603,7 +1602,7 @@ df_daily %>%
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
                            "<br><b>Deaths: </b>", cum_deaths,
                            "<br><b>Mortality: </b>", paste0(round(mortality, 2), 
-                                                     " per 100,000"))) %>%
+                                                            " per 100,000"))) %>%
   layout(hovermode = "unified x",
          title = paste0("Deaths across regions in ", my_country),
          yaxis = list(title = "Cumulative number of deaths cases"),
@@ -1626,7 +1625,7 @@ df_daily %>%
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
                            "<br><b>Reported cases: </b>", cum_reported,
                            "<br><b>Incidence of reported cases: </b>", paste0(round(incidence_reported, 2), 
-                                                                       " per 100,000"))) %>%
+                                                                              " per 100,000"))) %>%
   layout(hovermode = "unified x",
          title = paste0("Incidence of reported cases across regions in ", my_country),
          yaxis = list(title = "Incidence of reported cases per 100,000"),
@@ -1649,7 +1648,7 @@ df_daily %>%
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
                            "<br><b>Confirmed cases: </b>", cum_confirmed,
                            "<br><b>Incidence of confirmed cases: </b>", paste0(round(incidence_confirmed, 2), 
-                                                                        " per 100,000"))) %>%
+                                                                               " per 100,000"))) %>%
   layout(hovermode = "unified x",
          title = paste0("Incidence of confirmed cases across regions in ", my_country),
          yaxis = list(title = "Incidence of confirmed cases per 100,000"),
@@ -1672,7 +1671,7 @@ df_daily %>%
             text = ~paste0("<b>Region: </b>", resadmin1_correct,
                            "<br><b>Deaths: </b>", cum_deaths,
                            "<br><b>Mortality: </b>", paste0(round(mortality, 2), 
-                                                     " per 100,000"))) %>%
+                                                            " per 100,000"))) %>%
   layout(hovermode = "unified x",
          title = paste0("Mortality across regions in ", my_country),
          yaxis = list(title = "Mortality per 100,000"),
@@ -1784,7 +1783,9 @@ df_growth_rate %>%
               opacity = 0.8,
               hoverinfo = "none",
               showlegend = FALSE) %>%
-  add_lines(y = ~week_growth_confirmed_perc, 
+  add_trace(y = ~week_growth_confirmed_perc, 
+            type = "scatter",
+            mode = "markers+lines",
             color = I("black"),
             hoverinfo = "text", 
             text = ~paste0("<b>Date of reporting: </b>", report_date,
@@ -1815,7 +1816,9 @@ df_growth_rate %>%
               opacity = 0.8,
               hoverinfo = "none",
               showlegend = FALSE) %>%
-  add_lines(y = ~week_growth_deaths_perc, 
+  add_trace(y = ~week_growth_deaths_perc, 
+            type = "scatter",
+            mode = "markers+lines",
             color = I("black"),
             hoverinfo = "text", 
             text = ~paste0("<b>Date of reporting: </b>", report_date,
@@ -2055,7 +2058,7 @@ df_age_sex_long <-  df_age_sex %>%
          # creating a variable with the absolute number of reported cases
          color_info = paste0(patinfo_sex, " ", classification),
          color_info = fct_relevel(color_info, c("Female Reported cases", "Female Confirmed cases", "Female Deaths",
-                                            "Male Reported cases", "Male Confirmed cases","Male Deaths")),
+                                                "Male Reported cases", "Male Confirmed cases","Male Deaths")),
          # calculating CFR
          CFR_reported = round(deaths / reported * 100, 2),
          CFR_confirmed = round(deaths / confirmed * 100, 2))
@@ -2063,6 +2066,13 @@ df_age_sex_long <-  df_age_sex %>%
 #########################################
 ##      Pyramid for reported cases     ##
 #########################################
+
+# creating object to make the x-axis readable (no negative values) and that maintains itself after zooming out
+# how many digits the higher count of reported cases have?
+digits_reported <- (nchar(max(df_age_sex$reported)) - 1) * (-1)
+
+# next, we round it and arbitrarily divide it by 5, so that visualization and interpretation is still good
+round_reported <- round(max(df_age_sex$reported), digits = digits_reported) / 5
 
 # age-sex pyramid plot of reported cases
 df_age_sex_long %>%
@@ -2100,6 +2110,13 @@ df_age_sex_long %>%
 ##########################################
 ##      Pyramid for confirmed cases     ##
 ##########################################
+
+# creating object to make the x-axis readable (no negative values) and that maintains itself after zooming out
+# how many digits the higher count of confirmed cases have?
+digits_confirmed <- (nchar(max(df_age_sex$confirmed)) - 1) * (-1)
+
+# next, we round it and arbitrarily divide it by 5, so that visualization and interpretation is still good
+round_confirmed <- round(max(df_age_sex$confirmed), digits = digits_confirmed) / 5
 
 # age-sex pyramid plot of confirmed cases
 df_age_sex_long %>%
