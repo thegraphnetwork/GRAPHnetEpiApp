@@ -78,7 +78,8 @@ patcourse_datedischarge DATE,
 expo_visit_healthcare VARCHAR(50),
 lab_otherres VARCHAR(50),
 country_id INT,
-CONSTRAINT line_list_pk PRIMARY KEY(id)
+CONSTRAINT line_list_pk PRIMARY KEY(id),
+UNIQUE (patinfo_id, report_date, patinfo_ageonset_years, patinfo_sex, patinfo_resadmin1, patinfo_resadmin2)    
 );
 
 -- foreign keys
