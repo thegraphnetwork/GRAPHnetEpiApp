@@ -31,12 +31,12 @@ h1, h2, h3 {
 	/*font-weight: bold;*/
 	text-transform: uppercase;
 	text-align: center;
-	letter-spacing: .1em;
+
 	line-height: 1.2;
 }
 
 h1 {
-	margin: 50px 0;
+	margin: 20px 0;
 }
 
 h1.title{

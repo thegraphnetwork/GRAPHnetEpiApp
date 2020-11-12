@@ -63,16 +63,15 @@ iso_code_aux <- africa %>%
 # importing dictionary of correct/incorrect names 
 my_country_dict <- str_replace(str_to_lower(my_country), " ", "_")
 
-dict <- read.csv2(paste0("dict_", my_country_dict, ".csv"), encoding = "UTF-8") %>%
-  mutate(correct = str_to_title(correct),
-         incorrect = str_to_title(incorrect))
+dict <- read.csv2(paste0("shinyapp/Others/",my_country,"/dict_", my_country_dict, ".csv"), encoding = "UTF-8") %>%
+  setNames(c("incorrect", "correct", "admin_lvl"))
 
 ##############################
 ##      importing gpkg      ##
 ##############################
 
 # Reading gpkg with region polygons
-df_gpkg <- readOGR(paste0("Burkina_Faso_gadm36_BFA.gpkg"),
+df_gpkg <- readOGR(paste0("shinyapp/Others/",my_country,"/Burkina_Faso_gadm36_BFA.gpkg"),
                    layer = paste0("gadm36_", iso_code_aux, "_1"), 
                    encoding = "UTF-8", 
                    use_iconv = TRUE) %>%
@@ -84,13 +83,13 @@ df_gpkg <- readOGR(paste0("Burkina_Faso_gadm36_BFA.gpkg"),
 ##################################################
 
 # importing risk mapping result files: Mortality Risk Index for admin level 1
-df_MRI_adm01 <- read.csv(paste0(iso_code_aux, "_adm01_MRI.csv")) %>%
+df_MRI_adm01 <- read.csv(paste0("shinyapp/Others/",my_country,"/BFA_adm01_MRI.csv")) %>%
   mutate(Region = str_to_title(Region),
          Region = stringi::stri_encode(Region, from = "UTF-8", to = "UTF-8")) %>%
   as_tibble()
 
 # importing risk mapping result files: Transmission Risk Index for admin level 1
-df_TRI_adm01 <- read.csv(paste0(iso_code_aux, "_adm01_TRI.csv")) %>%
+df_TRI_adm01 <- read.csv(paste0("shinyapp/Others/",my_country,"/BFA_adm01_TRI.csv")) %>%
   mutate(patinfo_resadmin1 = str_to_title(patinfo_resadmin1),
          patinfo_resadmin1 = stringi::stri_encode(patinfo_resadmin1, from = "UTF-8", to = "UTF-8")) %>%
   as_tibble()
@@ -225,11 +224,11 @@ df_risk_MRI_1 %>%
                                                   bringToFront = TRUE),
               popup = ~paste0("<b>Country: </b>", NAME_0,
                               "<br><b>Department: </b>", NAME_1,
-                              "<br><b>Mortality Risk Index (raw and not including distance from medical facility): </b>", round(MRI_RIDX, 2))) %>%  
+                              "<br><b>Mortality Risk Index (raw and not including<br> distance from medical facility): </b>", round(MRI_RIDX, 2))) %>%  
   addLegend("bottomright", 
             pal = pallete.MRI_RIDX,
             values = ~MRI_RIDX_quintile,
-            title = ~paste0("Mortality Risk Index <br> (raw and not including distance from medical facility)"),
+            title = ~paste0("Mortality Risk Index <br> (raw and not including<br> distance from medical facility)"),
             opacity = 1) %>% 
   addLayersControl(
     baseGroups = c("Map", "Satellite"),

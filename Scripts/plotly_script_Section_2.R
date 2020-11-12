@@ -53,7 +53,8 @@ in_path = "/work/data-platform/data/"
 out_path = paste0("../data-platform/data/maps_graphs_results/", my_country)
 
 # defining relative path to import cleanCSV
-clean_csv_path = paste0(in_path, "cleanCSV/")
+# clean_csv_path = paste0(in_path, "cleanCSV/")
+clean_csv_path = "C:/Users/lucas/Documents/Lucas 2020/Consultoria/2020/WHO/data-platform/data/cleanCSV/"
 
 # turning off annoying scientific notation
 options(scipen = 999)
@@ -79,9 +80,9 @@ options(scipen = 999)
 ##      Loading country-specific linelist     ##
 ##                                            ##
 ################################################
-
+df
 # Importing clean DB (UTF-8 encoding)
-df <- read.csv(paste0(clean_csv_path, "niger_clean.csv"), sep = ";", encoding = "UTF-8") %>%
+df <- read.csv(paste0(clean_csv_path, "niger_clean.csv"), sep = ",", encoding = "UTF-8") %>%
   # removing additional information-less rows in the df
   filter(!is.na(report_date)) %>%
   # Transforming all dates properly
@@ -125,21 +126,23 @@ df <- read.csv(paste0(clean_csv_path, "niger_clean.csv"), sep = ";", encoding = 
 dict <- read.csv2("./Report/Scripts/Dictionaries/dict_niger.csv", encoding = "UTF-8")
 
 # testing if the names in the cleanCSV are correct or not
-test_incorrect_admin1 <- df$patinfo_resadmin1 %in% dict$incorrect[dict$admin_lvl == 1]
+test_incorrect_admin1 <- df$patinfo_resadmin1 %in% dictionary$Incorrect[dictionary$AdminLvl == 1]
 
-test_incorrect_admin2 <- df$patinfo_resadmin2 %in% dict$incorrect[dict$admin_lvl == 2]
+test_incorrect_admin2 <- df$patinfo_resadmin2 %in% dictionary$Incorrect[dictionary$AdminLvl == 2]
 
 # Loop to test individually if each patinfo_resadmin1 entry is correct or not
 for(i in seq_along(df$patinfo_resadmin1)){
   if(test_incorrect_admin1[i] == TRUE) {
-    index <- dict$incorrect %in% df$patinfo_resadmin1[i]
-    df$resadmin1_correct[i] <- dict$correct[dict$admin_lvl == 1 & index == TRUE]
+    index <- dictionary$Incorrect %in% df$patinfo_resadmin1[i]
+    df$resadmin1_correct[i] <- dictionary$Correct[dictionary$AdminLvl == 1 & index == TRUE]
   }
   if(test_incorrect_admin2[i] == TRUE) {
-    index <- dict$incorrect %in% df$patinfo_resadmin2[i]
-    df$resadmin2_correct[i] <- dict$correct[dict$admin_lvl == 2 & index == TRUE]
+    index <- dictionary$Incorrect %in% df$patinfo_resadmin2[i]
+    df$resadmin2_correct[i] <- dictionary$Correct[dictionary$AdminLvl == 2 & index == TRUE]
   }
 }
+
+# E se nao existir nada para corrigir?
 
 
 ####################################################################################

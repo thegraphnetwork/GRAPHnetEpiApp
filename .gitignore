@@ -7,6 +7,9 @@
 # Session Data files
 .RData
 
+# Big files
+../Others/ConfirmedCases.csv
+
 # User-specific files
 .Ruserdata
 
