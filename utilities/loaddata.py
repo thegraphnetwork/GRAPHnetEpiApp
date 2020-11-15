@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """
-Script for loading the CSVs into Postgre
+Script for loading the CSVs into PostgreSQL
 """
 import pandas as pd
 from pandas.errors import ParserError
-from sqlalchemy import create_engine, Table, MetaData, Column
+from sqlalchemy import create_engine, Table, MetaData, exc
+from tqdm import tqdm
+from psycopg2.extensions import AsIs
 
 import inquirer
 import os
@@ -18,7 +20,7 @@ PGHOST = 'localhost'
 PGDB = os.getenv('POSTGRES_DB')
 
 # Create connection
-pg_con = create_engine(f"postgresql://{PGUSER}:{PGPASS}@{PGHOST}/{PGDB}")
+pg_engine = create_engine(f"postgresql://{PGUSER}:{PGPASS}@{PGHOST}/{PGDB}")
 
 questions = [
     inquirer.Path('data_dir',
@@ -46,7 +48,7 @@ def get_table_info(table_name):
     :return:
     """
     metadata = MetaData()
-    table = Table(table_name, metadata, autoload=True, autoload_with=pg_con)
+    table = Table(table_name, metadata, autoload=True, autoload_with=pg_engine)
     return table
 
 
@@ -61,7 +63,7 @@ def load_csvs(pth):
         cname = os.path.split(csv)[-1]
         print(f'loading {cname}')
         try:
-            df = pd.read_csv(csv, encoding='utf8')
+            df = pd.read_csv(csv, encoding='utf8', quoting=1, quotechar='"', low_memory=False).convert_dtypes()
             yield df
         except ParserError as e:
             print(f"Problem parsing {cname}")
@@ -76,9 +78,29 @@ def load_csvs(pth):
             print(oe)
             continue
 
+
 def add_new_column(table_name, column_name, column_type):
-    pg_con.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type};")
-    pg_con.commit()
+    with pg_engine.connect() as connection:
+        connection.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type};")
+
+
+def validate_column_types(df):
+    """
+    Makes sure the types of every column are consistent
+    :param df: dataframe
+    :return: dataframe
+    """
+    _null = AsIs('NULL')
+    for column in df.columns:
+        if 'date' in column:
+            df[column] = pd.to_datetime(df[column], errors="coerce")
+        if column == 'expo_sourcecaseids':
+            df[column] = [s if pd.isnull(s) else s.replace(',','|') for s in df[column]]
+        # if '_id' in column:
+        #     df[column] = df[column].astype(int,)
+    # df.fillna(value=_null, inplace=True)
+    df2 = df.where(pd.notnull(df), None)
+    return df2
 
 
 def insert_into_db(csvg, table_name):
@@ -101,8 +123,27 @@ def insert_into_db(csvg, table_name):
                     add_new_column('line_list', column_name=c, column_type=coltype)
                 else:
                     print(f'skipping...')
-
-        # df.to_sql('line_list', con=pg_con, if_exists='append', index=False, method=None)#'multi')
+        df = validate_column_types(df)
+        insert_sql = F" INSERT INTO {table_name}({','.join(df.columns)}) VALUES({','.join(['%s' for i in df.columns])}) ON CONFLICT DO NOTHING"
+        with pg_engine.connect() as connection:
+            print(f"Loading {len(df)} cases.")
+            # pbar = tqdm(total=len(df), unit=' cases',)
+            i=0
+            for row in df.iterrows():
+                row = row[1]
+                try:
+                    connection.execute(insert_sql, row.where(pd.notnull(row),None))
+                    # pbar.update(i)
+                    i += 1
+                except exc.ProgrammingError as e:
+                    print(row)
+                    print(row.where(pd.notnull(row),None))
+                    raise(e)
+            # pbar.close()
+        # try:
+        #     df.to_sql(table_name, con=pg_engine, if_exists='append', index=False, method=None)  # 'multi')
+        # except exc.IntegrityError as e:
+        #     print(e)
 
 
 answers = inquirer.prompt(questions)

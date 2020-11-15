@@ -3,3 +3,4 @@ python-dotenv
 inquirer
 pandas
 sqlalchemy
+tqdm
