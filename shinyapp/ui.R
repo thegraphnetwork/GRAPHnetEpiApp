@@ -1,3 +1,12 @@
+# loading sources
+cleaning <- source(here::here("Scripts", "generic_run_csv.R"), local = T)$value
+
+# create list of countries
+map_files <- list.files(here::here("maps"))
+countries <- tools::file_path_sans_ext(stringr::str_remove_all(map_files[grepl("map_", map_files)], "map_"))
+countries_names <- sort(toupper(countries))
+
+
 
 header <- dashboardHeader(title="WHO Dashboard", disable = T)
 
@@ -205,6 +214,11 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                
                                                                checkboxInput("header", "Header", TRUE),
                                                                #checkboxInput("preview", "Visualizar ao abrir", TRUE),
+                                                               # Adding a file input for raw files 
+                                                               selectInput("country", "Country name", choices = countries_names, selected = NULL),
+                                                               fileInput("raw", "Choose raw data file", buttonLabel = "Raw data",
+                                                                         multiple = F, placeholder = "Select a file", accept = c(".xlsx", ".xls", ".csv", ".tsv")),
+                                                               downloadButton("data_save", "Download CSV"),# Downloading the CSV
                                                                
                                                                uiOutput("clean_data")
                                                         ),

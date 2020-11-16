@@ -1029,4 +1029,40 @@ shinyServer(function(input, output, session) {
     showNotification("Data is being cleaning.",duration = 5,type = "message")
   })
   
+  raw_to_clean <- reactiveValues()
+   raw <- Reactive({
+     req(input$raw)
+    ext <- tools::file_ext(input$raw$name)
+    switch (ext,
+      tsv = vroom::vroom(input$raw$datapath, delim = "\t"),
+      csv = vroom::vroom(input$raw$datapath, delim = ","),
+      xlsx = readxl::read_excel(input$raw$datapath), 
+      xls = readxl::read_xls(input$raw$datapath),
+      sendSweetAlert(
+        session = session,
+        title = "Error!",
+        text = "The data format should be in CSV, TSV, or Excel file.\n
+                If your data is in Excel ensure that it is on first sheet.",
+        type = "error"
+      ) 
+    )
+  })
+  raw_to_clean$raw <- raw()
+  observeEvent(input$country, {
+    raw_to_clean$clean <- cleaning_run(input$country, raw_to_clean$raw)
+    showModal(modalDialog(glue("Cleaning for {input$country}  done!\n
+                               Please, download the data file and load it for further analysis")))
+    
+    })
+  
+  input$data_save <-  downloadHandler(
+    filename = function(){
+      glue("clean_{tolower{input$country}}.tsv")
+    }, content = function(file){
+      vroom::vroom_write(raw_to_clean$clean, file)
+    }
+  )
+  
+  
+  
 })
