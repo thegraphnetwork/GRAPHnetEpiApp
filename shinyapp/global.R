@@ -48,7 +48,8 @@ p_load(char=c("lubridate", # for date manipulation
               "stringi",
               "lubridate",
               "yaml",
-              "RColorBrewer"),
+              "RColorBrewer",
+              "here", "glue", "vroom"),
        update = FALSE)
 
 
