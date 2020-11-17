@@ -1,10 +1,3 @@
-# loading sources
-cleaning <- source(here::here("Scripts", "generic_run_csv.R"), local = T)$value
-
-# create list of countries
-map_files <- list.files(here::here("maps"))
-countries <- tools::file_path_sans_ext(stringr::str_remove_all(map_files[grepl("map_", map_files)], "map_"))
-countries_names <- sort(toupper(countries))
 
 
 
