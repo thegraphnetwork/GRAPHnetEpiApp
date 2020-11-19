@@ -60,11 +60,12 @@ def load_csvs(pth):
     """
     csvs = glob.glob(os.path.join(pth, '*_clean.csv'))
     for csv in csvs:
-        cname = os.path.split(csv)[-1]
+        cname = os.path.split(csv)[-1].split('_clean.csv')[0]
+        cname = cname.replace('_', ' ').title()
         print(f'loading {cname}')
         try:
             df = pd.read_csv(csv, encoding='utf8', quoting=1, quotechar='"', low_memory=False).convert_dtypes()
-            yield df
+            yield df, cname
         except ParserError as e:
             print(f"Problem parsing {cname}")
             print(e)
@@ -112,7 +113,9 @@ def insert_into_db(csvg, table_name):
     '''
     table = get_table_info(table_name)
     db_cols = [col.name for col in table.columns]
-    for df in csvg:
+    if 'country_name' not in db_cols and table_name == 'line_list':
+        add_new_column('line_list', 'country_name', 'varchar(128)')
+    for df, cname in csvg:
         df.columns = [c.lower() for c in df.columns]  # make sure all column names are lowercase
         for c in df.columns:
             if c not in db_cols:
@@ -123,6 +126,7 @@ def insert_into_db(csvg, table_name):
                     add_new_column('line_list', column_name=c, column_type=coltype)
                 else:
                     print(f'skipping...')
+        df['country_name'] = cname
         df = validate_column_types(df)
         insert_sql = F" INSERT INTO {table_name}({','.join(df.columns)}) VALUES({','.join(['%s' for i in df.columns])}) ON CONFLICT DO NOTHING"
         with pg_engine.connect() as connection:
