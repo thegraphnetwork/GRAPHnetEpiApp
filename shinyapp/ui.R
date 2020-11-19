@@ -208,6 +208,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                checkboxInput("header", "Header", TRUE),
                                                                #checkboxInput("preview", "Visualizar ao abrir", TRUE),
                                                                # Adding a file input for raw files 
+                                                               shinyFeedback::useShinyFeedback(),
                                                                selectInput("country", "Country name", choices = countries_names, selected = NULL),
                                                                fileInput("raw", "Choose raw data file", buttonLabel = "Raw data",
                                                                          multiple = F, placeholder = "Select a file", accept = c(".xlsx", ".xls", ".csv", ".tsv")),

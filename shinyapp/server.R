@@ -1029,7 +1029,7 @@ shinyServer(function(input, output, session) {
     showNotification("Data is being cleaning.",duration = 5,type = "message")
   })
   
-  raw_to_clean <- reactiveValues()
+  
    raw <- Reactive({
      req(input$raw)
     ext <- tools::file_ext(input$raw$name)
@@ -1047,19 +1047,22 @@ shinyServer(function(input, output, session) {
       ) 
     )
   })
-  raw_to_clean$raw <- raw()
-  observeEvent(input$country, {
-    raw_to_clean$clean <- cleaning_run(input$country, raw_to_clean$raw)
-    showModal(modalDialog(glue("Cleaning for {input$country}  done!\n
-                               Please, download the data file and load it for further analysis")))
-    
+  
+  clean <- reactive( {
+    req(input$country, input$raw)
+    clean_df <- cleaning_run(input$country, raw())
+    feedbackSuccess(inputId = "country", show = exists(clean_df), 
+                    glue("Cleaning for <em> {input$country} </em>  done!\n
+                               Please, download the data file and load it for further analysis"))
+    clean_df
     })
   
   input$data_save <-  downloadHandler(
+    
     filename = function(){
       glue("clean_{tolower{input$country}}.tsv")
     }, content = function(file){
-      vroom::vroom_write(raw_to_clean$clean, file)
+      vroom::vroom_write(clean(), file)
     }
   )
   
