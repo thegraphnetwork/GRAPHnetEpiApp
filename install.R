@@ -30,6 +30,9 @@ install.packages('shinyjs')
 install.packages('officer')
 install.packages('flextable')
 install.packages('plotly')
+install.packages('devtools')
+install.packages('remotes')
+install.packages('RPostgreSQL')
 
 
 
