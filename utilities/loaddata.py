@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script for loading the CSVs into PostgreSQL
+Script for loading the clean line list CSVs into PostgreSQL
 """
 import pandas as pd
 from pandas.errors import ParserError
@@ -96,7 +96,7 @@ def validate_column_types(df):
         if 'date' in column:
             df[column] = pd.to_datetime(df[column], errors="coerce")
         if column == 'expo_sourcecaseids':
-            df[column] = [s if pd.isnull(s) else s.replace(',','|') for s in df[column]]
+            df[column] = [s if pd.isnull(s) else s.replace(',', '|') for s in df[column]]
         # if '_id' in column:
         #     df[column] = df[column].astype(int,)
     # df.fillna(value=_null, inplace=True)
@@ -125,24 +125,25 @@ def insert_into_db(csvg, table_name):
                 if ans['add_column']:
                     add_new_column('line_list', column_name=c, column_type=coltype)
                 else:
-                    print(f'skipping...')
+                    print(f'Not loading {c}')
+                    del df[c]
         df['country_name'] = cname
         df = validate_column_types(df)
-        insert_sql = F" INSERT INTO {table_name}({','.join(df.columns)}) VALUES({','.join(['%s' for i in df.columns])}) ON CONFLICT DO NOTHING"
+        insert_sql = f" INSERT INTO {table_name}({','.join(df.columns)}) VALUES({','.join(['%s' for i in df.columns])}) ON CONFLICT DO NOTHING"
         with pg_engine.connect() as connection:
             print(f"Loading {len(df)} cases.")
             # pbar = tqdm(total=len(df), unit=' cases',)
-            i=0
+            i = 0
             for row in df.iterrows():
                 row = row[1]
                 try:
-                    connection.execute(insert_sql, row.where(pd.notnull(row),None))
+                    connection.execute(insert_sql, row.where(pd.notnull(row), None))
                     # pbar.update(i)
                     i += 1
                 except exc.ProgrammingError as e:
                     print(row)
-                    print(row.where(pd.notnull(row),None))
-                    raise(e)
+                    print(row.where(pd.notnull(row), None))
+                    raise (e)
             # pbar.close()
         # try:
         #     df.to_sql(table_name, con=pg_engine, if_exists='append', index=False, method=None)  # 'multi')
