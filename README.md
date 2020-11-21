@@ -15,13 +15,13 @@ docker-compose build
 after the containers are built they can be started with
 
 ```bash
-docker-compose -p shinyapp -f docker-compose.yml --env-file .env_db up --build -d
+docker-compose -p shinyapp -f docker-compose.yml --env-file .env_db up --build
 ```
 One the containers are up the database will be accessible from on the host on por 5432 and can be accessed with any postgresql client.
 To stop the containers you can use the following command:
 
 ```bash
-docker-compose down
+docker-compose -p shinyapp -f docker-compose.yml --env-file .env_db down
 ```
 
 While the containers are up, you can also access the Shinyapp running in the container,
