@@ -35,3 +35,15 @@ services:
       - pgdata:/var/lib/postgresql/data
     restart: always
 
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env_db
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgresql
+    restart: always
+#    networks:
+#      - postgres-compose-network
+
