@@ -7,6 +7,7 @@ from pandas.errors import ParserError
 from sqlalchemy import create_engine, Table, MetaData, exc
 from tqdm import tqdm
 from psycopg2.extensions import AsIs
+from psycopg2.errors import DatetimeFieldOverflow
 
 import inquirer
 import os
@@ -119,7 +120,7 @@ def insert_into_db(csvg, table_name):
         df.columns = [c.lower() for c in df.columns]  # make sure all column names are lowercase
         for c in df.columns:
             if c not in db_cols:
-                print(f"Existing columns: {db_cols}\nMissing column: {c}\n Type: {df[c].dtype}")
+                # print(f"Existing columns: {db_cols}\nMissing column: {c}\n Type: {df[c].dtype}")
                 coltype = 'NUMERIC' if str(df[c].dtype) == 'float64' else 'VARCHAR(128)'
                 ans = inquirer.prompt(alter_table_questions)
                 if ans['add_column']:
@@ -134,6 +135,7 @@ def insert_into_db(csvg, table_name):
             print(f"Loading {len(df)} cases.")
             # pbar = tqdm(total=len(df), unit=' cases',)
             i = 0
+            cases_skipped = []
             for row in df.iterrows():
                 row = row[1]
                 try:
@@ -142,8 +144,16 @@ def insert_into_db(csvg, table_name):
                     i += 1
                 except exc.ProgrammingError as e:
                     print(row)
-                    print(row.where(pd.notnull(row), None))
+                    # print(row.where(pd.notnull(row), None))
                     raise (e)
+                except (exc.DataError, DatetimeFieldOverflow) as e:
+                    print(row)
+                    print(f"Bad row {row[0]}, skipping...")
+                    cases_skipped.append(row[0])
+
+                    # raise(e)
+            print ('Rows skipped', cases_skipped)
+
             # pbar.close()
         # try:
         #     df.to_sql(table_name, con=pg_engine, if_exists='append', index=False, method=None)  # 'multi')
