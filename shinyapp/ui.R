@@ -7,6 +7,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-primary_who.css"),
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-style.css"), 
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-progressbar.css"), 
+                      tags$link(rel = "stylesheet", type = "text/css", href = "custom-dateRange.css"), 
                       fluidPage(shinyjs::useShinyjs(),
                                 tags$script(src = "plugins/scripts.js"),
                                 tags$head(
@@ -24,14 +25,22 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                            tabPanel(title = "Main",
                                                     
                                                     fluidRow(
-                                                        column(width=12,align="left",style='padding-left:30px;',
+                                                        column(width=2,align="left", style='padding-left:30px;',
                                                                div(style="display:inline-block;vertical-align:bottom;",
                                                                    uiOutput("select_country")
                                                                ),
-                                                               div(style="display:inline-block;vertical-align:middle;",
-                                                                   h4(textOutput("last_update")),
-                                                                   br()
-                                                               )
+                                                               
+                                                               tags$style(HTML(".datepicker {z-index:99999 !important;}")),
+                                                               uiOutput("select_date")
+                                                        ),
+                                                        column(width=4, style='padding-left:20px;',
+                                                               br(),
+                                                               box(width=6,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h5(tags$b("You are viewing")),
+                                                                   h4(htmlOutput("country_chosen")),
+                                                                   h4(htmlOutput("last_update"))
+                                                                   ),
+                                                               br()
                                                         )
                                                     ),
                                                     fluidRow(
@@ -154,37 +163,99 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                         column(width = 12,
                                                                h1("Risk map (LVL 1)"),
                                                                box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Mortality Risk Index (raw)"),
+                                                                   h2("Mortality Risk Index"),
                                                                    p("Raw and not including distance from medical facility", align = "center"),
-                                                                   leafletOutput("map_tri_lvl1_1",height = "580px")
+                                                                   tabsetPanel(id="view_risk1_A",
+                                                                               tabPanel("Map",
+                                                                                        br(),
+                                                                                        leafletOutput("map_mri_lvl1_1",height = "580px")
+                                                                               ),
+                                                                               tabPanel("Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("bar_mri_lvl1_1",height = "580px")
+                                                                               )
+                                                                   )
+                                                               ),
+                                                               
+                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h2("Mortality Risk Index"),
+                                                                   p("Raw and including distance from medical facility", align = "center"),
+                                                                   tabsetPanel(id="view_risk1_B",
+                                                                               tabPanel("Map",
+                                                                                        br(),
+                                                                                        leafletOutput("map_mri_lvl1_2",height = "580px")
+                                                                               ),
+                                                                               tabPanel("Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("bar_mri_lvl1_2",height = "580px")
+                                                                               )
+                                                                   )
+                                                               ),
+                                                               
+                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h2("Normalized Mortality Risk Index"),
+                                                                   p("Including distance from medical facility between 0 and 100"),
+                                                                   tabsetPanel(id="view_risk1_C",
+                                                                               tabPanel("Map",
+                                                                                        br(),
+                                                                                        leafletOutput("map_mri_lvl1_3",height = "580px")
+                                                                               ),
+                                                                               tabPanel("Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("bar_mri_lvl1_3",height = "580px")
+                                                                               )
+                                                                   )
+                                                               )
+                                                        ),
+                                                        
+                                                        
+                                                        # Column 6
+                                                        column(width = 12,
+                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   h2("Transmission Risk Index"),
+                                                                   p("Raw", align = "center"),
+                                                                   tabsetPanel(id="view_risk2_A",
+                                                                               tabPanel("Map",
+                                                                                        br(),
+                                                                                        leafletOutput("map_tri_lvl1_1",height = "580px")
+                                                                               ),
+                                                                               tabPanel("Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("bar_tri_lvl1_1",height = "580px")
+                                                                               )
+                                                                   )
                                                                ),
                                                                
                                                                box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
                                                                    h2("Normalized Transmission Risk Index"),
-                                                                   p("Raw and not including distance from medical facility", align = "center"),
-                                                                   leafletOutput("map_tri_lvl1_2",height = "580px")
+                                                                   p("Standardized by day", align = "center"),
+                                                                   tabsetPanel(id="view_risk2_B",
+                                                                               tabPanel("Map",
+                                                                                        br(),
+                                                                                        leafletOutput("map_tri_lvl1_2",height = "580px")
+                                                                               ),
+                                                                               tabPanel("Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("bar_tri_lvl1_2",height = "580px")
+                                                                               )
+                                                                   )
                                                                ),
                                                                
                                                                box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2(" Normalized Mortality Risk Index"),
-                                                                   p("Including distance from medical facility between 0 and 100"),
-                                                                   leafletOutput("map_tri_lvl1_3",height = "580px")
+                                                                   h2("Normalized Transmission Risk Index"),
+                                                                   p("Standardized by day and without outliers", align = "center"),
+                                                                   tabsetPanel(id="view_risk2_C",
+                                                                               tabPanel("Map",
+                                                                                        br(),
+                                                                                        leafletOutput("map_tri_lvl1_3",height = "580px")
+                                                                               ),
+                                                                               tabPanel("Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("bar_tri_lvl1_3",height = "580px")
+                                                                               )
+                                                                   )
                                                                )
                                                         )
-                                                        
-                                                        # Column 6
-                                                        # column(width = 12,
-                                                        #        h1("Risk map (LVL 1)"),
-                                                        #        box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                        #            h2(" Normalized Mortality Risk Index"),
-                                                        #            leafletOutput("map_tri_lvl1_3",height = "580px")
-                                                        #        ),
-                                                        # 
-                                                        #        box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                        #            h1("Placeholder",align = "center")
-                                                        #        )
-                                                        # )
-                                                        
                                                         
                                                     )
                                            ),
@@ -203,10 +274,10 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                                     "text/comma-separated-values,text/plain",
                                                                                     ".csv",".xlsx")),
                                                                
-                                                               checkboxInput("header", "Header", TRUE),
-                                                               #checkboxInput("preview", "Visualizar ao abrir", TRUE),
+                                                               div(style="margin-top: 25px;",
+                                                                   actionButton("HelpBox_data1", label = NULL, icon = icon("question-circle"))
+                                                               )
                                                                
-                                                               uiOutput("clean_data")
                                                         ),
                                                         #municipal
                                                         column(width = 8,
@@ -226,7 +297,14 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                fileInput("file_data2", "Choose .GPKG file", buttonLabel = "Import",
                                                                          multiple = FALSE, placeholder = "Select a file",
                                                                          accept = c(".gpkg")),
-                                                               uiOutput("combine_data")
+                                                               
+                                                               
+                                                               div(style="display:inline-block;vertical-align:bottom;",
+                                                                   actionButton("HelpBox_gpkg", label = NULL, icon = icon("question-circle"))
+                                                               ),
+                                                               div(style="display:inline-block;vertical-align:middle;",
+                                                                   uiOutput("combine_data")
+                                                               )
                                                         )
                                                     )
                                            ),

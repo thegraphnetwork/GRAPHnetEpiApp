@@ -6,94 +6,264 @@ shinyServer(function(input, output, session) {
   output$select_country <- renderUI({
     selectInput("selected_country",
                 label = "Select a country:",
-                choices = sort(unique(country_info$Country)),
-                selected = sort(unique(country_info$Country))[1])
+                choices = countries_list,
+                selected = countries_list[1])
   })
   
   output$select_region <- renderUI({
     selectInput("selected_region",
                 label = "Select a region:",
-                choices = sort(unique(country_info$Region)),
-                selected = sort(unique(country_info$Region))[1])
+                choices = c("Central Africa", "Eastern Africa",  "Northern Africa", "Southern Africa", "Western Africa"),
+                selected = "Central Africa")
   })
   
-  output$last_update <- renderText({
-    paste0("Last update: ",LL_raw %>% 
-             filter(Country == input$selected_country) %>% 
-             arrange(desc(Reporting_Date)) %>% 
-             distinct(Country, .keep_all = T) %>% 
-             dplyr::select(Reporting_Date) %>% 
-             table() %>% 
-             names()
-    )
+
+  observeEvent(input$selected_country,{
+    
+    output$country_chosen <- renderText({
+      paste0("<b>Country: </b>", input$selected_country)
+    })
+    
+    country_selected <- reactive({
+      df_country %>% 
+        filter(Country == input$selected_country)
+    })
+
+    date_reactive <- reactive({
+      country_selected() %>% 
+        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+        arrange(desc(Reporting_Date)) %>% 
+        distinct(Country, .keep_all = T) %>% 
+        dplyr::select(Reporting_Date) %>% 
+        table() %>% 
+        names()
+    })
+    
+    output$last_update <- renderText({
+      paste0(
+        "<b>Last update: </b>",
+        substr(date_reactive(),9,10),"/",
+        substr(date_reactive(),6,7),"/",
+        substr(date_reactive(),1,4)
+      )
+    })
+
+    output$select_date <- renderUI({
+      dateRangeInput("selected_dates", "Date range:",
+                     start  = min(country_selected()$Reporting_Date),
+                     end    = max(country_selected()$Reporting_Date),
+                     min    = min(country_selected()$Reporting_Date),
+                     max    = max(country_selected()$Reporting_Date),
+                     format = "dd/mm/yy",
+                     separator = " - ")
+    })
+    
+    output$confirmedCases <- renderText({
+      prettyNum(
+        country_selected() %>% 
+          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          arrange(desc(Reporting_Date)) %>% 
+          distinct(Country, .keep_all = T) %>% 
+          dplyr::select(Cum_cases),
+        decimal.mark = ",", big.mark = ".")
+    })
+    
+    output$newCases <- renderText({
+      paste0(prettyNum(
+        country_selected() %>% 
+          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          filter(Epiweek == max(Epiweek)) %>% 
+          group_by(Epiweek) %>% 
+          mutate(NewCases = sum(Cases_this_day ,na.rm = T)) %>% 
+          ungroup() %>% 
+          distinct(Epiweek,.keep_all = T) %>% 
+          dplyr::select(NewCases),
+        decimal.mark = ",", big.mark = ".")," cases this week")
+    })
+    
+    output$Deaths <- renderText({
+      prettyNum(
+        country_selected() %>% 
+          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          arrange(desc(Reporting_Date)) %>% 
+          distinct(Country, .keep_all = T) %>% 
+          dplyr::select(Cum_deaths),
+        decimal.mark = ",", big.mark = ".")
+    })
+    
+    output$newDeaths <- renderText({
+      paste0(prettyNum(
+        country_selected() %>% 
+          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          filter(Epiweek == max(Epiweek)) %>% 
+          group_by(Epiweek) %>% 
+          mutate(NewDeaths = sum(Deaths_this_day ,na.rm = T)) %>% 
+          ungroup() %>% 
+          distinct(Epiweek,.keep_all = T) %>% 
+          dplyr::select(NewDeaths),
+        decimal.mark = ",", big.mark = ".")," deaths this week")
+    })
+    
+    output$CasesPerMillion <- renderText({
+      prettyNum(
+        country_selected() %>% 
+          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          filter(Epiweek == max(Epiweek)) %>% 
+          distinct(Epiweek,.keep_all = T) %>% 
+          dplyr::select(Cases_per_million),
+        decimal.mark = ",", big.mark = ".")
+    })
+    
+    output$DeathsPerMillion <- renderText({
+      paste0(prettyNum(
+        country_selected() %>% 
+          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          filter(Epiweek == max(Epiweek)) %>% 
+          distinct(Epiweek,.keep_all = T) %>% 
+          dplyr::select(Deaths_per_million),
+        decimal.mark = ",", big.mark = ".")," deaths per million")
+    })
+    
+    growth_rate_tab <- reactive({
+      country_selected() %>% 
+        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+        dplyr::select(Reporting_Date, Cases_past_week, Epiweek) %>% 
+        group_by(Epiweek) %>% 
+        # take the last day of each epiweek
+        slice(which.max(Reporting_Date)) %>% 
+        ungroup() %>% 
+        # Cases in the past week vs cases two weeks ago
+        mutate(diff_cases = Cases_past_week - lag(Cases_past_week,1), 
+               week_growth = diff_cases/lag(Cases_past_week,1),
+               week_growth_perc = 100 * week_growth, 
+               # formula to convert weekly_growth to daily_growth equivalent
+               growth = (((1 + week_growth) ^ (1/7)) - 1), 
+               growth_perc = 100 * growth)
+    })
+    
+    # plot
+    output$ts_growth_rate_tab <- renderPlotly({
+      plot_ly(growth_rate_tab(), x = ~Reporting_Date) %>%
+        # ribbons are polygons in the background
+        add_ribbons(x = ~Reporting_Date, ymin = 0, 
+                    # ymax needs to remove Inf or otherwise plotly will explode to a large ymax
+                    ymax = max(growth_rate_tab()$week_growth_perc[growth_rate_tab()$week_growth_perc != Inf], 
+                               na.rm = TRUE),
+                    color = I("red"), # red for increase in growth rate
+                    opacity = 0.5,
+                    hoverinfo = "none", # removes the hovering text (it is not needed in here)
+                    showlegend = FALSE, # to remove the unneeded trace info 
+                    line = list(color = "rgba(0, 0, 0, 0)")) %>% # red for increase in growth rate
+        add_ribbons(x = ~Reporting_Date, ymax = 0, 
+                    ymin = min(growth_rate_tab()$week_growth_perc[growth_rate_tab()$week_growth_perc != Inf], 
+                               na.rm = TRUE),
+                    color = I("green"), # green for decrease in growth rate
+                    opacity = 0.5,
+                    hoverinfo = "none", 
+                    showlegend = FALSE, 
+                    line = list(color = "rgba(0, 0, 0, 0)")) %>% # green for decrease in growth rate
+        add_trace(y = ~week_growth_perc, 
+                  name = "Weekly growth rate", 
+                  type = "scatter", # configuring trace as scatterplot
+                  mode = "markers+lines", # lines + points
+                  color = I("black"),
+                  hoverinfo = "text+x",
+                  text = ~paste0("<b>Date of reporting: </b>", Reporting_Date,
+                                 "<br><b>Epidemiological week: </b>", Epiweek,
+                                 "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_perc, 2), "%"))) %>%
+        layout(
+          title = paste0("<br>Week-on-week growth rate of new COVID-19 cases in ", input$selected_country),
+          yaxis = list(
+            title = "Average daily growth rate (%)<br>each week"),
+          xaxis = list(
+            title = "Date of Reporting",
+            type = "date",
+            tickformat = "%b<br>%d (%a)",
+            rangeslider = list(type = "date")
+          )
+        )
+    })
+    
+    epi_curve_ll <- reactive({
+      country_selected() %>% 
+        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+        dplyr::select(Reporting_Date, Cases_this_day, Deaths_this_day) %>% 
+        mutate(seven_day_case_avg = rollmean(x = Cases_this_day, k = 7, align = "right",  
+                                             fill = na.fill(Cases_this_day, 0)),
+               fourteen_day_case_avg = rollmean(x = Cases_this_day, k = 14, align = "right",  
+                                                fill = na.fill(Cases_this_day, 0)),
+               seven_day_death_avg = rollmean(x = Deaths_this_day, k = 7, align = "right",  
+                                              fill = na.fill(Deaths_this_day, 0)),
+               fourteen_day_death_avg = rollmean(x = Deaths_this_day, k = 14, align = "right",  
+                                                 fill = na.fill(Deaths_this_day, 0)))
+    })
+    
+    output$ts_epi_curve_ll_confirmed <- renderPlotly({
+      epi_curve_ll() %>%
+        plot_ly(x = ~Reporting_Date) %>%
+        add_bars(y = ~Cases_this_day, 
+                 colors = mycolors_1,
+                 name = "Cases this day", 
+                 hoverinfo = "text+x",
+                 text = ~paste0("<b>Confirmed cases in ", input$selected_country, ": </b>", Cases_this_day)) %>%
+        add_trace(y = ~seven_day_case_avg, 
+                  name = "7-day rolling avg. cases", 
+                  type = "scatter", 
+                  mode = "lines", 
+                  line = list(color = "black", dash = "dash"),
+                  hoverinfo = "text+x",
+                  text = ~paste("<b>7-day rolling avg.: </b>", round(seven_day_case_avg, 2))) %>%
+        add_trace(y = ~fourteen_day_case_avg, 
+                  name = "14-day rolling avg. cases", 
+                  type = "scatter",
+                  mode = "lines", 
+                  line = list(color = "black", dash = "dot"),
+                  hoverinfo = "text+x",
+                  text = ~paste0("<b>14-day rolling avg.: </b>", round(fourteen_day_case_avg, 2))) %>%
+        layout(hovermode = "x unified",
+               title = paste0("Daily COVID-19 confirmed cases in ", input$selected_country),
+               yaxis = list(title = "Absolute number of COVID-19 confirmed cases"),
+               xaxis = list(title = "Date of Reporting",
+                            type = "date",
+                            tickformat = "%b %d (%a)",
+                            rangeslider = list(type = "date"))
+        )
+    })
+    
+    output$ts_epi_curve_ll_deaths<- renderPlotly({
+      epi_curve_ll() %>%
+        plot_ly(x = ~Reporting_Date) %>%
+        add_bars(y = ~Deaths_this_day, 
+                 colors = mycolors_1,
+                 name = "Cases this day", 
+                 hoverinfo = "text+x",
+                 text = ~paste0("<b>Deaths in ", input$selected_country, ": </b>", Deaths_this_day)) %>%
+        add_trace(y = ~seven_day_death_avg, 
+                  name = "7-day rolling avg. cases", 
+                  type = "scatter", 
+                  mode = "lines", 
+                  line = list(color = "black", dash = "dash"),
+                  hoverinfo = "text+x",
+                  text = ~paste("<b>7-day rolling avg.: </b>", round(seven_day_death_avg, 2))) %>%
+        add_trace(y = ~fourteen_day_death_avg, 
+                  name = "14-day rolling avg. cases", 
+                  type = "scatter", 
+                  mode = "lines", 
+                  line = list(color = "black", dash = "dot"),
+                  hoverinfo = "text+x",
+                  text = ~paste0("<b>14-day rolling avg.: </b>", round(fourteen_day_death_avg, 2))) %>%
+        layout(hovermode = "x unified",
+               title = paste0("Daily COVID-19 deaths in ", input$selected_country),
+               yaxis = list(title = "Absolute number of COVID-19 deaths"),
+               xaxis = list(title = "Date of Reporting",
+                            type = "date",
+                            tickformat = "%b %d (%a)",
+                            rangeslider = list(type = "date"))
+        )
+    })
     
   })
   
-  output$confirmedCases <- renderText({
-    prettyNum(
-      df_country %>% 
-        arrange(desc(Reporting_Date)) %>% 
-        distinct(Country, .keep_all = T) %>% 
-        filter(Country == input$selected_country) %>% 
-        dplyr::select(Cum_cases),
-      decimal.mark = ",", big.mark = ".")
-  })
-  
-  output$newCases <- renderText({
-    paste0(prettyNum(
-      df_country %>% 
-        filter(Country == input$selected_country) %>% 
-        filter(Epiweek == max(Epiweek)) %>% 
-        group_by(Epiweek) %>% 
-        mutate(NewCases = sum(Cases_this_day ,na.rm = T)) %>% 
-        ungroup() %>% 
-        distinct(Epiweek,.keep_all = T) %>% 
-        dplyr::select(NewCases),
-      decimal.mark = ",", big.mark = ".")," cases this week")
-  })
-  
-  output$Deaths <- renderText({
-    prettyNum(
-      df_country %>% 
-        arrange(desc(Reporting_Date)) %>% 
-        distinct(Country, .keep_all = T) %>% 
-        filter(Country == input$selected_country) %>% 
-        dplyr::select(Cum_deaths),
-      decimal.mark = ",", big.mark = ".")
-  })
-  
-  output$newDeaths <- renderText({
-    paste0(prettyNum(
-      df_country %>% 
-        filter(Country == input$selected_country) %>% 
-        filter(Epiweek == max(Epiweek)) %>% 
-        group_by(Epiweek) %>% 
-        mutate(NewDeaths = sum(Deaths_this_day ,na.rm = T)) %>% 
-        ungroup() %>% 
-        distinct(Epiweek,.keep_all = T) %>% 
-        dplyr::select(NewDeaths),
-      decimal.mark = ",", big.mark = ".")," deaths this week")
-  })
-  
-  output$CasesPerMillion <- renderText({
-    prettyNum(
-      df_country %>% 
-        filter(Country == input$selected_country) %>% 
-        filter(Epiweek == max(Epiweek)) %>% 
-        distinct(Epiweek,.keep_all = T) %>% 
-        dplyr::select(Cases_per_million),
-      decimal.mark = ",", big.mark = ".")
-  })
-  
-  output$DeathsPerMillion <- renderText({
-    paste0(prettyNum(
-      df_country %>% 
-        filter(Country == input$selected_country) %>% 
-        filter(Epiweek == max(Epiweek)) %>% 
-        distinct(Epiweek,.keep_all = T) %>% 
-        dplyr::select(Deaths_per_million),
-      decimal.mark = ",", big.mark = ".")," deaths per million")
-  })
   
   # Cases per Million map
   output$map_cases_per_million <- renderLeaflet({
@@ -254,7 +424,7 @@ shinyServer(function(input, output, session) {
   # Risk maps
   
   # Mortality Risk Index (raw and not including distance from medical facility)
-  output$map_tri_lvl1_1 <- renderLeaflet({
+  output$map_mri_lvl1_1 <- renderLeaflet({
     df_risk_MRI_1 %>%
       leaflet() %>%
       addTiles() %>%
@@ -275,7 +445,7 @@ shinyServer(function(input, output, session) {
   })
   
   # Mortality Risk Index (raw and including distance from medical facility)
-  output$map_tri_lvl1_2 <- renderLeaflet({
+  output$map_mri_lvl1_2 <- renderLeaflet({
     df_risk_MRI_1 %>%
       leaflet() %>%
       addTiles() %>%
@@ -296,7 +466,7 @@ shinyServer(function(input, output, session) {
   })
   
   # Normalized Mortality Risk Index
-  output$map_tri_lvl1_3 <- renderLeaflet({
+  output$map_mri_lvl1_3 <- renderLeaflet({
     df_risk_MRI_1 %>%
       leaflet() %>%
       addTiles() %>%
@@ -317,16 +487,203 @@ shinyServer(function(input, output, session) {
                 opacity = 1)
   })
   
+  # Risk Index (raw and not including distance from medical facility)
+  output$bar_mri_lvl1_1 <- renderPlotly({
+    df_risk_MRI_1 %>% 
+      plot_ly(x = ~reorder(NAME_1, -MRI_RIDX)) %>%
+      add_bars(y = ~MRI_RIDX, 
+               color = ~NAME_1,
+               colors = mycolors_2,
+               hoverinfo = "text+x", 
+               # presenting reported cases info
+               text = ~paste0("<b>Region: </b>", NAME_1,
+                              "<br><b>Mortality Risk Index (raw): </b>", round(MRI_RIDX, 2))) %>%
+      layout(hovermode = "unified x",
+             yaxis = list(title = "Mortality Risk Index"))
+  })
+  
+  # Risk Index (raw and including distance from medical facility)
+  output$bar_mri_lvl1_2 <- renderPlotly({
+    df_risk_MRI_1 %>% 
+      plot_ly(x = ~reorder(NAME_1, -MRI_RIDX2)) %>%
+      add_bars(y = ~MRI_RIDX2, 
+               color = ~NAME_1,
+               colors = mycolors_2,
+               hoverinfo = "text+x", 
+               # presenting reported cases info
+               text = ~paste0("<b>Region: </b>", NAME_1,
+                              "<br><b>Mortality Risk Index</b>(raw and including distance from medical facility): </b>", 
+                              round(MRI_RIDX2, 2))) %>%
+      layout(hovermode = "unified x",
+             yaxis = list(title = "Mortality Risk Index"))
+  })
+  
+  # Standardized Risk Index
+  output$bar_mri_lvl1_3 <- renderPlotly({
+    df_risk_MRI_1 %>% 
+      plot_ly(x = ~reorder(NAME_1, -MRI_IDX)) %>%
+      add_bars(y = ~MRI_IDX, 
+               color = ~NAME_1,
+               colors = mycolors_2,
+               hoverinfo = "text+x", 
+               # presenting reported cases info
+               text = ~paste0("<b>Region: </b>", NAME_1,
+                              "<br><b>Mortality Risk Index<br>(standardized and including distance from medical facility): </b>", 
+                              round(MRI_IDX, 2))) %>%
+      layout(hovermode = "unified x",
+             yaxis = list(title = "Mortality Risk Index"))
+  })
+  
+  # Transmission Risk Index (raw and not including distance from medical facility)
+  output$map_tri_lvl1_1 <- renderLeaflet({
+    # Transmission Risk Index (raw)
+    df_risk_TRI_1 %>%
+      # filtering for the last date (could be replaced by a slider in shiny)
+      filter(report_date == max(report_date, na.rm = TRUE)) %>%
+      leaflet() %>%
+      addTiles() %>%
+      addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+      addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
+      addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+                  opacity = 1.0, fillOpacity = 0.75,
+                  fillColor = ~pallete.TRI_RIDX(TRI_RIDX_quintile),
+                  highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                      bringToFront = TRUE),
+                  popup = ~paste0("<b>Country: </b>", NAME_0,
+                                  "<br><b>Department: </b>", NAME_1,
+                                  "<br><b>Transmission Risk Index (raw): </b>", round(TRI_RIDX, 2))) %>%  
+      addLayersControl(
+        baseGroups = c("Map", "Satellite"),
+        options = layersControlOptions(collapsed = TRUE)
+      )
+  })
+  
+  # Transmission Risk Index (raw and including distance from medical facility)
+  output$map_tri_lvl1_2 <- renderLeaflet({
+    # Transmission Risk Index Normalized between 0 and 100 by the maximum raw value for each day)
+    df_risk_TRI_1 %>%
+      # filtering for the last date (could be replaced by a slider in shiny)
+      filter(report_date == max(report_date, na.rm = TRUE)) %>%
+      leaflet() %>%
+      addTiles() %>%
+      addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+      addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
+      addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+                  opacity = 1.0, fillOpacity = 0.75,
+                  fillColor = ~pallete.TRI_IDX(TRI_IDX_quintile),
+                  highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                      bringToFront = TRUE),
+                  popup = ~paste0("<b>Country: </b>", NAME_0,
+                                  "<br><b>Department: </b>", NAME_1,
+                                  "<br><b>Transmission Risk Index (standardized by day): </b>", round(TRI_IDX, 2))) %>%  
+      addLayersControl(
+        baseGroups = c("Map", "Satellite"),
+        options = layersControlOptions(collapsed = TRUE)
+      )
+  })
+  
+  # Normalized Transmission Risk Index
+  output$map_tri_lvl1_3 <- renderLeaflet({
+    # Transmission Risk Index Normalized between 0 and 100 by the maximum raw value for each day
+    # but exluding outliers)
+    df_risk_TRI_1 %>%
+      # filtering for the last date (could be replaced by a slider in shiny)
+      filter(report_date == max(report_date, na.rm = TRUE)) %>%
+      leaflet() %>%
+      addTiles() %>%
+      addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
+      addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
+      addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+                  opacity = 1.0, fillOpacity = 0.75,
+                  fillColor = ~pallete.TRI_IDX2(TRI_IDX2_quintile),
+                  highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                      bringToFront = TRUE),
+                  popup = ~paste0("<b>Country: </b>", NAME_0,
+                                  "<br><b>Department: </b>", NAME_1,
+                                  "<br><b>Transmission Risk Index (standardized by day and without outliers): </b>",
+                                  round(TRI_IDX2, 2))) %>%  
+      addLayersControl(
+        baseGroups = c("Map", "Satellite"),
+        options = layersControlOptions(collapsed = TRUE)
+      )
+  })
+  
+  # Risk Index (raw and not including distance from medical facility)
+  output$bar_tri_lvl1_1 <- renderPlotly({
+    # interactive time series plot: Transmission Risk Index (raw)
+    df_risk_TRI_1 %>% 
+      plot_ly(x = ~report_date) %>%
+      add_lines(y = ~TRI_RIDX, 
+                color = ~NAME_1,
+                colors = mycolors_2,
+                hoverinfo = "text+x", 
+                # presenting reported cases info
+                text = ~paste0("<b>Region: </b>", NAME_1,
+                               "<br><b>Transmission Risk Index (raw): </b>", round(TRI_RIDX, 2))) %>%
+      layout(hovermode = "unified x",
+             yaxis = list(title = "Transmission Risk Index"),
+             xaxis = list(title = "Date of Reporting",
+                          type = "date",
+                          tickformat = "%b %d (%a)",
+                          rangeslider = list(type = "date")
+             )
+      )
+  })
+  
+  # Risk Index (raw and including distance from medical facility)
+  output$bar_tri_lvl1_2 <- renderPlotly({
+    # interactive time series plot: Transmission Risk Index (standardized by day)
+    df_risk_TRI_1 %>% 
+      plot_ly(x = ~report_date) %>%
+      add_lines(y = ~TRI_IDX, 
+                color = ~NAME_1,
+                colors = mycolors_2,
+                hoverinfo = "text+x", 
+                # presenting reported cases info
+                text = ~paste0("<b>Region: </b>", NAME_1,
+                               "<br><b>Transmission Risk Index (standardized by day): </b>", round(TRI_IDX, 2))) %>%
+      layout(hovermode = "unified x",
+             yaxis = list(title = "Transmission Risk Index"),
+             xaxis = list(title = "Date of Reporting",
+                          type = "date",
+                          tickformat = "%b %d (%a)",
+                          rangeslider = list(type = "date")
+             )
+      )
+  })
+  
+  # Standardized Risk Index
+  output$bar_tri_lvl1_3 <- renderPlotly({
+    # interactive time series plot: Transmission Risk Index (standardized by day)
+    df_risk_TRI_1 %>% 
+      plot_ly(x = ~report_date) %>%
+      add_lines(y = ~TRI_IDX2, 
+                color = ~NAME_1,
+                colors = mycolors_2,
+                hoverinfo = "text+x", 
+                # presenting reported cases info
+                text = ~paste0("<b>Region: </b>", NAME_1,
+                               "<br><b>Transmission Risk Index <br> (standardized by day and without outliers): </b>", round(TRI_IDX2, 2))) %>%
+      layout(hovermode = "unified x",
+             yaxis = list(title = "Transmission Risk Index"),
+             xaxis = list(title = "Date of Reporting",
+                          type = "date",
+                          tickformat = "%b %d (%a)",
+                          rangeslider = list(type = "date")
+             )
+      )
+  })
+  
   
   arq_data1 <- reactiveValues(data = NULL)
   observeEvent(input$file_data1,{
     showNotification("Importing file.",duration = 3,type = "message")
     dat <- data.table::fread(input$file_data1$datapath,stringsAsFactors = F,
-                             header = input$header,
+                             header = T,
                              sep = ";")
     if(ncol(dat)<=2){
       dat <- data.table::fread(input$file_data1$datapath,stringsAsFactors = F,
-                               header = input$header,
+                               header = T,
                                sep = ",")  
     }
     
@@ -516,77 +873,11 @@ shinyServer(function(input, output, session) {
     assign("pop_data", pop_data, envir = .GlobalEnv)
   })
   
-  # selects region for comparisons. Change my_country to change
-  # _reactive <- reactive({
-  #     country_info %>% 
-  #         filter(Country == input$selected_country) %>% 
-  #         dplyr::select(Region) %>% 
-  #         pull()
-  # })
-  
-  growth_rate_tab <- reactive({
-    df_country %>% 
-      filter(Country == input$selected_country) %>% 
-      dplyr::select(Reporting_Date, Cases_past_week, Epiweek) %>% 
-      group_by(Epiweek) %>% 
-      # take the last day of each epiweek
-      slice(which.max(Reporting_Date)) %>% 
-      ungroup() %>% 
-      # Cases in the past week vs cases two weeks ago
-      mutate(diff_cases = Cases_past_week - lag(Cases_past_week,1), 
-             week_growth = diff_cases/lag(Cases_past_week,1),
-             week_growth_perc = 100 * week_growth, 
-             # formula to convert weekly_growth to daily_growth equivalent
-             growth = (((1 + week_growth) ^ (1/7)) - 1), 
-             growth_perc = 100 * growth)
-  })
-  
-  # plot
-  output$ts_growth_rate_tab <- renderPlotly({
-    plot_ly(growth_rate_tab(), x = ~Reporting_Date) %>%
-      # ribbons are polygons in the background
-      add_ribbons(x = ~Reporting_Date, ymin = 0, 
-                  # ymax needs to remove Inf or otherwise plotly will explode to a large ymax
-                  ymax = max(growth_rate_tab()$week_growth_perc[growth_rate_tab()$week_growth_perc != Inf], 
-                             na.rm = TRUE),
-                  color = I("red"), # red for increase in growth rate
-                  opacity = 0.5,
-                  hoverinfo = "none", # removes the hovering text (it is not needed in here)
-                  showlegend = FALSE, # to remove the unneeded trace info 
-                  line = list(color = "rgba(0, 0, 0, 0)")) %>% # red for increase in growth rate
-      add_ribbons(x = ~Reporting_Date, ymax = 0, 
-                  ymin = min(growth_rate_tab()$week_growth_perc[growth_rate_tab()$week_growth_perc != Inf], 
-                             na.rm = TRUE),
-                  color = I("green"), # green for decrease in growth rate
-                  opacity = 0.5,
-                  hoverinfo = "none", 
-                  showlegend = FALSE, 
-                  line = list(color = "rgba(0, 0, 0, 0)")) %>% # green for decrease in growth rate
-      add_trace(y = ~week_growth_perc, 
-                name = "Weekly growth rate", 
-                type = "scatter", # configuring trace as scatterplot
-                mode = "markers+lines", # lines + points
-                color = I("black"),
-                hoverinfo = "text+x",
-                text = ~paste0("<b>Date of reporting: </b>", Reporting_Date,
-                               "<br><b>Epidemiological week: </b>", Epiweek,
-                               "<br><b>Weekly growth rate: </b>", paste0(round(week_growth_perc, 2), "%"))) %>%
-      layout(
-        title = paste0("<br>Week-on-week growth rate of new COVID-19 cases in ", input$selected_country),
-        yaxis = list(
-          title = "Average daily growth rate (%)<br>each week"),
-        xaxis = list(
-          title = "Date of Reporting",
-          type = "date",
-          tickformat = "%b<br>%d (%a)",
-          rangeslider = list(type = "date")
-        )
-      )
-  })
   
   df_regional_comparison <- reactive({
     df_country %>% 
       filter(Region == input$selected_region) %>% 
+      filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
       dplyr::select(Reporting_Date, Cases_per_million, Deaths_per_million, Country) %>%
       group_by(Country) 
   })
@@ -627,6 +918,7 @@ shinyServer(function(input, output, session) {
   
   output$table_all_contries <- DT::renderDT(
     df_country %>% 
+      filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
       group_by(Country) %>% 
       slice(which.max(Reporting_Date)) %>% 
       dplyr::rename(Cases = Cum_cases, Deaths = Cum_deaths) %>% 
@@ -649,6 +941,7 @@ shinyServer(function(input, output, session) {
   
   output$table_all_regions <- DT::renderDT(
     df_country %>% 
+      filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
       dplyr::select(Reporting_Date, Country, Cum_cases, Cum_deaths, Region, Population) %>% 
       group_by(Country) %>% 
       slice(which.max(Reporting_Date)) %>% 
@@ -678,84 +971,6 @@ shinyServer(function(input, output, session) {
   output$combine_data <- renderUI({
     actionButton("combine_data_button", label = "Combine data",
                  style="color: #000000; background-color: #fff; border-color: #24ccff")
-  })
-  
-  epi_curve_ll <- reactive({
-    df_country %>% 
-      filter(Country == input$selected_country) %>% 
-      dplyr::select(Reporting_Date, Cases_this_day, Deaths_this_day) %>% 
-      mutate(seven_day_case_avg = rollmean(x = Cases_this_day, k = 7, align = "right",  
-                                           fill = na.fill(Cases_this_day, 0)),
-             fourteen_day_case_avg = rollmean(x = Cases_this_day, k = 14, align = "right",  
-                                              fill = na.fill(Cases_this_day, 0)),
-             seven_day_death_avg = rollmean(x = Deaths_this_day, k = 7, align = "right",  
-                                            fill = na.fill(Deaths_this_day, 0)),
-             fourteen_day_death_avg = rollmean(x = Deaths_this_day, k = 14, align = "right",  
-                                               fill = na.fill(Deaths_this_day, 0)))
-  })
-  
-  output$ts_epi_curve_ll_confirmed <- renderPlotly({
-    epi_curve_ll() %>%
-      plot_ly(x = ~Reporting_Date) %>%
-      add_bars(y = ~Cases_this_day, 
-               colors = mycolors_1,
-               name = "Cases this day", 
-               hoverinfo = "text+x",
-               text = ~paste0("<b>Confirmed cases in ", input$selected_country, ": </b>", Cases_this_day)) %>%
-      add_trace(y = ~seven_day_case_avg, 
-                name = "7-day rolling avg. cases", 
-                type = "scatter", 
-                mode = "lines", 
-                line = list(color = "black", dash = "dash"),
-                hoverinfo = "text+x",
-                text = ~paste("<b>7-day rolling avg.: </b>", round(seven_day_case_avg, 2))) %>%
-      add_trace(y = ~fourteen_day_case_avg, 
-                name = "14-day rolling avg. cases", 
-                type = "scatter",
-                mode = "lines", 
-                line = list(color = "black", dash = "dot"),
-                hoverinfo = "text+x",
-                text = ~paste0("<b>14-day rolling avg.: </b>", round(fourteen_day_case_avg, 2))) %>%
-      layout(hovermode = "x unified",
-             title = paste0("Daily COVID-19 confirmed cases in ", input$selected_country),
-             yaxis = list(title = "Absolute number of COVID-19 confirmed cases"),
-             xaxis = list(title = "Date of Reporting",
-                          type = "date",
-                          tickformat = "%b %d (%a)",
-                          rangeslider = list(type = "date"))
-      )
-  })
-  
-  output$ts_epi_curve_ll_deaths<- renderPlotly({
-    epi_curve_ll() %>%
-      plot_ly(x = ~Reporting_Date) %>%
-      add_bars(y = ~Deaths_this_day, 
-               colors = mycolors_1,
-               name = "Cases this day", 
-               hoverinfo = "text+x",
-               text = ~paste0("<b>Deaths in ", input$selected_country, ": </b>", Deaths_this_day)) %>%
-      add_trace(y = ~seven_day_death_avg, 
-                name = "7-day rolling avg. cases", 
-                type = "scatter", 
-                mode = "lines", 
-                line = list(color = "black", dash = "dash"),
-                hoverinfo = "text+x",
-                text = ~paste("<b>7-day rolling avg.: </b>", round(seven_day_death_avg, 2))) %>%
-      add_trace(y = ~fourteen_day_death_avg, 
-                name = "14-day rolling avg. cases", 
-                type = "scatter", 
-                mode = "lines", 
-                line = list(color = "black", dash = "dot"),
-                hoverinfo = "text+x",
-                text = ~paste0("<b>14-day rolling avg.: </b>", round(fourteen_day_death_avg, 2))) %>%
-      layout(hovermode = "x unified",
-             title = paste0("Daily COVID-19 deaths in ", input$selected_country),
-             yaxis = list(title = "Absolute number of COVID-19 deaths"),
-             xaxis = list(title = "Date of Reporting",
-                          type = "date",
-                          tickformat = "%b %d (%a)",
-                          rangeslider = list(type = "date"))
-      )
   })
   
   
@@ -1027,6 +1242,24 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$clean_data_button,{
     showNotification("Data is being cleaning.",duration = 5,type = "message")
+  })
+  
+  observeEvent(input$HelpBox_data1,{
+    showModal(modalDialog(
+      title = "Info",
+      "Please, in order to get all charts updated, it is required to upload the country data file in .csv and its correspondent .gpkg file.",
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
+  
+  observeEvent(input$HelpBox_gpkg,{
+    showModal(modalDialog(
+      title = "Info",
+      "Please, in order to get all charts updated, it is required to upload the country data file in .csv and its correspondent .gpkg file.",
+      easyClose = TRUE,
+      footer = NULL
+    ))
   })
   
 })

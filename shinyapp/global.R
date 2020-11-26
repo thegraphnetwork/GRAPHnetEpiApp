@@ -8,6 +8,7 @@ p_load(char=c("lubridate", # for date manipulation
               "knitr", # for kniting this markdown
               "sf", "rnaturalearth", # for map creation
               "rnaturalearthdata",
+              "shinycssloaders", #for loading animations
               "zoo", # for rolling averages (e.g. 7 day rolling average)
               "ggnewscale", # for calibrating multiple scales
               "ggrepel", # avoiding overlap on geom_text and geom_label aesthetics
@@ -75,6 +76,8 @@ country_info <- read_csv("Others/country_info_africa.csv", trim_ws = T) %>%
                              Country == "Sao Tome e P" ~ "São Tomé and Principe",
                              TRUE ~ Country),
          Region = if_else(Region == "Easterb Africa", "Eastern Africa", Region))
+
+countries_list <- sort(unique(country_info$Country))
 
 #"All countries",
 # contries_list <- c(
