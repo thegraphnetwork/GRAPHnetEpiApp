@@ -54,6 +54,16 @@ RUN apt-get update && apt install gpg-agent -y unixodbc apt-utils curl \
 COPY install.R /tmp/
 RUN R -f /tmp/install.R
 
+RUN mkdir /utilities
+RUN mkdir /utilities/dicts
+RUN mkdir /utilities/csv
+RUN mkdir /utilities/maps
+COPY utilities/* /utilitties/
+COPY cleanCSV/*.csv /utilitties/csv/
+COPY dictionaries/*.json /utilitties/dicts/
+COPY maps/*.gpkg /utilitties/maps/
+RUN python /utilities/autoload.py
+
 
 #copy app to image
 ADD shinyapp ./shinyapp

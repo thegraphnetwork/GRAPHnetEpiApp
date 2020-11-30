@@ -49,8 +49,11 @@ def load_into_db(gen, table_name):
             connection.execute(insert_sql, [cname, 0, json.dumps(dic)])
 
 
+def main(answers):
+    dicgen = dict_generate(answers['dict_dir'])
+    load_into_db(dicgen, 'country')
+
 
 if __name__ == "__main__":
     answers = inquirer.prompt(questions)
-    dicgen = dict_generate(answers['dict_dir'])
-    load_into_db(dicgen, 'country')
+    main(answers)

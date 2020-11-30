@@ -28,9 +28,14 @@ def insert_into_postgis(pth):
         splitname = m.split('_')
         country_name = splitname[0]
         country_ISO_code = splitname[2].split('.')[0]
-        os.system(f'ogr2ogr -f PostgreSQL PG:"dbname=\'{PGDB}\' host=\'{PGHOST}\' port=\'5432\' user=\'{PGUSER}\' password=\'{PGPASS}\'" {m}')
+        os.system(
+            f'ogr2ogr -f PostgreSQL PG:"dbname=\'{PGDB}\' host=\'{PGHOST}\' port=\'5432\' user=\'{PGUSER}\' password=\'{PGPASS}\'" {m}')
 
 
+def main(answers):
+    insert_into_postgis(answers['maps_dir'])
 
-answers = inquirer.prompt(questions)
-insert_into_postgis(answers['maps_dir'])
+
+if __name__ == '__main__':
+    answers = inquirer.prompt(questions)
+    main(answers)

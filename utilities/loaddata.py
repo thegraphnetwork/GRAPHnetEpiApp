@@ -105,10 +105,12 @@ def validate_column_types(df):
     return df2
 
 
-def insert_into_db(csvg, table_name):
+def insert_into_db(csvg, table_name, auto):
     '''
     Pulls dataframes from the load_csvs generator and attempts to insert
     it into the database
+    :param table_name: name of the table to insert the data into
+    :param auto: Auto load, ignoring columns not existing in the database, if True.
     :param csvg: Generator yieldind dataframes
     :return:
     '''
@@ -122,7 +124,10 @@ def insert_into_db(csvg, table_name):
             if c not in db_cols:
                 # print(f"Existing columns: {db_cols}\nMissing column: {c}\n Type: {df[c].dtype}")
                 coltype = 'NUMERIC' if str(df[c].dtype) == 'float64' else 'VARCHAR(128)'
-                ans = inquirer.prompt(alter_table_questions)
+                if auto:
+                    ans = {'add_column': False}
+                else:
+                    ans = inquirer.prompt(alter_table_questions)
                 if ans['add_column']:
                     add_new_column('line_list', column_name=c, column_type=coltype)
                 else:
@@ -160,7 +165,10 @@ def insert_into_db(csvg, table_name):
         # except exc.IntegrityError as e:
         #     print(e)
 
+def main(answers, auto=False):
+    csvgen = load_csvs(answers['data_dir'])
+    insert_into_db(csvgen, answers['table_name'], auto=auto)
 
-answers = inquirer.prompt(questions)
-csvgen = load_csvs(answers['data_dir'])
-insert_into_db(csvgen, answers['table_name'])
+if __name__=='__main__':
+    answers = inquirer.prompt(questions)
+    main(answers)
