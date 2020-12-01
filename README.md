@@ -6,7 +6,10 @@ This application provides an interactive analytical COVID-19 dashboard for the A
 The application can be run locally or from Docker containers.
 before Building the container make sure an `.env_db` file exists with the proper variables declared.
 
-to start the containers, you need to have docker and docker-compose installed and run the following commands:
+to start the containers, you need to have docker and docker-compose installed. Make sure you have the 
+following directories in the root of your clone of this repository: `cleanCSV`(containins linelist CSVs)
+`maps` (containing the mapps in Geopackage format to be loaded), and `dicts` (containing the name dictionaries
+as JSON files). Then run the following command:
 
 ```bash
 docker-compose build
