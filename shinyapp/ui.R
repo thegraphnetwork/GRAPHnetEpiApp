@@ -8,7 +8,9 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-style.css"), 
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-progressbar.css"), 
                       tags$link(rel = "stylesheet", type = "text/css", href = "custom-dateRange.css"), 
+                      tags$script(src = "plugins/animation.js"),
                       fluidPage(shinyjs::useShinyjs(),
+                                aniview::use_aniview(),
                                 tags$script(src = "plugins/scripts.js"),
                                 tags$head(
                                     tags$link(rel = "stylesheet", 
@@ -73,31 +75,35 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                h1("Cronological view"),
                                                                
                                                                #Box 1
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   tabsetPanel(
-                                                                       tabPanel(title = "Chart",
-                                                                                br(),
-                                                                                plotlyOutput("ts_growth_rate_tab")
-                                                                       ),
-                                                                       tabPanel(title = "Table",
-                                                                                br(),
-                                                                                DT::DTOutput("table_all_contries",width = "100%") 
+                                                               aniview(animation = "fadeInUp",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           tabsetPanel(
+                                                                               tabPanel(title = "Chart",
+                                                                                        br(),
+                                                                                        plotlyOutput("ts_growth_rate_tab")
+                                                                               ),
+                                                                               tabPanel(title = "Table",
+                                                                                        br(),
+                                                                                        DT::DTOutput("table_all_contries",width = "100%") 
+                                                                               )
+                                                                           )
                                                                        )
-                                                                   )
                                                                ),
                                                                
                                                                #Box 2
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   tabsetPanel(
-                                                                       tabPanel("Cases",
-                                                                                br(),
-                                                                                plotlyOutput("ts_epi_curve_ll_confirmed")
-                                                                       ),
-                                                                       tabPanel("Deaths",
-                                                                                br(),
-                                                                                plotlyOutput("ts_epi_curve_ll_deaths")
+                                                               aniview(animation = "fadeInUp",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           tabsetPanel(
+                                                                               tabPanel("Cases",
+                                                                                        br(),
+                                                                                        plotlyOutput("ts_epi_curve_ll_confirmed")
+                                                                               ),
+                                                                               tabPanel("Deaths",
+                                                                                        br(),
+                                                                                        plotlyOutput("ts_epi_curve_ll_deaths")
+                                                                               )
+                                                                           )
                                                                        )
-                                                                   )
                                                                )
                                                                
                                                         ),
@@ -108,161 +114,185 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                br(),
                                                                
                                                                #Box 3
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   style="position:relative;width:100%;height:100%;",
-                                                                   br(),
-                                                                   tabsetPanel(
-                                                                       tabPanel(title = "Chart",
-                                                                                br(),
-                                                                                div(
-                                                                                    uiOutput("select_region")
-                                                                                ),
-                                                                                plotlyOutput("ts_df_regional_comparison",width = "100%")
-                                                                       ),
-                                                                       tabPanel(title = "Table",
-                                                                                br(),
-                                                                                DT::DTOutput("table_all_regions",width = "100%") 
+                                                               aniview(animation = "fadeInUp",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           style="position:relative;width:100%;height:100%;",
+                                                                           br(),
+                                                                           tabsetPanel(
+                                                                               tabPanel(title = "Chart",
+                                                                                        br(),
+                                                                                        div(
+                                                                                            uiOutput("select_region")
+                                                                                        ),
+                                                                                        plotlyOutput("ts_df_regional_comparison",width = "100%")
+                                                                               ),
+                                                                               tabPanel(title = "Table",
+                                                                                        br(),
+                                                                                        DT::DTOutput("table_all_regions",width = "100%") 
+                                                                               )
+                                                                           )
                                                                        )
-                                                                   )
                                                                ),
                                                                
                                                                #Box 4
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   style="position:relative;width:100%;height:100%;",
-                                                                   tabsetPanel(
-                                                                       tabPanel(title = "Chart",
-                                                                                br(),br(),
-                                                                                plotlyOutput("piramid_age_sex",width = "100%"),
-                                                                                br(),br(),
-                                                                                p("*Most cases are missing information for sex and age status")
+                                                               aniview(animation = "fadeInUp",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           style="position:relative;width:100%;height:100%;",
+                                                                           tabsetPanel(
+                                                                               tabPanel(title = "Chart",
+                                                                                        br(),br(),
+                                                                                        plotlyOutput("piramid_age_sex",width = "100%"),
+                                                                                        br(),br(),
+                                                                                        p("*Most cases are missing information for sex and age status")
+                                                                               )
+                                                                           )
+                                                                           #,plotlyOutput("ranking_plot_infeccao", height = "600px")
                                                                        )
-                                                                   )
-                                                                   #,plotlyOutput("ranking_plot_infeccao", height = "600px")
                                                                )
                                                         ),
                                                         
                                                         # Column 3
                                                         column(width = 12,
                                                                h1("Africa view"),
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Cases per Million"),
-                                                                   leafletOutput("map_cases_per_million",height = "580px")
+                                                               aniview(animation = "slideInLeft",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Cases per Million"),
+                                                                           leafletOutput("map_cases_per_million",height = "580px")
+                                                                       )
                                                                ),
                                                                
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Deaths per Million"),
-                                                                   leafletOutput("map_deaths_per_million",height = "580px")
+                                                               aniview(animation = "slideInRight",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Deaths per Million"),
+                                                                           leafletOutput("map_deaths_per_million",height = "580px")
+                                                                       )
                                                                )
                                                         ),
                                                         
                                                         # Column 4
                                                         column(width = 12,
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Cumulative Cases"),
-                                                                   leafletOutput("map_cumulative_cases",height = "580px")
+                                                               aniview(animation = "slideInLeft",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Cumulative Cases"),
+                                                                           leafletOutput("map_cumulative_cases",height = "580px")
+                                                                       )
                                                                ),
                                                                
-                                                               box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Cumulative Deaths"),
-                                                                   leafletOutput("map_cumulative_deaths",height = "580px")
+                                                               aniview(animation = "slideInRight",
+                                                                       box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Cumulative Deaths"),
+                                                                           leafletOutput("map_cumulative_deaths",height = "580px")
+                                                                       )
                                                                )
                                                         ),
                                                         
                                                         # Column 5
                                                         column(width = 12,
                                                                h1("Risk map (LVL 1)"),
-                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Mortality Risk Index"),
-                                                                   p("Raw and not including distance from medical facility", align = "center"),
-                                                                   tabsetPanel(id="view_risk1_A",
-                                                                               tabPanel("Map",
-                                                                                        br(),
-                                                                                        leafletOutput("map_mri_lvl1_1",height = "580px")
-                                                                               ),
-                                                                               tabPanel("Chart",
-                                                                                        br(),
-                                                                                        plotlyOutput("bar_mri_lvl1_1",height = "580px")
-                                                                               )
-                                                                   )
+                                                               aniview(animation = "slideInLeft",
+                                                                       box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Mortality Risk Index"),
+                                                                           p("Raw and not including distance from medical facility", align = "center"),
+                                                                           tabsetPanel(id="view_risk1_A",
+                                                                                       tabPanel("Map",
+                                                                                                br(),
+                                                                                                leafletOutput("map_mri_lvl1_1",height = "580px")
+                                                                                       ),
+                                                                                       tabPanel("Chart",
+                                                                                                br(),
+                                                                                                plotlyOutput("bar_mri_lvl1_1",height = "580px")
+                                                                                       )
+                                                                           )
+                                                                       )
                                                                ),
                                                                
-                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Mortality Risk Index"),
-                                                                   p("Raw and including distance from medical facility", align = "center"),
-                                                                   tabsetPanel(id="view_risk1_B",
-                                                                               tabPanel("Map",
-                                                                                        br(),
-                                                                                        leafletOutput("map_mri_lvl1_2",height = "580px")
-                                                                               ),
-                                                                               tabPanel("Chart",
-                                                                                        br(),
-                                                                                        plotlyOutput("bar_mri_lvl1_2",height = "580px")
-                                                                               )
-                                                                   )
+                                                               aniview(animation = "fadeInUp",
+                                                                       box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Mortality Risk Index"),
+                                                                           p("Raw and including distance from medical facility", align = "center"),
+                                                                           tabsetPanel(id="view_risk1_B",
+                                                                                       tabPanel("Map",
+                                                                                                br(),
+                                                                                                leafletOutput("map_mri_lvl1_2",height = "580px")
+                                                                                       ),
+                                                                                       tabPanel("Chart",
+                                                                                                br(),
+                                                                                                plotlyOutput("bar_mri_lvl1_2",height = "580px")
+                                                                                       )
+                                                                           )
+                                                                       )
                                                                ),
                                                                
-                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Normalized Mortality Risk Index"),
-                                                                   p("Including distance from medical facility between 0 and 100"),
-                                                                   tabsetPanel(id="view_risk1_C",
-                                                                               tabPanel("Map",
-                                                                                        br(),
-                                                                                        leafletOutput("map_mri_lvl1_3",height = "580px")
-                                                                               ),
-                                                                               tabPanel("Chart",
-                                                                                        br(),
-                                                                                        plotlyOutput("bar_mri_lvl1_3",height = "580px")
-                                                                               )
-                                                                   )
+                                                               aniview(animation = "slideInRight",
+                                                                       box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Normalized Mortality Risk Index"),
+                                                                           p("Including distance from medical facility between 0 and 100"),
+                                                                           tabsetPanel(id="view_risk1_C",
+                                                                                       tabPanel("Map",
+                                                                                                br(),
+                                                                                                leafletOutput("map_mri_lvl1_3",height = "580px")
+                                                                                       ),
+                                                                                       tabPanel("Chart",
+                                                                                                br(),
+                                                                                                plotlyOutput("bar_mri_lvl1_3",height = "580px")
+                                                                                       )
+                                                                           )
+                                                                       )
                                                                )
                                                         ),
                                                         
                                                         
                                                         # Column 6
                                                         column(width = 12,
-                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Transmission Risk Index"),
-                                                                   p("Raw", align = "center"),
-                                                                   tabsetPanel(id="view_risk2_A",
-                                                                               tabPanel("Map",
-                                                                                        br(),
-                                                                                        leafletOutput("map_tri_lvl1_1",height = "580px")
-                                                                               ),
-                                                                               tabPanel("Chart",
-                                                                                        br(),
-                                                                                        plotlyOutput("bar_tri_lvl1_1",height = "580px")
-                                                                               )
-                                                                   )
+                                                               aniview(animation = "slideInLeft",
+                                                                       box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Transmission Risk Index"),
+                                                                           p("Raw", align = "center"),
+                                                                           tabsetPanel(id="view_risk2_A",
+                                                                                       tabPanel("Map",
+                                                                                                br(),
+                                                                                                leafletOutput("map_tri_lvl1_1",height = "580px")
+                                                                                       ),
+                                                                                       tabPanel("Chart",
+                                                                                                br(),
+                                                                                                plotlyOutput("bar_tri_lvl1_1",height = "580px")
+                                                                                       )
+                                                                           )
+                                                                       )
                                                                ),
                                                                
-                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Normalized Transmission Risk Index"),
-                                                                   p("Standardized by day", align = "center"),
-                                                                   tabsetPanel(id="view_risk2_B",
-                                                                               tabPanel("Map",
-                                                                                        br(),
-                                                                                        leafletOutput("map_tri_lvl1_2",height = "580px")
-                                                                               ),
-                                                                               tabPanel("Chart",
-                                                                                        br(),
-                                                                                        plotlyOutput("bar_tri_lvl1_2",height = "580px")
-                                                                               )
-                                                                   )
+                                                               aniview(animation = "fadeInUp",
+                                                                       box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Normalized Transmission Risk Index"),
+                                                                           p("Standardized by day", align = "center"),
+                                                                           tabsetPanel(id="view_risk2_B",
+                                                                                       tabPanel("Map",
+                                                                                                br(),
+                                                                                                leafletOutput("map_tri_lvl1_2",height = "580px")
+                                                                                       ),
+                                                                                       tabPanel("Chart",
+                                                                                                br(),
+                                                                                                plotlyOutput("bar_tri_lvl1_2",height = "580px")
+                                                                                       )
+                                                                           )
+                                                                       )
                                                                ),
                                                                
-                                                               box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h2("Normalized Transmission Risk Index"),
-                                                                   p("Standardized by day and without outliers", align = "center"),
-                                                                   tabsetPanel(id="view_risk2_C",
-                                                                               tabPanel("Map",
-                                                                                        br(),
-                                                                                        leafletOutput("map_tri_lvl1_3",height = "580px")
-                                                                               ),
-                                                                               tabPanel("Chart",
-                                                                                        br(),
-                                                                                        plotlyOutput("bar_tri_lvl1_3",height = "580px")
-                                                                               )
-                                                                   )
+                                                               aniview(animation = "slideInRight",
+                                                                       box(width = 4, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                           h2("Normalized Transmission Risk Index"),
+                                                                           p("Standardized by day and without outliers", align = "center"),
+                                                                           tabsetPanel(id="view_risk2_C",
+                                                                                       tabPanel("Map",
+                                                                                                br(),
+                                                                                                leafletOutput("map_tri_lvl1_3",height = "580px")
+                                                                                       ),
+                                                                                       tabPanel("Chart",
+                                                                                                br(),
+                                                                                                plotlyOutput("bar_tri_lvl1_3",height = "580px")
+                                                                                       )
+                                                                           )
+                                                                       )
                                                                )
                                                         )
                                                         
@@ -318,9 +348,15 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                     )
                                            ),
                                            tabPanel("Reports",
-                                                    uiOutput("select_pdf_file"),
-                                                    downloadButton("donwload","Download",style="color: #000000; background-color: #fff; border-color: #087fff")
-                                                    )
+                                                    column(width = 12,
+                                                           box(width=3,id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                               h2("Download Covid-19 Report"),
+                                                               uiOutput("select_pdf_file"),
+                                                               downloadButton("downloadReport","Download",style="color: #000000; background-color: #fff; border-color: #087fff")
+                                                           )
+                                                    ),
+                                                    hr()
+                                           )
                                 )
                       )
 )
