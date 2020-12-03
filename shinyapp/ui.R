@@ -39,7 +39,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                    h5(tags$b("You are viewing")),
                                                                    h4(htmlOutput("country_chosen")),
                                                                    h4(htmlOutput("last_update"))
-                                                                   ),
+                                                               ),
                                                                br()
                                                         )
                                                     ),
@@ -109,6 +109,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                
                                                                #Box 3
                                                                box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
+                                                                   style="position:relative;width:100%;height:100%;",
                                                                    br(),
                                                                    tabsetPanel(
                                                                        tabPanel(title = "Chart",
@@ -116,7 +117,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                                 div(
                                                                                     uiOutput("select_region")
                                                                                 ),
-                                                                                plotlyOutput("ts_df_regional_comparison")
+                                                                                plotlyOutput("ts_df_regional_comparison",width = "100%")
                                                                        ),
                                                                        tabPanel(title = "Table",
                                                                                 br(),
@@ -127,7 +128,15 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                                
                                                                #Box 4
                                                                box(width = 6, id="box_info",solidHeader = TRUE, status = "primary", collapsible = F,
-                                                                   h1("Placeholder",align = "center")
+                                                                   style="position:relative;width:100%;height:100%;",
+                                                                   tabsetPanel(
+                                                                       tabPanel(title = "Chart",
+                                                                                br(),br(),
+                                                                                plotlyOutput("piramid_age_sex",width = "100%"),
+                                                                                br(),br(),
+                                                                                p("*Most cases are missing information for sex and age status")
+                                                                       )
+                                                                   )
                                                                    #,plotlyOutput("ranking_plot_infeccao", height = "600px")
                                                                )
                                                         ),
@@ -263,7 +272,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                     h2("Importing data",align="center"),
                                                     
                                                     #Importing data
-                                                    box(width=12, title="Main file", status="primary",
+                                                    box(width=12, title="Linelist file", status="primary",
                                                         solidHeader = TRUE, collapsible = F,
                                                         column(width = 4,
                                                                # Input: Select a file ----
@@ -289,7 +298,7 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                         )),
                                                     
                                                     #Importing GPKG files
-                                                    box(width=12, title="GPKG file", status="primary",
+                                                    box(width=12, title="Geographical Boundaries File", status="primary",
                                                         solidHeader = TRUE, collapsible = F,
                                                         column(width = 4,
                                                                # Input: Select a file ----
@@ -308,7 +317,10 @@ body <- dashboardBody(style = "background-color: #fcfcfc;", #fafeff;
                                                         )
                                                     )
                                            ),
-                                           tabPanel("Downloads")
+                                           tabPanel("Reports",
+                                                    uiOutput("select_pdf_file"),
+                                                    downloadButton("donwload","Download",style="color: #000000; background-color: #fff; border-color: #087fff")
+                                                    )
                                 )
                       )
 )
