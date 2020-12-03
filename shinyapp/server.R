@@ -1370,9 +1370,9 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       if(input$selected_pdf_file=="Senegal"){
-        "link1"
+        "https://github.com/thegraphnetwork/GRAPHnetEpiApp/raw/master/shinyapp/Others/Senegal.pdf"
       }else{
-        "link2"
+        "https://github.com/thegraphnetwork/GRAPHnetEpiApp/raw/master/shinyapp/Others/BurkinaFaso.pdf"
       }
     }
   )
