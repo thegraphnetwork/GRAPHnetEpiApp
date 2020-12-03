@@ -17,6 +17,15 @@ shinyServer(function(input, output, session) {
                 selected = "Central Africa")
   })
   
+  output$select_date <- renderUI({
+    dateRangeInput("selected_dates", "Date range:",
+                   start  = min(df_country$Reporting_Date),
+                   end    = max(df_country$Reporting_Date),
+                   min    = min(df_country$Reporting_Date),
+                   max    = max(df_country$Reporting_Date),
+                   format = "dd/mm/yy",
+                   separator = " - ")
+  })
   
   observeEvent(input$selected_country,{
     
@@ -26,12 +35,12 @@ shinyServer(function(input, output, session) {
     
     country_selected <- reactive({
       df_country %>% 
+        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
         filter(Country == input$selected_country)
-    })
+       })
     
     date_reactive <- reactive({
       country_selected() %>% 
-        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
         arrange(desc(Reporting_Date)) %>% 
         distinct(Country, .keep_all = T) %>% 
         dplyr::select(Reporting_Date) %>% 
@@ -48,20 +57,10 @@ shinyServer(function(input, output, session) {
       )
     })
     
-    output$select_date <- renderUI({
-      dateRangeInput("selected_dates", "Date range:",
-                     start  = min(country_selected()$Reporting_Date),
-                     end    = max(country_selected()$Reporting_Date),
-                     min    = min(country_selected()$Reporting_Date),
-                     max    = max(country_selected()$Reporting_Date),
-                     format = "dd/mm/yy",
-                     separator = " - ")
-    })
-    
     output$confirmedCases <- renderText({
       prettyNum(
         country_selected() %>% 
-          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
           arrange(desc(Reporting_Date)) %>% 
           distinct(Country, .keep_all = T) %>% 
           dplyr::select(Cum_cases),
@@ -71,7 +70,7 @@ shinyServer(function(input, output, session) {
     output$newCases <- renderText({
       paste0(prettyNum(
         country_selected() %>% 
-          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
           filter(Epiweek == max(Epiweek)) %>% 
           group_by(Epiweek) %>% 
           mutate(NewCases = sum(Cases_this_day ,na.rm = T)) %>% 
@@ -84,7 +83,7 @@ shinyServer(function(input, output, session) {
     output$Deaths <- renderText({
       prettyNum(
         country_selected() %>% 
-          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
           arrange(desc(Reporting_Date)) %>% 
           distinct(Country, .keep_all = T) %>% 
           dplyr::select(Cum_deaths),
@@ -94,7 +93,7 @@ shinyServer(function(input, output, session) {
     output$newDeaths <- renderText({
       paste0(prettyNum(
         country_selected() %>% 
-          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
           filter(Epiweek == max(Epiweek)) %>% 
           group_by(Epiweek) %>% 
           mutate(NewDeaths = sum(Deaths_this_day ,na.rm = T)) %>% 
@@ -107,7 +106,7 @@ shinyServer(function(input, output, session) {
     output$CasesPerMillion <- renderText({
       prettyNum(
         country_selected() %>% 
-          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
           filter(Epiweek == max(Epiweek)) %>% 
           distinct(Epiweek,.keep_all = T) %>% 
           dplyr::select(Cases_per_million),
@@ -117,7 +116,7 @@ shinyServer(function(input, output, session) {
     output$DeathsPerMillion <- renderText({
       paste0(prettyNum(
         country_selected() %>% 
-          filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+          #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
           filter(Epiweek == max(Epiweek)) %>% 
           distinct(Epiweek,.keep_all = T) %>% 
           dplyr::select(Deaths_per_million),
@@ -126,7 +125,7 @@ shinyServer(function(input, output, session) {
     
     growth_rate_tab <- reactive({
       country_selected() %>% 
-        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+        #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
         dplyr::select(Reporting_Date, Cases_past_week, Epiweek) %>% 
         group_by(Epiweek) %>% 
         # take the last day of each epiweek
@@ -186,7 +185,7 @@ shinyServer(function(input, output, session) {
     
     epi_curve_ll <- reactive({
       country_selected() %>% 
-        filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+        #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
         dplyr::select(Reporting_Date, Cases_this_day, Deaths_this_day) %>% 
         mutate(seven_day_case_avg = rollmean(x = Cases_this_day, k = 7, align = "right",  
                                              fill = na.fill(Cases_this_day, 0)),
@@ -975,7 +974,7 @@ shinyServer(function(input, output, session) {
   df_regional_comparison <- reactive({
     df_country %>% 
       filter(Region == input$selected_region) %>% 
-      filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+      #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
       dplyr::select(Reporting_Date, Cases_per_million, Deaths_per_million, Country) %>%
       group_by(Country) 
   })
@@ -1016,7 +1015,7 @@ shinyServer(function(input, output, session) {
   
   output$table_all_contries <- DT::renderDT(
     df_country %>% 
-      filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+      #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
       group_by(Country) %>% 
       slice(which.max(Reporting_Date)) %>% 
       dplyr::rename(Cases = Cum_cases, Deaths = Cum_deaths) %>% 
@@ -1039,7 +1038,7 @@ shinyServer(function(input, output, session) {
   
   output$table_all_regions <- DT::renderDT(
     df_country %>% 
-      filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
+      #filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
       dplyr::select(Reporting_Date, Country, Cum_cases, Cum_deaths, Region, Population) %>% 
       group_by(Country) %>% 
       slice(which.max(Reporting_Date)) %>% 
@@ -1360,7 +1359,7 @@ shinyServer(function(input, output, session) {
     ))
   })
   
-  output$donwload <- downloadHandler(
+  output$downloadReport <- downloadHandler(
     filename = function(){
       if(input$selected_pdf_file=="Senegal"){
         "Senegal_Covid_Report.pdf"
@@ -1370,9 +1369,9 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       if(input$selected_pdf_file=="Senegal"){
-        "https://github.com/thegraphnetwork/GRAPHnetEpiApp/raw/master/shinyapp/Others/Senegal.pdf"
+        file.copy('Others/Senegal.pdf', file)
       }else{
-        "https://github.com/thegraphnetwork/GRAPHnetEpiApp/raw/master/shinyapp/Others/BurkinaFaso.pdf"
+        file.copy('Others/BurkinaFaso.pdf', file)
       }
     }
   )
