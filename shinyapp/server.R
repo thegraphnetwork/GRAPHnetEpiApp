@@ -6,8 +6,8 @@ shinyServer(function(input, output, session) {
   output$select_country <- renderUI({
     selectInput("selected_country",
                 label = "Select a country:",
-                choices = countries_list,
-                selected = countries_list[1])
+                choices = c("Senegal", "Burkina Faso"), #countries_list,
+                selected = "Senegal") #countries_list[1]
   })
   
   output$select_region <- renderUI({
@@ -17,7 +17,7 @@ shinyServer(function(input, output, session) {
                 selected = "Central Africa")
   })
   
-
+  
   observeEvent(input$selected_country,{
     
     output$country_chosen <- renderText({
@@ -28,7 +28,7 @@ shinyServer(function(input, output, session) {
       df_country %>% 
         filter(Country == input$selected_country)
     })
-
+    
     date_reactive <- reactive({
       country_selected() %>% 
         filter(Reporting_Date >= input$selected_dates[1] & Reporting_Date <= input$selected_dates[2]) %>% 
@@ -47,7 +47,7 @@ shinyServer(function(input, output, session) {
         substr(date_reactive(),1,4)
       )
     })
-
+    
     output$select_date <- renderUI({
       dateRangeInput("selected_dates", "Date range:",
                      start  = min(country_selected()$Reporting_Date),
@@ -262,13 +262,94 @@ shinyServer(function(input, output, session) {
         )
     })
     
+    df_age_sex <- reactive({
+      df_LL %>% 
+        filter(Country == input$selected_country) %>%
+        # filtering out individuals with missing sex or age
+        # creating age categories
+        mutate(age_group = cut(as.numeric(Age), 
+                               breaks = c(0, 5, 9, 19, 29, 39, 49, 59, 69, 79, Inf),
+                               labels = c("< 5", "5-9", "10-19", "20-29", "30-39", "40-49",
+                                          "50-59", "60-69", "70-79", "> 80"), 
+                               right = TRUE)) %>% 
+        # for each age group and sex, sum the number of cases and the number of deaths
+        filter(!is.na(age_group)) %>%
+        filter(!is.na(Sex)) %>%
+        group_by(age_group, Sex) %>%
+        summarise(
+          confirmed = sum(FinalEpiClassification == "Confirmed", na.rm = TRUE),
+          deaths = sum(FinalOutcome == "Dead", na.rm = TRUE)
+        ) %>%
+        ungroup()
+    })
+    
+    
+    # long format for the stacked bar chart
+    df_age_sex_long <-  reactive({
+      df_age_sex() %>% 
+        # subtract out deaths from reported count to get CASES ALONE 
+        # needed since we're going to build a STACKED bar chart.
+        mutate(
+          `Confirmed cases` = confirmed - deaths,
+          Deaths = deaths,
+          Sex = recode_factor(Sex,
+                              "M" = "Male",
+                              "F" = "Female")) %>% 
+        pivot_longer(names_to = "classification", cols = c(
+          `Confirmed cases`, 
+          Deaths)) %>% 
+        mutate(classification = fct_relevel(classification, c( 
+          "Confirmed cases", 
+          "Deaths")),
+          # in order for the pyramid to be correctly displayed, one of the groups should be negative
+          # we will hack the axis later to make it the absolute number
+          value = ifelse(Sex == "Female", value * (-1), value),
+          # value to be passed to hoverinfo in plotly
+          text_value = paste0("<b>", classification, ": </b>", abs(value)),
+          # creating a variable with the absolute number of reported cases
+          color_info = paste0(Sex, " ", classification),
+          color_info = fct_relevel(color_info, c("Female Confirmed cases", "Female Deaths",
+                                                 "Male Confirmed cases","Male Deaths")),
+          # calculating CFR
+          CFR_confirmed = round(deaths / confirmed * 100, 2))
+    })
+    
+    # age-sex pyramid plot of confirmed cases
+    output$piramid_age_sex <- renderPlotly({
+      df_age_sex_long() %>%
+        plot_ly(x = ~value, # inverting x axis
+                y = ~age_group, # inverting x axis
+                color = ~color_info,
+                colors = c("Female Confirmed cases" = "#66C2A5",
+                           "Female Deaths" = "red",
+                           "Male Confirmed cases" = "#8DA0CB",
+                           "Male Deaths" = "red"),
+                customdata = ~text_value,
+                hoverinfo = "text",
+                text = ~paste0("<b>Sex: </b>", Sex,
+                               "<br><b>Age group: </b>", age_group,
+                               "<br>", text_value,
+                               "<br><b>CFR (based on confirmed cases): </b>", CFR_confirmed, "%")) %>%
+        # changing orientations to horizontal
+        add_bars(orientation = "h") %>%
+        layout(bargap = 0.1,
+               # needed to make bars correctly placed
+               barmode = "relative",
+               title = paste0("Age-sex distribution of all COVID-19 confirmed cases in "),
+               yaxis = list(title = "Age group"),
+               xaxis = list(title = "COVID-19 confirmed cases and deaths")
+               # legend = list(orientation = "h",   # show entries horizontally
+               #               xanchor = "center",  # use center of legend as anchor
+               #               x = 0.5)
+        )
+    })
+    
   })
-  
   
   # Cases per Million map
   output$map_cases_per_million <- renderLeaflet({
     africa_map %>% 
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 3, maxZoom = 3)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -307,7 +388,7 @@ shinyServer(function(input, output, session) {
   # Deaths per Million map
   output$map_deaths_per_million <- renderLeaflet({
     africa_map %>% 
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 3, maxZoom = 3)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -346,7 +427,7 @@ shinyServer(function(input, output, session) {
   # Cumulative cases map
   output$map_cumulative_cases <- renderLeaflet({
     africa_map %>% 
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 3, maxZoom = 3)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -385,7 +466,7 @@ shinyServer(function(input, output, session) {
   # Cumulative deaths map
   output$map_cumulative_deaths <- renderLeaflet({
     africa_map %>% 
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 3, maxZoom = 3)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -426,7 +507,7 @@ shinyServer(function(input, output, session) {
   # Mortality Risk Index (raw and not including distance from medical facility)
   output$map_mri_lvl1_1 <- renderLeaflet({
     df_risk_MRI_1 %>%
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 7, maxZoom = 7)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -447,7 +528,7 @@ shinyServer(function(input, output, session) {
   # Mortality Risk Index (raw and including distance from medical facility)
   output$map_mri_lvl1_2 <- renderLeaflet({
     df_risk_MRI_1 %>%
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 7, maxZoom = 7)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -468,7 +549,7 @@ shinyServer(function(input, output, session) {
   # Normalized Mortality Risk Index
   output$map_mri_lvl1_3 <- renderLeaflet({
     df_risk_MRI_1 %>%
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 7, maxZoom = 7)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
@@ -540,7 +621,7 @@ shinyServer(function(input, output, session) {
     df_risk_TRI_1 %>%
       # filtering for the last date (could be replaced by a slider in shiny)
       filter(report_date == max(report_date, na.rm = TRUE)) %>%
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 7, maxZoom = 7)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
       addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
@@ -555,8 +636,15 @@ shinyServer(function(input, output, session) {
       addLayersControl(
         baseGroups = c("Map", "Satellite"),
         options = layersControlOptions(collapsed = TRUE)
-      )
+      ) %>%  
+      addLegend("bottomright", 
+                pal = pallete.TRI_RIDX,
+                values = ~TRI_RIDX_quintile,
+                title = ~paste0("Transmission Risk Index<br>(raw)"),
+                opacity = 1)
   })
+  
+  
   
   # Transmission Risk Index (raw and including distance from medical facility)
   output$map_tri_lvl1_2 <- renderLeaflet({
@@ -564,7 +652,7 @@ shinyServer(function(input, output, session) {
     df_risk_TRI_1 %>%
       # filtering for the last date (could be replaced by a slider in shiny)
       filter(report_date == max(report_date, na.rm = TRUE)) %>%
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 7, maxZoom = 7)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
       addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
@@ -579,7 +667,12 @@ shinyServer(function(input, output, session) {
       addLayersControl(
         baseGroups = c("Map", "Satellite"),
         options = layersControlOptions(collapsed = TRUE)
-      )
+      ) %>%  
+      addLegend("bottomright", 
+                pal = pallete.TRI_IDX,
+                values = ~TRI_IDX_quintile,
+                title = ~paste0("Transmission Risk Index (standardized by day)"),
+                opacity = 1)
   })
   
   # Normalized Transmission Risk Index
@@ -589,7 +682,7 @@ shinyServer(function(input, output, session) {
     df_risk_TRI_1 %>%
       # filtering for the last date (could be replaced by a slider in shiny)
       filter(report_date == max(report_date, na.rm = TRUE)) %>%
-      leaflet() %>%
+      leaflet(options = leafletOptions(minZoom = 7, maxZoom = 7)) %>%
       addTiles() %>%
       addProviderTiles(providers$CartoDB.Positron, group = "Map") %>%
       addProviderTiles(providers$HERE.satelliteDay, group = "Satellite") %>%
@@ -605,7 +698,12 @@ shinyServer(function(input, output, session) {
       addLayersControl(
         baseGroups = c("Map", "Satellite"),
         options = layersControlOptions(collapsed = TRUE)
-      )
+      ) %>%  
+      addLegend("bottomright", 
+                pal = pallete.TRI_IDX2,
+                values = ~TRI_IDX2_quintile,
+                title = ~paste0("Transmission Risk Index<br>(standardized by day and<br>without outliers)"),
+                opacity = 1)
   })
   
   # Risk Index (raw and not including distance from medical facility)
@@ -1260,6 +1358,28 @@ shinyServer(function(input, output, session) {
       easyClose = TRUE,
       footer = NULL
     ))
+  })
+  
+  output$donwload <- downloadHandler(
+    filename = function(){
+      if(input$selected_pdf_file=="Senegal"){
+        "Senegal_Covid_Report.pdf"
+      }else{
+        "BurkinaFaso_Covid_Report.pdf"
+      }
+    },
+    content = function(file) {
+      if(input$selected_pdf_file=="Senegal"){
+        "link1"
+      }else{
+        "link2"
+      }
+    }
+  )
+  
+  output$select_pdf_file <- renderUI({
+    selectInput("selected_pdf_file","",
+                choices = list("Senegal", "Burkina Faso"))
   })
   
 })
