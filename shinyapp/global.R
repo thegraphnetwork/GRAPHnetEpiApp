@@ -49,7 +49,8 @@ p_load(char=c("lubridate", # for date manipulation
               "stringi",
               "lubridate",
               "yaml",
-              "RColorBrewer"),
+              "RColorBrewer",
+              "aniview"),
        update = FALSE)
 
 
@@ -515,7 +516,6 @@ pallete.MRI_RIDX <- colorFactor(palette = "YlOrRd", df_risk_MRI_1$MRI_RIDX_quint
 pallete.MRI_RIDX2 <- colorFactor(palette = "YlOrRd", df_risk_MRI_1$MRI_RIDX2_quintile)
 pallete.MRI_IDX <- colorFactor(palette = "YlOrRd", df_risk_MRI_1$MRI_IDX_quintile)
 
-
 ###################################################
 ##                                               ##
 ##      SETTING COLOR THEME FOR RColorBrewer     ##
@@ -526,4 +526,7 @@ pallete.MRI_IDX <- colorFactor(palette = "YlOrRd", df_risk_MRI_1$MRI_IDX_quintil
 # Define the number of colors to prevent error in plots
 nb.cols_2 <- length(unique(df_gpkg$NAME_1))
 mycolors_2 <- colorRampPalette(brewer.pal(8, "Set3"))(nb.cols_2)
+
+
+
 
