@@ -81,7 +81,7 @@ def load_csvs(pth):
             continue
 
 def create_table(table_name):
-    with pg_engine.connect as connection:
+    with pg_engine.connect() as connection:
         connection.execute(f"CREATE TABLE {table_name}(id BIGSERIAL PRIMARY KEY);")
 
 def add_new_column(table_name, column_name, column_type):

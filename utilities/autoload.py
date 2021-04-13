@@ -9,7 +9,7 @@ import loaddata, load_gpkg_maps, load_dictionaries
 ## Loading CSV linelists
 params = {
     'data_dir': './csv/',
-    'table_name': 'linelist'
+    'table_name': 'line_list'
 }
 loaddata.main(params, auto=True)
 
