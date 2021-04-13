@@ -64,7 +64,7 @@ COPY data/cleanCSV/*.csv /utilities/csv/
 COPY data/dictionaries/*.json /utilities/dicts/
 COPY data/maps/*.gpkg /utilities/maps/
 RUN pip3 install -r /utilities/requirements.txt
-RUN cd /utilities && python3 autoload.py
+# RUN cd /utilities && python3 autoload.py
 
 
 #copy app to image
@@ -75,4 +75,4 @@ ADD shinyapp ./shinyapp
 # Make all app files readable
 RUN chmod -R +r /srv/shiny-server/
 
-CMD ["R", "-e",  "require(shiny); shiny::runApp('/shinyapp', host='0.0.0.0', port=3838)"]
+# CMD ["R", "-e",  "require(shiny); shiny::runApp('/shinyapp', host='0.0.0.0', port=3838)"]

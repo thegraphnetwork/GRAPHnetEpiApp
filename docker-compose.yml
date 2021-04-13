@@ -18,6 +18,7 @@ services:
         - "3838:3838"
     depends_on:
       - postgresql
+    entrypoint: ["/start.sh"] 
     volumes:
       - 'shiny_logs:/var/log/shiny-server'
       - './mountpoints/apps:/srv/shiny-server'
@@ -34,7 +35,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: always
-
+    
   pgadmin:
     image: dpage/pgadmin4
     env_file:
