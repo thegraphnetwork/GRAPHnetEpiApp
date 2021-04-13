@@ -23,4 +23,4 @@ load_gpkg_maps.main(params)
 params = {
     'dict_dir': './dicts/',
 }
-load_dictionaries(params)
+load_dictionaries.main(params)
