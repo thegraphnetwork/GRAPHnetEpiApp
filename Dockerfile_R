@@ -64,6 +64,7 @@ COPY data/cleanCSV/*.csv /utilities/csv/
 COPY data/dictionaries/*.json /utilities/dicts/
 COPY data/maps/*.gpkg /utilities/maps/
 RUN pip3 install -r /utilities/requirements.txt
+COPY start.sh /
 # RUN cd /utilities && python3 autoload.py
 
 
