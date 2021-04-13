@@ -18,7 +18,7 @@ services:
         - "3838:3838"
     depends_on:
       - postgresql
-    entrypoint: ["/start.sh"] 
+    command: sh -c /start.sh 
     volumes:
       - 'shiny_logs:/var/log/shiny-server'
       - './mountpoints/apps:/srv/shiny-server'
