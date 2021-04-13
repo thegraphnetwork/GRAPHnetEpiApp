@@ -43,7 +43,7 @@ services:
     env_file:
       - .env_db
     ports:
-      - "16543:8080"
+      - "5050:5050"
     depends_on:
       - postgresql
     restart: always
