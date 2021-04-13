@@ -5,3 +5,4 @@ pandas
 sqlalchemy
 psycopg2
 tqdm
+pgcli
