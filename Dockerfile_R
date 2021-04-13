@@ -59,12 +59,12 @@ RUN mkdir /utilities/dicts
 RUN mkdir /utilities/csv
 RUN mkdir /utilities/maps
 COPY requirements.txt /utilities/
-COPY utilities/* /utilitties/
-COPY data/cleanCSV/*.csv /utilitties/csv/
-COPY data/dictionaries/*.json /utilitties/dicts/
-COPY data/maps/*.gpkg /utilitties/maps/
+COPY utilities/* /utilities/
+COPY data/cleanCSV/*.csv /utilities/csv/
+COPY data/dictionaries/*.json /utilities/dicts/
+COPY data/maps/*.gpkg /utilities/maps/
 RUN pip3 install -r /utilities/requirements.txt
-RUN cd /utilities && python autoload.py
+RUN cd /utilities && python3 autoload.py
 
 
 #copy app to image
