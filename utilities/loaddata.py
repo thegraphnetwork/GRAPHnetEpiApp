@@ -27,6 +27,7 @@ questions = [
     inquirer.Path('data_dir',
                   message="Enter directory where the clean CSVs located(don't forget the trailing '/')",
                   path_type=inquirer.Path.DIRECTORY,
+                  default='csv/'
                   ),
     inquirer.Text('table_name',
                   message="Type the name of the table in which to insert the data",
@@ -125,6 +126,7 @@ def insert_into_db(csvg, table_name, auto):
     db_cols = [col.name for col in table.columns]
     if 'country_name' not in db_cols and table_name == 'line_list':
         add_new_column('line_list', 'country_name', 'varchar(128)')
+        db_cols.append('country_name')
     for df, cname in csvg:
         df.columns = [c.lower() for c in df.columns]  # make sure all column names are lowercase
         for c in df.columns:
@@ -134,9 +136,11 @@ def insert_into_db(csvg, table_name, auto):
                 if auto:
                     ans = {'add_column': False}
                 else:
+                    print(f'Column {c} is missing.')
                     ans = inquirer.prompt(alter_table_questions)
                 if ans['add_column']:
                     add_new_column('line_list', column_name=c, column_type=coltype)
+                    db_cols.append(c)
                 else:
                     print(f'Not loading {c}')
                     del df[c]
