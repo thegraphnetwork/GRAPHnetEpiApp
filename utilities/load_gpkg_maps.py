@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv('../.env_db')
 PGUSER = os.getenv('POSTGRES_USER')
 PGPASS = os.getenv('POSTGRES_PASSWORD')
-PGHOST = 'localhost'
+PGHOST = 'postgresql'
 PGDB = os.getenv('POSTGRES_DB')
 
 questions = [
