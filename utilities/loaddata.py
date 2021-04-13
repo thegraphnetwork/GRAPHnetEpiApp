@@ -80,6 +80,9 @@ def load_csvs(pth):
             print(oe)
             continue
 
+def create_table(table_name):
+    with pg_engine.connect as connection:
+        connection.execute(f"CREATE TABLE {table_name}(id BIGSERIAL PRIMARY KEY);")
 
 def add_new_column(table_name, column_name, column_type):
     with pg_engine.connect() as connection:
@@ -114,7 +117,11 @@ def insert_into_db(csvg, table_name, auto):
     :param csvg: Generator yieldind dataframes
     :return:
     '''
-    table = get_table_info(table_name)
+    try:
+        table = get_table_info(table_name)
+    except exc.NoSuchTableError:
+        create_table(table_name)
+        table = get_table_info(table_name)
     db_cols = [col.name for col in table.columns]
     if 'country_name' not in db_cols and table_name == 'line_list':
         add_new_column('line_list', 'country_name', 'varchar(128)')
