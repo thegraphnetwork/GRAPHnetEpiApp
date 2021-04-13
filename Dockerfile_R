@@ -65,6 +65,7 @@ COPY data/dictionaries/*.json /utilities/dicts/
 COPY data/maps/*.gpkg /utilities/maps/
 RUN pip3 install -r /utilities/requirements.txt
 COPY start.sh /
+COPY .env_db /
 # RUN cd /utilities && python3 autoload.py
 
 
