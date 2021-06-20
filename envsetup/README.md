@@ -1,8 +1,8 @@
  
-# Host configuration files
+# Host Configuration files
 Some basic configuration files are stored in this directory and must be applied on the host on deploy
 
-## Firewall configuration
+## Firewall Configuration
 Make sure that `ufw` firewall configuration program is  installed.
 
 Run the configuration script below which will turn on the firewal, blocking up all connection except the ones required by EpigraphHub
@@ -22,7 +22,7 @@ After saving and closing the  file, make sure to restart docker using the follow
 ```bash
 sudo service docker restart
 ```
-## Setting um Nginx
+## Setting up Nginx
 After building the containers with `docker-compose`, you need to configure Nginx to serve the app and PGadmin4.
 
 Copy the file `nginx_default.conf` as the default site configuration with the following command:
