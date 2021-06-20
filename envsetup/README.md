@@ -23,7 +23,7 @@ Run the configuration script below which will turn on the firewal, blocking up a
 sudo ./ufw_setup.sh 
 ```
 
-Aditionally, in order to fix docker UFW vulnerability, edit the `/etc/default/docker and add the following line:
+Aditionally, in order to fix docker UFW vulnerability, edit the `/etc/default/docker` and add the following line:
 
 ```
 DOCKER_OPTS="--iptables=false"
@@ -40,7 +40,7 @@ After building the containers with `docker-compose`, you need to configure Nginx
 Copy the file `nginx_default.conf` as the default site configuration with the following command:
 
 ```bash
-sudo mv nginx_default.conf /etc/nginx/sites-available/default
+sudo cp nginx_default.conf /etc/nginx/sites-available/default
 ```
 then restart Nginx with the following command:
 
