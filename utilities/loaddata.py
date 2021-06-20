@@ -161,7 +161,8 @@ def insert_into_db(csvg, table_name, auto):
                 except exc.ProgrammingError as e:
                     print(row)
                     # print(row.where(pd.notnull(row), None))
-                    raise (e)
+                    print (e)
+                    cases_skipped.append(row[0])
                 except (exc.DataError, DatetimeFieldOverflow) as e:
                     print(row)
                     print(f"Bad row {row[0]}, skipping...")
