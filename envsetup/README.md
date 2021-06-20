@@ -1,7 +1,19 @@
  
 # Host Configuration files
-Some basic configuration files are stored in this directory and must be applied on the host on deploy
+Some basic configuration files are stored in this directory and must be applied on the host on deploy.
 
+## Basic configuration
+After the first login, remember to  allow only public-key authentication. For that, you must edit the file `/etc/ssh/sshd_config` and set
+```
+PubkeyAuthentication yes
+PasswordAuthentication no
+``` 
+And then restart `ssh`
+```bash
+sudo service ssh restart
+``` 
+
+You should also create a non root user with sudo powers.
 ## Firewall Configuration
 Make sure that `ufw` firewall configuration program is  installed.
 
