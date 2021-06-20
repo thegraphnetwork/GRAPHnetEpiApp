@@ -27,7 +27,11 @@ def insert_into_postgis(pth):
         fname = os.path.split(m)[-1]
         print(f"Inserting {fname} into PostGIS.")
         Map = gpd.read_file(m, driver='GPKG')
-        Map.to_postgis(fname, engine, if_exists='replace')
+        country_name = fname.split('_')[0]
+        try:
+            Map.to_postgis(country_name, engine, if_exists='replace')
+        except Exception as e:
+            print(f"Loading of the {country_name} maps failed:/n{e}")
         
         # splitname = m.split('_')
         # country_name = splitname[0]
