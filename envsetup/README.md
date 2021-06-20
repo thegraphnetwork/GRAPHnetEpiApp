@@ -45,5 +45,5 @@ sudo cp nginx_default.conf /etc/nginx/sites-available/default
 then restart Nginx with the following command:
 
 ```bash
-sudo service nginx default
+sudo service nginx restart
 ```
