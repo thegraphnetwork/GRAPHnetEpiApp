@@ -19,6 +19,18 @@ usermod -aG sudo <username>
 ```
 
 You should also create a non root user with sudo powers.
+
+## Installing Docker
+To install docker follow these [instructions](https://docs.docker.com/engine/install/ubuntu/).
+
+then run these commands to give permission to your non-root user to issue docker commands
+
+```bash
+$ sudo groupadd docker
+$ sudo usermod -aG docker $USER
+$ newgrp docker
+```
+
 ## Firewall Configuration
 Make sure that `ufw` firewall configuration program is  installed.
 

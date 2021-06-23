@@ -1,4 +1,4 @@
-version: "3.7"
+#version: "3.7"
 volumes:
   pgdata:
   shiny_logs:
@@ -47,6 +47,5 @@ services:
     depends_on:
       - postgresql
     restart: always
-#    networks:
-#      - postgres-compose-network
+
 
