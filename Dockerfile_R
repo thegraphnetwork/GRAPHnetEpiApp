@@ -1,4 +1,4 @@
-FROM rocker/shiny-verse
+FROM rocker/shiny-verse:latest
 
 #update all packages
 RUN apt-get update

@@ -13,6 +13,11 @@ And then restart `ssh`
 sudo service ssh restart
 ``` 
 
+Create a non-root user and put it in the adm group
+```bash
+usermod -aG sudo <username>
+```
+
 You should also create a non root user with sudo powers.
 ## Firewall Configuration
 Make sure that `ufw` firewall configuration program is  installed.
