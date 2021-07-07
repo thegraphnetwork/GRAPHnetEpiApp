@@ -31,6 +31,8 @@ $ sudo usermod -aG docker $USER
 $ newgrp docker
 ```
 
+Also install docker-compose by following [these instructions](https://docs.docker.com/compose/install/)
+
 ## Firewall Configuration
 Make sure that `ufw` firewall configuration program is  installed.
 

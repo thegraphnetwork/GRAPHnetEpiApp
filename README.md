@@ -1,4 +1,5 @@
-# The Graph Network Shiny App
+# EpiGraphHub Shiny App
+![architecture](architecture.png)
 
 This application provides an interactive analytical COVID-19 dashboard for the African continent.
 
