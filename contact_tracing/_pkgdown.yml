@@ -1,0 +1,42 @@
+template:
+  package: preferably
+
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Home
+      href: index.html
+    - text: Scripts
+      menu:
+      -  text: 01 global.R
+         href: articles/a01_global.html
+      -  text: 02 server.R
+         href: articles/a02_server.html
+      -  text: 03 server_functions.R
+         href: articles/a03_server_functions.html
+      -  text: 03.1 server_functions_for_CIV.R
+         href: articles/a03.1_server_functions_for_CIV.html
+      -  text: 03.2 server_functions_for_COG.R
+         href: articles/a03.2_server_functions_for_COG.html
+      -  text: 03.3 server_functions_for_SAMPLE.R
+         href: articles/a03.3_server_functions_for_SAMPLE.html
+      -  text: 03.4 server_functions_for_UGA.R
+         href: articles/a03.4_server_functions_for_UGA.html
+      -  text: 04 ui.R
+         href: articles/a04_ui.html
+      -  text: 05 report.Rmd
+         href: articles/a05_report.html
+    - text: Report outputs
+      menu:
+      -  text: HTML page
+         href: articles/gocontactr_report_html_page.html
+      -  text: HTML slides
+         href: articles/gocontactr_report_html_slides.html
+    - text: Walkthroughs
+      href: articles/a06_video_walkthroughs.html
+    - text: View Sample App
+      href: https://gocontactr.shinyapps.io/sample
+    - text: Changelog
+      href: news/index.html
+      

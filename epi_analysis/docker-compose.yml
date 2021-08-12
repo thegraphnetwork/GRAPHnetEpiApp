@@ -1,0 +1,51 @@
+#version: "3.7"
+volumes:
+  pgdata:
+  shiny_logs:
+
+services:
+  shiny:
+    container_name: shiny
+    build:
+      context: "."
+      dockerfile: Dockerfile_R
+    env_file:
+      - .env_db
+    restart: always
+    user: root
+    # Uncomment the lines below to disable application logs STDOUT output
+    # environment:
+    #   - APPLICATION_LOGS_TO_STDOUT=false
+    ports:
+        - "3838:3838"
+    depends_on:
+      - postgresql
+    command: sh -c /start.sh 
+    volumes:
+      - 'shiny_logs:/var/log/shiny-server'
+      - './mountpoints/apps:/srv/shiny-server'
+
+  postgresql:
+    container_name: postgresql
+    build:
+      context: "."
+      dockerfile: "Dockerfile-postgis"
+    env_file:
+      - .env_db
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    env_file:
+      - .env_db
+    ports:
+      - "5050:5050"
+    depends_on:
+      - postgresql
+    restart: always
+
+

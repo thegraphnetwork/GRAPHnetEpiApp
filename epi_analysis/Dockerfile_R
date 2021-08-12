@@ -1,0 +1,80 @@
+FROM rocker/shiny-verse:latest
+
+#update all packages
+RUN apt-get update
+
+#upgrade
+RUN apt-get upgrade -y
+
+#install additional packages
+RUN apt-get update && apt install gpg-agent -y unixodbc apt-utils curl \
+    tzdata \
+    libudunits2-dev \
+    libmagick++-dev\
+    libsodium-dev \
+    graphviz \
+    dirmngr \
+    gpg-agent \
+    nano \
+    vim \
+    gawk \
+    less \
+    libcurl4-openssl-dev \
+    libxml2-dev \
+    libjpeg-turbo8-dev \
+    gdal-bin \
+    proj-bin \
+    lbzip2 \
+    libfftw3-dev \
+    libgdal-dev \
+    libgeos-dev \
+    libgsl0-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    libhdf4-alt-dev \
+    libhdf5-dev \
+    libjq-dev \
+#    liblwgeom-dev \
+    libpq-dev \
+    libproj-dev \
+    libprotobuf-dev \
+    python3-pip\
+    libnetcdf-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    netcdf-bin \
+    protobuf-compiler \
+    sqlite3 \
+    tk-dev \
+    unixodbc-dev \
+    software-properties-common \
+    cron
+
+# install the R dependencies
+COPY install.R /tmp/
+RUN R -f /tmp/install.R
+
+RUN mkdir /utilities
+RUN mkdir /utilities/dicts
+RUN mkdir /utilities/csv
+RUN mkdir /utilities/maps
+COPY requirements.txt /utilities/
+COPY utilities/* /utilities/
+COPY data/cleanCSV/*.csv /utilities/csv/
+COPY data/dictionaries/*.json /utilities/dicts/
+COPY data/maps/*.gpkg /utilities/maps/
+RUN pip3 install -r /utilities/requirements.txt
+COPY start.sh /
+COPY .env_db /
+# RUN cd /utilities && python3 autoload.py
+
+
+#copy app to image
+ADD shinyapp ./shinyapp
+#/srv/shiny-server/shinyapp
+#RUN ls -ls /srv/shiny-server/shinyapp
+
+# Make all app files readable
+RUN chmod -R +r /srv/shiny-server/
+
+# CMD ["R", "-e",  "require(shiny); shiny::runApp('/shinyapp', host='0.0.0.0', port=3838)"]

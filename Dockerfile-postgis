@@ -1,6 +1,0 @@
-FROM postgis/postgis:latest
-
-ADD postgis_setup/* /docker-entrypoint-initdb.d/
-#ADD dev_dumps /dumps
-#ADD database /docker-entrypoint-sql
-ADD database/* /docker-entrypoint-initdb.d/

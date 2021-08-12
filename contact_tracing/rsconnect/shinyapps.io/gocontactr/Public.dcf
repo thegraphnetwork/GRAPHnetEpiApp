@@ -1,0 +1,14 @@
+name: Public
+title:
+username:
+account: gocontactr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3999059
+bundleId: 4571529
+url: https://gocontactr.shinyapps.io/Public/
+when: 1620416390.71042
+lastSyncTime: 1620416390.71044
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile|go_data|manual_analyses

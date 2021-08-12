@@ -1,0 +1,13 @@
+name: Congo
+title: Congo
+username:
+account: gocontactr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4159293
+bundleId: 4641498
+url: https://gocontactr.shinyapps.io/Congo/
+when: 1622023163.85951
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile|DESCRIPTION|private_data/Base contacts_GUINEE_2021_03_14_GLOBAL.xlsx|private_data/Niger_Contacts_COVID-19_review_27_01_2021.xlsx|docs|vignettes

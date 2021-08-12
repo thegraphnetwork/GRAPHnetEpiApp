@@ -1,0 +1,201 @@
+id_case,name_case,classif_case,date_symp_onset_case,last_name_contact,first_name_contact,sex_contact,id_contact_end,id_contact,relation_contact_case,age_contact,phone_contact,hcw_status_contact,admin1_contact,admin2_contact,admin3_contact,hhld_name_contact,type_contact,vital_state_contact,date_death_or_illness_contact,date_last_interaction,follow_up_status,loc_death_contact,follow_up_1,follow_up_2,follow_up_3,follow_up_4,follow_up_5,follow_up_6,follow_up_7,follow_up_8,follow_up_9,follow_up_10,follow_up_11,follow_up_12,follow_up_13,follow_up_14
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,Balan,Michael,Male,1,1-1,patient,69,1-127-234-0063x8999,No,Lagos,Ojo,NA,NA,Low-risk,Healthy,NA,18447,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,Naylor,Christina,Female,2,1-2,patient,51,983-352-0835x22322,Yes,Lagos,Lagos Mainland,NA,NA,High-risk,Deceased,18468,18458,Inactive,Eti-Osa,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,al-Islam,Chassity,Female,3,1-3,co-worker,44,1-408-511-0812,No,Lagos,Badagry,NA,NA,Low-risk,Healthy,NA,18449,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,Johnson,Smiley,Female,4,1-4,co-worker,18,115.164.5850,No,Lagos,Kosofe,NA,NA,Low-risk,Ill,18464,18454,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,el-Iman,Morgaen,Female,5,1-5,co-worker,76,086-734-3149x72427,No,Lagos,Kosofe,NA,NA,Low-risk,Healthy,NA,18455,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,Bryant-Townsell,Aisha,Female,6,1-6,community-member,87,676-283-2129x74743,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Deceased,18425,18415,Inactive,Agege,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,Reilly,Kristy,Female,7,1-7,community-member,89,(084)904-9464x97802,Yes,Lagos,Amuwo-Odofin,NA,NA,Low-risk,Healthy,NA,18465,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,el-Bagheri,Emily,Female,8,1-8,patient,68,804-066-6794x59152,No,Lagos,Alimosho,NA,NA,Low-risk,Deceased,18428,18418,Inactive,Ikorodu,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,Bell,Jessica,Female,9,1-9,family member,39,1-205-790-8179x80007,No,Lagos,Lagos Island,NA,NA,High-risk,Ill,18433,18423,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,Dr. Josie Bechtelar PhD,Confirmed,2020-06-09,el-Agha,Sereno,Male,10,1-10,community-member,97,+79(8)1654451465,Yes,Lagos,Ifako-Ijaye,NA,NA,Low-risk,Healthy,NA,18464,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Harts,Kaatima,Female,11,2-1,community-member,41,475.466.4114x729,Yes,Lagos,Kosofe,NA,NA,Low-risk,Healthy,NA,18538,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Deluca,Blas,Male,12,2-2,family member,13,(044)635-2517x2992,Yes,Lagos,Eti-Osa,NA,NA,Low-risk,Deceased,18515,18505,Inactive,Lagos Mainland,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,al-Arafat,Cameron,Male,13,2-3,family member,43,380-365-3477x3271,No,Lagos,Ikeja,NA,NA,High-risk,Ill,18521,18511,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Nguyen,Catalina,Female,14,2-4,community-member,97,1-184-090-3198x58525,No,Lagos,Agege,NA,NA,High-risk,Ill,18515,18505,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Lingen,Katherine,Female,15,2-5,co-worker,30,+92(5)4630446425,No,Lagos,Ajeromi-Ifelodun,NA,NA,Low-risk,Healthy,NA,18520,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,el-Karimi,Samuel,Male,16,2-6,co-worker,73,(726)741-6629x72751,No,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Healthy,NA,18558,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Ramirez-Valdez,Drew,Male,17,2-7,family member,79,1-665-654-0631,Yes,Lagos,Ifako-Ijaye,NA,NA,High-risk,Deceased,18547,18537,Inactive,Epe,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Mace,Alexis,Female,18,2-8,family member,58,1-553-212-1291,No,Lagos,Ibeju/Lekki,NA,NA,High-risk,Healthy,NA,18518,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,el-Masood,Tyler,Male,19,2-9,co-worker,55,(823)309-1479,Yes,Lagos,Ikorodu,NA,NA,High-risk,Healthy,NA,18529,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+2,Mr. Merle Kulas,Confirmed,2020-09-03,Chrisman,Logan,Male,20,2-10,patient,29,(613)659-5175x525,No,Lagos,Ibeju/Lekki,NA,NA,High-risk,Ill,18533,18523,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Antonio,Billlie,Female,21,3-1,co-worker,11,1-355-161-2873x63155,No,Lagos,Ibeju/Lekki,NA,NA,High-risk,Ill,18523,18513,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Burkhart,Karla,Female,22,3-2,co-worker,7,(457)564-8090x27046,No,Lagos,Ojo,NA,NA,Low-risk,Healthy,NA,18536,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Park,Sabrina,Female,23,3-3,patient,19,569.980.5545x5661,Yes,Lagos,Ikeja,NA,NA,High-risk,Healthy,NA,18546,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Wheatley,Yusuke,Male,24,3-4,patient,14,960.072.0720,No,Lagos,Ikorodu,NA,NA,High-risk,Deceased,18566,18556,Inactive,Ikorodu,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Roybal,Anicca,Female,25,3-5,co-worker,48,09673025074,Yes,Lagos,Surulere,NA,NA,Low-risk,Healthy,NA,18559,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Tamayo,Kellsi,Female,26,3-6,community-member,24,(562)584-9609,Yes,Lagos,Ikorodu,NA,NA,Low-risk,Ill,18552,18542,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Harris,Furqaan,Male,27,3-7,patient,35,352-208-0950,No,Lagos,Kosofe,NA,NA,High-risk,Ill,18554,18544,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Ransom,Mahboob,Male,28,3-8,co-worker,6,1-356-622-3175,No,Lagos,Oshodi-Isolo,NA,NA,Low-risk,Healthy,NA,18534,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Towne,Natasha,Female,29,3-9,family member,0,+54(0)6306343707,Yes,Lagos,Ikorodu,NA,NA,High-risk,Deceased,18562,18552,Inactive,Ajeromi-Ifelodun,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+3,Shelia Balistreri,Confirmed,2020-09-11,Boden,Jacob,Male,30,3-10,family member,52,351.771.4705x49464,No,Lagos,Mushin,NA,NA,Low-risk,Ill,18550,18540,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Abachiche,Celestino,Male,31,4-1,family member,99,1-441-357-7973x745,No,Lagos,Amuwo-Odofin,NA,NA,High-risk,Deceased,18426,18416,Inactive,Oshodi-Isolo,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Legarde,Sierra,Female,32,4-2,patient,18,313.471.5489,No,Lagos,Lagos Mainland,NA,NA,High-risk,Ill,18401,18391,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Creel,Zachary,Male,33,4-3,community-member,54,466-792-0276x8035,Yes,Lagos,Shomolu,NA,NA,High-risk,Healthy,NA,18417,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Fladland,Ghaaliba,Female,34,4-4,family member,57,938-001-4971x791,No,Lagos,Shomolu,NA,NA,High-risk,Healthy,NA,18438,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Lucero,Dewarren,Male,35,4-5,family member,97,841-808-8547,No,Lagos,Ojo,NA,NA,Low-risk,Deceased,18412,18402,Inactive,Ifako-Ijaye,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Walton,Alexis,Female,36,4-6,co-worker,54,+94(7)7686986393,No,Lagos,Lagos Island,NA,NA,High-risk,Healthy,NA,18395,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Williams,Lakshmi Harshitha,Female,37,4-7,family member,75,700.139.1047x303,Yes,Lagos,Amuwo-Odofin,NA,NA,High-risk,Healthy,NA,18408,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,al-Baddour,Liban,Male,38,4-8,patient,2,1-701-653-0702x93481,Yes,Lagos,Apapa,NA,NA,High-risk,Deceased,18396,18386,Inactive,Ifako-Ijaye,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Montelongo Ponce,Krystal,Female,39,4-9,family member,79,765-492-5867x34439,No,Lagos,Ojo,NA,NA,High-risk,Healthy,NA,18400,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+4,Mr. Carlo Fisher,Confirmed,2020-05-08,Castillo-Duron,Young Saeng,Female,40,4-10,co-worker,62,1-406-691-1393x876,No,Lagos,Lagos Island,NA,NA,High-risk,Healthy,NA,18422,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,el-Hana,Hissa,Female,41,5-1,co-worker,92,(137)214-3231x7987,No,Lagos,Ojo,NA,NA,High-risk,Deceased,18586,18576,Inactive,Shomolu,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Miller,Musu,Female,42,5-2,community-member,34,881-375-9289x53026,No,Lagos,Mushin,NA,NA,Low-risk,Ill,18590,18580,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Rudman,Mariah,Female,43,5-3,co-worker,44,04767764244,No,Lagos,Oshodi-Isolo,NA,NA,High-risk,Deceased,18600,18590,Inactive,Mushin,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,el-Fahmy,Ronald,Male,44,5-4,patient,84,06919314066,No,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Deceased,18610,18600,Inactive,Badagry,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Manton,Corshaid,Male,45,5-5,community-member,71,604.904.8574x870,No,Lagos,Ikorodu,NA,NA,Low-risk,Healthy,NA,18602,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Burnett,Melborne,Male,46,5-6,co-worker,49,946.359.9578x9188,No,Lagos,Mushin,NA,NA,Low-risk,Deceased,18573,18563,Inactive,Epe,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Gagnon,Alexandra,Female,47,5-7,family member,6,628.392.9133x66126,No,Lagos,Eti-Osa,NA,NA,High-risk,Ill,18606,18596,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Adams,Nicholas,Male,48,5-8,co-worker,58,337.026.9254,Yes,Lagos,Badagry,NA,NA,Low-risk,Healthy,NA,18595,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Soto Montellano,Devon'Naiye,Male,49,5-9,co-worker,53,859-608-6987x2274,Yes,Lagos,Ojo,NA,NA,High-risk,Ill,18582,18572,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+5,Roscoe Gutkowski,Confirmed,2020-11-04,Lim,Julia,Female,50,5-10,family member,71,601.176.1382x5733,No,Lagos,Shomolu,NA,NA,High-risk,Ill,18606,18596,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Dominguez,Hunter,Male,51,6-1,patient,34,495-993-5849,Yes,Lagos,Alimosho,NA,NA,Low-risk,Healthy,NA,18536,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Jones,Matius,Male,52,6-2,community-member,99,646.788.2356x15307,No,Lagos,Ojo,NA,NA,High-risk,Healthy,NA,18495,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Barnes,Bianca,Female,53,6-3,family member,69,1-371-221-5727x785,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,High-risk,Deceased,18516,18506,Inactive,Ajeromi-Ifelodun,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Garcia-Morales,Pakou,Female,54,6-4,co-worker,39,+93(9)6066595735,No,Lagos,Badagry,NA,NA,High-risk,Deceased,18520,18510,Inactive,Alimosho,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,White,Anbara,Female,55,6-5,community-member,34,+25(1)6999906040,Yes,Lagos,Surulere,NA,NA,Low-risk,Deceased,18492,18482,Inactive,Alimosho,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Hutchinson,Dagny,Female,56,6-6,family member,28,1-932-981-5585,No,Lagos,Ifako-Ijaye,NA,NA,High-risk,Deceased,18532,18522,Inactive,Badagry,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Lee,Jacklyn,Female,57,6-7,family member,79,835.735.9739,Yes,Lagos,Ojo,NA,NA,High-risk,Healthy,NA,18540,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,al-Ozer,Larissa,Female,58,6-8,family member,51,(172)274-9897x30702,Yes,Lagos,Amuwo-Odofin,NA,NA,Low-risk,Healthy,NA,18530,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Ishii,Aneesa,Female,59,6-9,patient,82,03780664846,Yes,Lagos,Badagry,NA,NA,Low-risk,Deceased,18518,18508,Inactive,Ikeja,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+6,Landen Reinger,Confirmed,2020-08-17,Martinez,Trevon,Male,60,6-10,family member,9,(438)953-3468,Yes,Lagos,Alimosho,NA,NA,Low-risk,Healthy,NA,18497,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+7,Isa McGlynn,Confirmed,2020-05-05,Alcazar Ochoa,Kevin,Male,61,7-1,co-worker,72,625-519-9393,Yes,Lagos,Agege,NA,NA,Low-risk,Ill,18392,18382,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Morales-Fernandez,Nicholas,Male,62,7-2,co-worker,16,(582)504-9519x6796,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Ill,18392,18382,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Watson,Kaylyn,Female,63,7-3,family member,81,771-776-7315,No,Lagos,Agege,NA,NA,Low-risk,Healthy,NA,18410,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Lynch,Kacie,Female,64,7-4,community-member,22,(103)114-4226,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Deceased,18400,18390,Inactive,Badagry,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Womack,Nusaiba,Female,65,7-5,patient,63,457.592.8247,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,Low-risk,Deceased,18404,18394,Inactive,Surulere,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Walker,Dakota,Male,66,7-6,co-worker,56,1-551-432-2356x16120,No,Lagos,Kosofe,NA,NA,High-risk,Deceased,18412,18402,Inactive,Kosofe,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Phenix,Alysa,Female,67,7-7,patient,83,1-918-592-9268x826,No,Lagos,Agege,NA,NA,High-risk,Healthy,NA,18423,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Alger,Amjad,Male,68,7-8,family member,9,617.447.2708x236,Yes,Lagos,Ikorodu,NA,NA,High-risk,Deceased,18428,18418,Inactive,Lagos Island,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,Truong,Griselda,Female,69,7-9,patient,85,+85(3)9129066064,Yes,Lagos,Epe,NA,NA,High-risk,Healthy,NA,18412,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+7,Isa McGlynn,Confirmed,2020-05-05,al-Neman,Christian,Male,70,7-10,family member,63,+92(9)9800757671,No,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Ill,18420,18410,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+8,Eloy Shields,Confirmed,2020-10-10,Algien,Sunny,Male,71,8-1,family member,23,(562)059-9892x890,No,Lagos,Lagos Mainland,NA,NA,Low-risk,Healthy,NA,18595,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Crawford,Idris,Male,72,8-2,co-worker,7,283-930-3866,Yes,Lagos,Amuwo-Odofin,NA,NA,Low-risk,Deceased,18580,18570,Inactive,Ibeju/Lekki,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Silas,Christopher,Male,73,8-3,family member,50,04208958574,Yes,Lagos,Lagos Island,NA,NA,High-risk,Deceased,18594,18584,Inactive,Kosofe,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Leavy,Kenaya,Female,74,8-4,co-worker,42,04352481501,No,Lagos,Eti-Osa,NA,NA,High-risk,Healthy,NA,18555,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Carroll,Michelle,Female,75,8-5,co-worker,34,126.077.7288,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,High-risk,Healthy,NA,18563,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Brosious,Samantha,Female,76,8-6,family member,65,401-364-5634,Yes,Lagos,Amuwo-Odofin,NA,NA,Low-risk,Ill,18554,18544,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Corsentino,Andrew,Male,77,8-7,community-member,25,(310)761-4784x5691,Yes,Lagos,Surulere,NA,NA,Low-risk,Deceased,18563,18553,Inactive,Agege,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,al-Jalil,Deante,Male,78,8-8,co-worker,40,227-838-8928x04293,No,Lagos,Lagos Mainland,NA,NA,High-risk,Ill,18569,18559,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Wade,Shelby,Female,79,8-9,family member,90,090-918-9421,No,Lagos,Epe,NA,NA,High-risk,Ill,18575,18565,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+8,Eloy Shields,Confirmed,2020-10-10,Musa,Jacob,Male,80,8-10,patient,81,018-444-4493,Yes,Lagos,Ifako-Ijaye,NA,NA,High-risk,Ill,18586,18576,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,1,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Hilmes,Paul,Male,81,9-1,patient,4,995.731.6983x78090,No,Lagos,Agege,NA,NA,High-risk,Ill,18433,18423,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Abdi,Kanaan,Male,82,9-2,patient,34,326-646-4926x70737,Yes,Lagos,Ibeju/Lekki,NA,NA,High-risk,Ill,18432,18422,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Hopkins,Armenda,Female,83,9-3,co-worker,11,(711)609-7425x644,No,Lagos,Ajeromi-Ifelodun,NA,NA,Low-risk,Healthy,NA,18447,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Bison,Arianna,Female,84,9-4,community-member,3,+24(1)8884873739,No,Lagos,Lagos Island,NA,NA,Low-risk,Healthy,NA,18444,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Taheran,Vincent,Male,85,9-5,co-worker,92,434-199-3360x577,Yes,Lagos,Oshodi-Isolo,NA,NA,High-risk,Ill,18459,18449,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,al-Saeed,Lauren,Female,86,9-6,community-member,16,(825)834-3578,Yes,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Deceased,18419,18409,Inactive,Ajeromi-Ifelodun,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Balaun,Michael,Male,87,9-7,community-member,60,1-319-253-6519x2937,Yes,Lagos,Shomolu,NA,NA,High-risk,Healthy,NA,18466,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Witte,De Andre,Male,88,9-8,family member,15,929.214.5542,No,Lagos,Surulere,NA,NA,Low-risk,Deceased,18420,18410,Inactive,Lagos Island,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Hand,Pornchai,Male,89,9-9,co-worker,96,(591)810-5359x73052,No,Lagos,Apapa,NA,NA,Low-risk,Healthy,NA,18444,Inactive,NA,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+9,Ike Mayert,Confirmed,2020-06-04,Hernandez,Jaasir,Male,90,9-10,patient,30,865-434-7958x1212,Yes,Lagos,Oshodi-Isolo,NA,NA,Low-risk,Deceased,18429,18419,Inactive,Ifako-Ijaye,1,1,1,1,1,1,1,1,1,1,1,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,el-Rasheed,Roshni,Female,91,10-1,co-worker,55,(173)656-7171x0422,Yes,Lagos,Shomolu,NA,NA,Low-risk,Ill,18492,18482,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,Roybal,Ray Bright,Male,92,10-2,family member,69,303.033.8857x408,No,Lagos,Badagry,NA,NA,High-risk,Ill,18535,18525,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,Kump,Sonia,Female,93,10-3,patient,71,694-263-1255x876,No,Lagos,Ikorodu,NA,NA,High-risk,Healthy,NA,18523,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,Weston,Cheresa,Female,94,10-4,community-member,34,352.056.3651,No,Lagos,Mushin,NA,NA,High-risk,Deceased,18527,18517,Inactive,Ojo,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,al-Latif,Sajiyya,Female,95,10-5,family member,65,01013907870,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,High-risk,Healthy,NA,18516,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,el-Tabet,Jamie,Female,96,10-6,patient,72,379-248-5524,No,Lagos,Eti-Osa,NA,NA,Low-risk,Healthy,NA,18529,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,al-Khatib,Poliala,Female,97,10-7,community-member,65,(630)092-6380x60575,Yes,Lagos,Surulere,NA,NA,Low-risk,Ill,18489,18479,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,Ouellette,Maya,Female,98,10-8,co-worker,52,(350)959-5438x2826,Yes,Lagos,Surulere,NA,NA,Low-risk,Healthy,NA,18502,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,al-Amer,Nabeeh,Male,99,10-9,patient,40,696.871.9238x7875,No,Lagos,Mushin,NA,NA,High-risk,Deceased,18525,18515,Inactive,Amuwo-Odofin,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+10,Dempsey Parisian,Confirmed,2020-08-12,Farina,Kaylee,Female,100,10-10,co-worker,69,+62(5)0930226200,Yes,Lagos,Ifako-Ijaye,NA,NA,Low-risk,Healthy,NA,18532,Inactive,NA,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Lester,Kelsey,Female,101,11-1,family member,45,(104)576-1549,Yes,Lagos,Surulere,NA,NA,High-risk,Ill,18644,18634,Inactive,NA,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Platero,Steven,Male,102,11-2,patient,80,885-963-4376,No,Lagos,Mushin,NA,NA,Low-risk,Deceased,18648,18638,Inactive,Oshodi-Isolo,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Andrews,Aamina,Female,103,11-3,community-member,70,1-610-509-9244x718,No,Lagos,Ajeromi-Ifelodun,NA,NA,Low-risk,Healthy,NA,18650,Inactive,NA,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Dilallo,Derek,Male,104,11-4,co-worker,15,06702143128,No,Lagos,Surulere,NA,NA,Low-risk,Deceased,18626,18616,Inactive,Kosofe,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Oh,Alexander,Male,105,11-5,family member,74,593-104-8862x815,Yes,Lagos,Ifako-Ijaye,NA,NA,High-risk,Healthy,NA,18634,Inactive,NA,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Lee,Nawf,Male,106,11-6,community-member,13,+83(4)3377559296,No,Lagos,Oshodi-Isolo,NA,NA,High-risk,Healthy,NA,18610,Inactive,NA,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Ward,Dakota,Male,107,11-7,family member,100,(451)623-7912,No,Lagos,Alimosho,NA,NA,Low-risk,Deceased,18614,18604,Inactive,Oshodi-Isolo,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Huynh,Murshid,Male,108,11-8,community-member,78,373.855.4037x9000,No,Lagos,Agege,NA,NA,Low-risk,Deceased,18618,18608,Inactive,Ibeju/Lekki,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Sandoval,Rabi,Male,109,11-9,family member,37,02217923394,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Healthy,NA,18624,Inactive,NA,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+11,Miss Clarissa Sipes DVM,Confirmed,2020-12-05,Kiefel,Lenasia,Female,110,11-10,family member,10,05637456620,No,Lagos,Epe,NA,NA,High-risk,Ill,18619,18609,Inactive,NA,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Mcwilliams,Kelsy,Female,111,12-1,patient,76,1-249-271-0550,Yes,Lagos,Badagry,NA,NA,Low-risk,Ill,18492,18482,Inactive,NA,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Garcia-Perez,Edward,Male,112,12-2,co-worker,92,036-475-6039,No,Lagos,Ibeju/Lekki,NA,NA,High-risk,Ill,18461,18451,Inactive,NA,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Schultz,Jagger,Male,113,12-3,community-member,23,01031364970,Yes,Lagos,Badagry,NA,NA,Low-risk,Deceased,18492,18482,Inactive,Ibeju/Lekki,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Lamont,Jose,Male,114,12-4,community-member,29,571-174-5548,No,Lagos,Lagos Island,NA,NA,Low-risk,Deceased,18496,18486,Inactive,Lagos Mainland,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Shelton,Philip,Male,115,12-5,community-member,92,255.090.0344,No,Lagos,Ojo,NA,NA,Low-risk,Healthy,NA,18479,Inactive,NA,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Manriquez,Richard,Male,116,12-6,community-member,53,1-898-097-5464x55888,Yes,Lagos,Apapa,NA,NA,High-risk,Healthy,NA,18467,Inactive,NA,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Brown,Jessica,Female,117,12-7,patient,71,868-872-1632x06734,No,Lagos,Lagos Mainland,NA,NA,Low-risk,Deceased,18482,18472,Inactive,Ikorodu,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Martinez,Tahnee,Female,118,12-8,patient,48,936.046.0534x21036,No,Lagos,Lagos Island,NA,NA,Low-risk,Ill,18470,18460,Inactive,NA,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Sanchez,Kaela,Female,119,12-9,patient,6,1-278-773-7296,No,Lagos,Mushin,NA,NA,Low-risk,Healthy,NA,18465,Inactive,NA,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+12,Rodney Funk,Confirmed,2020-07-17,Alvarado,James,Male,120,12-10,co-worker,58,386.741.2862x205,No,Lagos,Epe,NA,NA,High-risk,Deceased,18507,18497,Inactive,Ibeju/Lekki,1,1,1,1,1,1,1,1,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Croteau,Justin,Male,121,13-1,patient,41,(058)648-9805x3157,No,Lagos,Oshodi-Isolo,NA,NA,High-risk,Deceased,18582,18572,Inactive,Kosofe,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Mercer,Akira,Male,122,13-2,patient,41,681.206.0377x405,Yes,Lagos,Epe,NA,NA,High-risk,Deceased,18601,18591,Inactive,Kosofe,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Rosean,Luke,Male,123,13-3,co-worker,9,+37(2)0373192269,No,Lagos,Surulere,NA,NA,High-risk,Deceased,18583,18573,Inactive,Surulere,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Lee,Hanlala,Male,124,13-4,family member,22,1-844-590-5535,No,Lagos,Ifako-Ijaye,NA,NA,Low-risk,Ill,18610,18600,Inactive,NA,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,al-Ahsan,Shavonne,Female,125,13-5,patient,95,1-056-684-7934x0679,No,Lagos,Lagos Mainland,NA,NA,High-risk,Healthy,NA,18585,Inactive,NA,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Hasbrouck,David,Male,126,13-6,family member,28,1-999-895-5702,Yes,Lagos,Kosofe,NA,NA,High-risk,Healthy,NA,18590,Inactive,NA,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Wheeler,Shaheera,Female,127,13-7,co-worker,80,272.467.4999x1117,Yes,Lagos,Agege,NA,NA,Low-risk,Deceased,18617,18607,Inactive,Shomolu,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Cortez,Derrick,Male,128,13-8,co-worker,53,1-900-874-6011,No,Lagos,Ikorodu,NA,NA,Low-risk,Ill,18587,18577,Inactive,NA,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,Dillard,Alyvia,Female,129,13-9,patient,65,09370367117,Yes,Lagos,Ojo,NA,NA,High-risk,Healthy,NA,18598,Inactive,NA,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+13,Clarice McKenzie-Grimes,Confirmed,2020-11-06,al-Riaz,Ramalaan,Male,130,13-10,community-member,39,1-284-472-1123x92065,No,Lagos,Ajeromi-Ifelodun,NA,NA,Low-risk,Healthy,NA,18598,Inactive,NA,1,1,1,1,1,1,1,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Johnson,Monica,Female,131,14-1,co-worker,59,1-072-038-1802x182,No,Lagos,Lagos Island,NA,NA,Low-risk,Deceased,18586,18576,Inactive,Agege,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,al-Tabatabai,Numair,Male,132,14-2,co-worker,78,04437751381,Yes,Lagos,Agege,NA,NA,Low-risk,Deceased,18564,18554,Inactive,Amuwo-Odofin,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Morgan,Megan,Female,133,14-3,co-worker,50,(226)255-6919x00696,Yes,Lagos,Epe,NA,NA,High-risk,Deceased,18566,18556,Inactive,Epe,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,al-Abdullah,Erik,Male,134,14-4,community-member,17,210-909-7827,Yes,Lagos,Shomolu,NA,NA,Low-risk,Ill,18593,18583,Inactive,NA,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Khanal,Antoinette,Female,135,14-5,community-member,25,+47(3)2050520518,No,Lagos,Ifako-Ijaye,NA,NA,High-risk,Deceased,18592,18582,Inactive,Epe,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Thorpe,Juwairiyyah,Female,136,14-6,patient,3,1-910-012-1756x51861,Yes,Lagos,Ikeja,NA,NA,Low-risk,Healthy,NA,18595,Inactive,NA,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Weaver,Audric,Male,137,14-7,family member,84,1-746-218-6373,Yes,Lagos,Alimosho,NA,NA,Low-risk,Healthy,NA,18558,Inactive,NA,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Patterson,Alan,Male,138,14-8,family member,92,06869822989,Yes,Lagos,Kosofe,NA,NA,Low-risk,Deceased,18576,18566,Inactive,Surulere,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Owston,Anadelia,Female,139,14-9,family member,13,(241)329-5581x73005,Yes,Lagos,Lagos Mainland,NA,NA,High-risk,Healthy,NA,18581,Inactive,NA,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+14,Attilio Rogahn,Confirmed,2020-10-14,Pham,Khaalida,Female,140,14-10,co-worker,75,307-596-1000x82249,Yes,Lagos,Eti-Osa,NA,NA,Low-risk,Ill,18593,18583,Inactive,NA,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Motta,Devin,Male,141,15-1,co-worker,60,1-771-760-5819x312,No,Lagos,Ikeja,NA,NA,High-risk,Healthy,NA,18475,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Doughty,Elijah,Male,142,15-2,patient,97,(153)481-7869x6962,No,Lagos,Apapa,NA,NA,High-risk,Ill,18482,18472,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Strange Owl,Quinn,Male,143,15-3,patient,88,893.988.6638,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Ill,18443,18433,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Anderson,Karen,Female,144,15-4,co-worker,43,175.241.2638x20223,No,Lagos,Ifako-Ijaye,NA,NA,Low-risk,Ill,18442,18432,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Brown,Abdul Baari,Male,145,15-5,co-worker,67,(451)033-2265x074,No,Lagos,Ojo,NA,NA,High-risk,Deceased,18476,18466,Inactive,Ibeju/Lekki,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Chounlamany,Sage,Female,146,15-6,family member,98,709.012.2823x7194,Yes,Lagos,Mushin,NA,NA,High-risk,Ill,18468,18458,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Ousley,Saami,Male,147,15-7,co-worker,31,+54(2)0850492182,No,Lagos,Amuwo-Odofin,NA,NA,High-risk,Ill,18468,18458,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Reyes,Nico,Male,148,15-8,co-worker,77,(616)404-7756x5891,No,Lagos,Agege,NA,NA,High-risk,Healthy,NA,18444,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,Deleon,Cameron,Male,149,15-9,patient,94,143-243-5579x466,Yes,Lagos,Shomolu,NA,NA,High-risk,Deceased,18445,18435,Inactive,Oshodi-Isolo,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+15,Euphemia Hirthe DDS,Confirmed,2020-06-19,el-Bagheri,Shane,Male,150,15-10,community-member,24,1-522-829-1857,No,Lagos,Kosofe,NA,NA,Low-risk,Ill,18460,18450,Inactive,NA,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Aragon,Rylee,Female,151,16-1,co-worker,19,918.451.8626x3797,No,Lagos,Apapa,NA,NA,Low-risk,Ill,18637,18627,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Lee,Erick,Male,152,16-2,community-member,7,1-849-955-9530x0855,Yes,Lagos,Badagry,NA,NA,Low-risk,Deceased,18617,18607,Inactive,Ibeju/Lekki,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Elliott,Tajshawnne,Female,153,16-3,community-member,32,942-160-7667x19416,No,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Deceased,18612,18602,Inactive,Lagos Island,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Blalock,Tevin,Male,154,16-4,family member,84,1-255-978-5639x4168,No,Lagos,Kosofe,NA,NA,High-risk,Deceased,18643,18633,Inactive,Mushin,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Collins,Jensen,Male,155,16-5,community-member,51,+85(0)0818210533,No,Lagos,Surulere,NA,NA,High-risk,Ill,18598,18588,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Liss,Kelly,Female,156,16-6,family member,75,373.703.5138,No,Lagos,Ibeju/Lekki,NA,NA,High-risk,Ill,18636,18626,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Nguyen,Esther,Female,157,16-7,family member,50,+84(5)1051820275,Yes,Lagos,Oshodi-Isolo,NA,NA,High-risk,Healthy,NA,18641,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Campos,Waajida,Female,158,16-8,community-member,32,225.871.2683x03199,No,Lagos,Lagos Island,NA,NA,Low-risk,Healthy,NA,18634,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,Altangerel,Brandi,Female,159,16-9,patient,87,840-145-9865x31633,No,Lagos,Alimosho,NA,NA,High-risk,Healthy,NA,18603,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+16,Lidie Walker,Confirmed,2020-12-01,el-Musa,Hanaaa,Female,160,16-10,family member,89,047-463-9579x4842,No,Lagos,Badagry,NA,NA,High-risk,Ill,18632,18622,Inactive,NA,1,1,1,1,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,el-Momin,Madison,Female,161,17-1,patient,89,01232834274,No,Lagos,Kosofe,NA,NA,Low-risk,Deceased,18531,18521,Inactive,Lagos Mainland,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Pedersen,Danielle,Female,162,17-2,co-worker,42,1-914-206-7198,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Deceased,18534,18524,Inactive,Ikeja,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,al-Afzal,Mateaki,Male,163,17-3,patient,92,(816)488-3335,Yes,Lagos,Ibeju/Lekki,NA,NA,High-risk,Healthy,NA,18554,Inactive,NA,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Malone,Tyler,Male,164,17-4,community-member,11,(189)456-4630x271,No,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Ill,18555,18545,Inactive,NA,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,al-Hashim,Kiersten,Female,165,17-5,patient,20,+34(1)6112313081,No,Lagos,Ikeja,NA,NA,High-risk,Deceased,18508,18498,Inactive,Ibeju/Lekki,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Sena,Westen,Male,166,17-6,family member,97,668.818.8205x882,No,Lagos,Badagry,NA,NA,Low-risk,Ill,18552,18542,Inactive,NA,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Portillos,Dennison,Male,167,17-7,family member,44,+00(5)2002656186,No,Lagos,Alimosho,NA,NA,High-risk,Deceased,18534,18524,Inactive,Ifako-Ijaye,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Shileny,Faith,Female,168,17-8,community-member,71,+76(4)4386864483,Yes,Lagos,Ojo,NA,NA,Low-risk,Ill,18519,18509,Inactive,NA,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Aquino,Savannah,Female,169,17-9,family member,42,497-128-2798x264,Yes,Lagos,Amuwo-Odofin,NA,NA,High-risk,Healthy,NA,18534,Inactive,NA,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+17,Welton Smitham,Confirmed,2020-09-01,Lau,Aubrey,Female,170,17-10,co-worker,62,(893)870-2819,No,Lagos,Lagos Mainland,NA,NA,Low-risk,Healthy,NA,18552,Inactive,NA,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Silva,Dakota,Male,171,18-1,family member,86,194-240-8898x646,No,Lagos,Amuwo-Odofin,NA,NA,High-risk,Deceased,18619,18609,Inactive,Ibeju/Lekki,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Thomas,David,Male,172,18-2,co-worker,37,(336)159-8080x874,No,Lagos,Surulere,NA,NA,High-risk,Healthy,NA,18638,Inactive,NA,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Statom,Madalyn,Female,173,18-3,patient,11,931.904.2583,No,Lagos,Alimosho,NA,NA,Low-risk,Deceased,18625,18615,Inactive,Ajeromi-Ifelodun,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,al-Suleiman,Mina,Female,174,18-4,community-member,22,(069)640-5810x44175,No,Lagos,Mushin,NA,NA,Low-risk,Ill,18620,18610,Inactive,NA,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Tran,Owen,Male,175,18-5,patient,81,1-238-659-1123x2965,No,Lagos,Epe,NA,NA,Low-risk,Healthy,NA,18645,Inactive,NA,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Loi,Zachary,Male,176,18-6,co-worker,74,+75(4)9419987365,No,Lagos,Ibeju/Lekki,NA,NA,Low-risk,Deceased,18645,18635,Inactive,Badagry,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Abdelgadir,Jazmine,Female,177,18-7,community-member,93,335.747.4485,No,Lagos,Ifako-Ijaye,NA,NA,High-risk,Ill,18637,18627,Inactive,NA,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Mccarthy,Jonathan,Male,178,18-8,community-member,43,938.929.3309,No,Lagos,Amuwo-Odofin,NA,NA,High-risk,Ill,18645,18635,Inactive,NA,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Aragon,Seung,Male,179,18-9,family member,6,958-757-3695,No,Lagos,Lagos Mainland,NA,NA,High-risk,Ill,18650,18640,Inactive,NA,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+18,Miss Bryanna Okuneva,Confirmed,2020-12-09,Nosker,Mawhiba,Female,180,18-10,co-worker,5,1-397-942-3836x29713,No,Lagos,Mushin,NA,NA,Low-risk,Deceased,18637,18627,Inactive,Ifako-Ijaye,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Ello,Elizabeth,Female,181,19-1,patient,9,672.509.0444x7617,No,Lagos,Shomolu,NA,NA,High-risk,Ill,18408,18398,Inactive,NA,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Roubideaux,Mustaba,Male,182,19-2,patient,24,(665)317-6338x514,No,Lagos,Ikorodu,NA,NA,Low-risk,Healthy,NA,18389,Inactive,NA,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Martinez-Sanchez,Derek,Male,183,19-3,family member,24,043.494.4446,No,Lagos,Oshodi-Isolo,NA,NA,High-risk,Healthy,NA,18406,Inactive,NA,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Lehnhausen,Tareefa,Female,184,19-4,co-worker,98,220.675.6563,Yes,Lagos,Apapa,NA,NA,High-risk,Deceased,18437,18427,Inactive,Apapa,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Allie,Kyle,Male,185,19-5,patient,58,(189)538-7929,No,Lagos,Ibeju/Lekki,NA,NA,High-risk,Deceased,18394,18384,Inactive,Badagry,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Garcia,Meranda,Female,186,19-6,community-member,44,406-549-8073,Yes,Lagos,Ifako-Ijaye,NA,NA,Low-risk,Ill,18412,18402,Inactive,NA,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,al-Tariq,Christopher,Male,187,19-7,co-worker,0,(656)228-7792,No,Lagos,Mushin,NA,NA,Low-risk,Healthy,NA,18433,Inactive,NA,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Lucero,Andrew,Male,188,19-8,patient,19,(018)907-2595x68101,No,Lagos,Ojo,NA,NA,High-risk,Ill,18392,18382,Inactive,NA,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Song,Faran,Male,189,19-9,patient,77,471.896.9898,No,Lagos,Badagry,NA,NA,Low-risk,Deceased,18412,18402,Inactive,Shomolu,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+19,Lorrie Schuster,Confirmed,2020-05-06,Castro-Morales,Courtney,Female,190,19-10,patient,97,733-659-8122,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,Low-risk,Deceased,18393,18383,Inactive,Eti-Osa,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Mcclain,Collin,Male,191,20-1,family member,77,633-340-6701x81968,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,High-risk,Deceased,18610,18600,Inactive,Ikeja,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Davis,Derek,Male,192,20-2,co-worker,81,(110)665-4661,Yes,Lagos,Ajeromi-Ifelodun,NA,NA,High-risk,Deceased,18648,18638,Inactive,Apapa,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,el-Salah,Alexandria,Female,193,20-3,community-member,9,(769)207-4510x8386,No,Lagos,Epe,NA,NA,High-risk,Ill,18612,18602,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,el-Mahdavi,Venessa,Female,194,20-4,community-member,76,09156133337,No,Lagos,Lagos Mainland,NA,NA,High-risk,Healthy,NA,18646,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,el-Halim,Molli,Female,195,20-5,co-worker,20,403.448.0574,Yes,Lagos,Surulere,NA,NA,Low-risk,Ill,18617,18607,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Pacheco,Reuben,Male,196,20-6,community-member,26,295-550-0964,Yes,Lagos,Alimosho,NA,NA,Low-risk,Healthy,NA,18652,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Almanza Meza,Anthony,Male,197,20-7,patient,50,889.492.3747,Yes,Lagos,Kosofe,NA,NA,Low-risk,Ill,18626,18616,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Reiners,Dimitri,Male,198,20-8,family member,39,(237)013-0446x25267,No,Lagos,Ikorodu,NA,NA,Low-risk,Healthy,NA,18641,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Wickwire,Jasmin,Female,199,20-9,family member,27,(012)002-0770x1428,Yes,Lagos,Lagos Island,NA,NA,Low-risk,Healthy,NA,18651,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+20,Arden Mraz-Reynolds,Confirmed,2020-12-12,Lummis,Catarina,Female,200,20-10,co-worker,83,1-063-637-0775x83561,No,Lagos,Badagry,NA,NA,Low-risk,Healthy,NA,18636,Inactive,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0

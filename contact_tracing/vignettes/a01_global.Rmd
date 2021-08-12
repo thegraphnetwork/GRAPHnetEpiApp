@@ -1,0 +1,480 @@
+---
+title: "01: global.R"
+output:
+ rmarkdown::html_document:
+   toc: yes
+   toc_depth: 2
+   toc_float: yes
+params:
+ building_docs: true
+---
+
+```{r include=FALSE}
+## for knitting into documentation file
+
+if(exists("params") && !is.null(params$building_docs) && params$building_docs == TRUE ){
+  knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+}
+```
+
+The global.R file is run once before your app starts. 
+Any R objects created here become available to the app.R file, 
+the ui.R and the server.R files. 
+# Main parameters
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~  Main parameters ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PARAMS <- list()
+```
+
+The application has been built to work with two main data sources: 
+contact tracing data from KoboCollect-exported csv files,
+and contact tracing data from a Go.Data instance (by direct API connection)
+Here, at the beginning of the global.R file, 
+we set the PARAMS$country_code variable to the country being worked on. 
+This ensures that the correct data import elements are loaded in the app,
+that is, either the elements for KoboCollect csv import and processing, 
+or the elements for connecting to, and downloading from the Go.Data instance.
+
+```{r }
+## Uncomment the below to change country app version
+#PARAMS$country_code <- "CIV" 
+#PARAMS$country_code <- "COG"
+#PARAMS$country_code <- "UGA"
+PARAMS$country_code <- "SAMPLE"
+```
+
+When `testing_mode` is set to true, the app loads with only a small subset of the data. 
+This hastens loading speed and saves your time.
+
+```{r }
+PARAMS$testing_mode <- FALSE
+```
+
+When `remove_help_tab` is set to false, RStudio loads the PDF from the help tab
+as a separate window. Somewhat annoying
+
+```{r }
+PARAMS$remove_help_tab <- TRUE
+```
+
+For the Go.Data-sourced sample data, information on administrative levels is mostly missing.
+But this makes for an uninteresting dashboard. 
+Turn on this parameter to add in sample administrative levels
+
+```{r }
+PARAMS$fake_data <- TRUE
+```
+
+# Packages 
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~  Packages ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+I would normally load packages with p_load
+but I had some trouble with this when deploying to shiny 
+
+```{r message=FALSE, warning=FALSE, fig.width=7}
+
+library(devtools)
+if (!webshot::is_phantomjs_installed()) webshot::install_phantomjs()
+library(webshot)  ##  for screenshots of htmlwidgets when outputting
+library(here) 
+library(paletteer) ## for palettes
+# remotes::install_github("jbkunst/highcharter")
+library(highcharter)  ## most charts 
+library(plotly) ## for the snake plot. highcharter renders this plot too slowly
+library(shiny)
+library(shinyjs)
+library(shinyWidgets)
+library(shinydashboard)
+library(shinydashboardPlus) ## extends shinydashboard
+library(shinycssloaders) ## spinners for when app elements are loading
+library(fresh) ## easy theme changes
+library(reactable) ## HTML tables
+library(htmlwidgets) ## for prependContent function
+library(reactablefmtr) ## additional elements for reactable tables
+library(magrittr) ## I sometimes use the %<>% operator from here
+library(lubridate) ## date wrangling
+library(inspectdf) ## the inspect_cat function is used on first page of app
+library(visdat) ##  vizdat function used on first page to visualize dataframe
+library(stringi) ## some additional string manipulations not provided by stringr 
+library(anytime) ## for the `anydate` function which does intelligent date parsing
+library(glue) ## alternative to `paste`
+library(janitor) ## some cleaning utilities
+library(scales) ## for date and time scales
+library(gt) ## for easily customizable HTML table
+library(gtools) ## for the `mixedsort` function
+library(rvest) ## for the html_text2 function
+library(pander) ## for some tables?
+library(rio) ## easy importing
+library(flextable) ## called by huxtable in some functions
+library(huxtable) ## tables that output to docx and powerpoint
+library(rmarkdown) ## for knitting the report
+# devtools::install_github("davidgohel/officedown")
+library(officedown) ## for PPTX docs etc.
+# devtools::install_github("rfortherestofus/pagedreport", ref = "main")
+library(pagedreport) ## for PDF reports 
+library(promises) ## not sure
+library(clock) ## not sure
+library(charlatan) ## for creating fake data
+library(httr) ## for pulling from godata API
+library(jsonlite) ## convert json files to data frames
+# devtools::install_github("amirmasoudabdol/preferably")
+library(preferably) ## theme for documentation site
+library(tidyverse) ## tidyverse called last to avoid masking
+```
+
+# Misc options
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~  Misc options ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+A few miscellaneous settings
+
+```{r }
+options(scipen = 999) # turn off scientific notation
+set.seed(1) # fix seed
+options(tibble.print_max = 35, tibble.print_min = 35) # personal preference
+```
+
+# Misc functions
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~ Misc functions ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+Random functions used throughout the application
+
+```{r }
+source(here("helper_scripts/misc_functions.R"), local = T)
+```
+
+# Set colors and themes
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~ Set colors and themes ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+Save some hex codes as named colors for use in app
+
+```{r }
+space_cadet <- "#1C2541"
+white <- "#FFFFFF"
+alice_blue <- "#D9F0FE"
+light_gray <- "#ebebeb"
+cinnabar <- "#E64B35"
+coral <- "#ff7a4a"
+peach <- "#FCDC9C"
+bright_yellow_crayola <- "#FFB238"
+spinner_color <- burnt_sienna <- "#EE6C4D"
+```
+
+Here we set the params for the `fresh` theme. 
+The `fresh` package permits easy customization of shinydashboard colors.
+
+```{r }
+my_fresh_theme <-
+  fresh::create_theme(
+    fresh::adminlte_color(
+      light_blue = white
+    ),
+    fresh::adminlte_sidebar(
+      dark_bg = space_cadet,
+      dark_hover_bg = cinnabar,
+      dark_color = alice_blue
+    ),
+    fresh::adminlte_global(
+      content_bg = white,
+      box_bg = white,
+      info_box_bg = light_gray
+    )
+  )
+```
+
+Set a color legend for each country/ app version.
+This feeds the colors on active contacts plots (app tab 2)
+
+```{r }
+if (PARAMS$country_code %in% c("COG", "CIV", "SAMPLE") ){
+  
+legend_df <-
+  tribble(
+    ~breaks, ~colors,
+    "Manquant", col2hex("black"),
+    "Poursuite du suivi", col2hex("lightseagreen"),
+    "Symptomatique, resultats attendus", col2hex("lightpink2"),
+    "Devenu cas confirme", col2hex("orangered"),
+    "Sorti sain", col2hex("darkolivegreen4"),
+    "Deplacé", col2hex("wheat3"),
+    "Not generated", col2hex("wheat4"),
+    "Fin du suivi", col2hex("dodgerblue3"),
+    "Suivi futur", col2hex("goldenrod"),
+    "Future follow-up", col2hex("goldenrod"),
+    "Decede", col2hex("purple3")
+  ) %>%
+  arrange(breaks) %>%
+  mutate(breaks = fct_inorder(breaks)) %>%
+  mutate(legend_index = row_number())
+
+} else if (PARAMS$country_code == "UGA"){
+legend_df <-
+  tribble(
+    ~breaks, ~colors,
+    "Missed", col2hex("gray50"),
+    "Missing", col2hex("black"),
+    "Seen, Ok", col2hex("lightseagreen"),
+    "Seen, Not Ok", col2hex("orangered"),
+    "Not attempted", col2hex("wheat3"),
+    "Not performed", col2hex("blueviolet"),
+    "Not generated", col2hex("purple3"),
+    "End of follow-up", col2hex("dodgerblue3"),
+    "Future follow-up", col2hex("goldenrod")
+  ) %>%
+  arrange(breaks) %>%
+  mutate(breaks = fct_inorder(breaks)) %>%
+  mutate(legend_index = row_number())
+}
+```
+
+# Misc objects
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~ Misc objects ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+cols_to_exclude_from_filters <- 
+  ## filters not created for rows that change across each contact
+  c("follow_up_date", "follow_up_day", 
+    "follow_up_status", "follow_up_status_simple",
+    ## no filters for synthetic columns either
+    "row_id","row_number","sort_number", 
+    ## and no filters on names. 
+    ## Franck mentioned not printing names to app for privacy
+    "first_name", "last_name")
+```
+
+# Highcharter themes
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~ Highcharter themes ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ~~~~ Palette ----
+highcharter_palette_initial <- c(
+  "#332859",
+  (
+    paletteer_d("ggsci::nrc_npg") %>%
+      as.character() %>%
+      str_sub(1, 7)
+  )
+)
+## for graphs with many categories
+ramped_colors <- colorRampPalette(highcharter_palette_initial)(15)
+
+## remove first and last colors from ramp, because these are the initial colors
+new_colors <-
+  ramped_colors[-c(1, length(ramped_colors))] %>%
+  rev()
+## combine to final palette
+highcharter_palette <- c(highcharter_palette_initial, new_colors)
+```
+
+## Menu items for highcharter
+
+```{r }
+# ~~~~ Menu items for highcharter ----
+
+myMenuItems <-
+  c(
+    "printChart",
+    "separator",
+    "downloadPNG",
+    "downloadJPEG",
+    "downloadPDF",
+    "downloadSVG",
+    "separator",
+    "viewData",
+    "downloadCSV",
+    "downloadXLS"
+  )
+```
+
+## Combine into final theme
+
+```{r }
+# ~~~~ Combine into final theme ----
+newtheme <-
+  hc_theme_merge(
+    getOption("highcharter.theme"),
+    hc_theme(
+      chart = list(
+        backgroundColor = "transparent",
+        zoomType = "xy",
+        panning = list(enabled = TRUE, type = "xy"),
+        panKey = "shift"
+      ),
+      colors = highcharter_palette,
+      labels = list(style = list(lineHeight = "100px")),
+      plotOptions = list(series = list(label = list(
+        style = list(lineHeight = "100px")
+      ))),
+      exporting = list(buttons = list(contextButton = list(menuItems = myMenuItems)))
+    )
+  )
+
+options(highcharter.theme = newtheme)
+```
+
+## Theme for sparklines in value boxes
+
+```{r }
+# ~~~ Theme for sparklines in value boxes ----
+```
+
+This theme is very minimalist. Equivalent to theme_void in ggplot. 
+Still hoverable though.
+
+```{r }
+hc_theme_sparkline_vb <- function(...) {
+  theme <- list(
+    chart = list(
+      backgroundColor = NULL,
+      margins = c(0, 0, 0, 0),
+      spacingTop = 0,
+      spacingRight = 0,
+      spacingBottom = 0,
+      spacingLeft = 0,
+      plotBorderWidth = 0,
+      borderWidth = 0,
+      style = list(overflow = "visible")
+    ),
+    xAxis = list(
+      visible = FALSE,
+      endOnTick = FALSE,
+      startOnTick = FALSE
+    ),
+    yAxis = list(
+      visible = FALSE,
+      endOnTick = FALSE,
+      startOnTick = FALSE
+    ),
+    tooltip = list(
+      outside = FALSE,
+      shadow = FALSE,
+      borderColor = "transparent",
+      botderWidth = 0,
+      backgroundColor = "transparent",
+      style = list(textOutline = "5px white")
+    ),
+    plotOptions = list(
+      series = list(
+        marker = list(enabled = FALSE),
+        lineWidth = 2,
+        shadow = FALSE,
+        fillOpacity = 0.25,
+        color = "#FFFFFFBF",
+        fillColor = list(
+          linearGradient = list(x1 = 0, y1 = 1, x2 = 0, y2 = 0),
+          stops = list(
+            list(0.00, "#FFFFFF00"),
+            list(0.50, "#FFFFFF7F"),
+            list(1.00, "#FFFFFFFF")
+          )
+        )
+      )
+    ),
+    credits = list(
+      enabled = FALSE,
+      text = ""
+    )
+  )
+
+  theme <- structure(theme, class = "hc_theme")
+
+  if (length(list(...)) > 0) {
+    theme <- hc_theme_merge(
+      theme,
+      hc_theme(...)
+    )
+  }
+
+  theme
+}
+```
+
+## Plotly theme
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~  Plotly theme ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+font <- list(
+  family = "Avenir",
+  size = 15,
+  color = "white"
+)
+
+label <- list(
+  bordercolor = "transparent",
+  font = font
+)
+```
+
+## ggplot2 theme
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~ ggplot2 theme ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+my_theme <- theme_classic() +
+  theme(
+    plot.title = element_text(face = "bold"),
+    # plot.background = element_rect(fill = "gray93"),
+    panel.grid.major = element_line(color = "gray95", size = 0.2),
+    strip.background = element_blank(),
+    # element textbox is from ggtext
+    strip.text = ggtext::element_textbox(
+      size = 11, face = "bold",
+      color = "white", fill = "steelblue3", halign = 0.5,
+      r = unit(5, "pt"), width = unit(1, "npc"),
+      padding = margin(2, 0, 1, 0), margin = margin(3, 3, 3, 3)
+    )
+  )
+
+theme_set(my_theme)
+```
+
+## Reactable theme
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~  Reactable theme ----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+options(reactable.theme = reactableTheme(
+  stripedColor = "#f0f1fc70",
+  backgroundColor = "#FFFFFF00",
+  highlightColor = "#DADEFB",
+  cellPadding = "4px 4px"
+))
+```
+

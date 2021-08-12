@@ -1,0 +1,34 @@
+---
+title: "06: Video walkthroughs"
+output:
+ rmarkdown::html_document:
+   toc: yes
+   toc_depth: 2
+   toc_float: yes
+   number_sections: true
+   code_folding: hide
+---
+
+# Walkthrough 1: How to run the app manually
+
+This video explains how to run the app in a non-shiny context, for when you are writing functions.
+
+<iframe src="https://player.vimeo.com/video/551994886" width="640" height="564" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+
+# Walkthrough 2: Adding an additional chart to the app
+
+This video uses an example to demonstrate how to add custom visualizations to the application.
+
+<iframe src="https://player.vimeo.com/video/551649922" width="640" height="564" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+
+# Walkthrough 3: How the filters work (UI side)
+
+This video explains how the dynamic filters are generated. This is arguably one of the tricker parts of the application.
+
+<iframe src="https://player.vimeo.com/video/551651683" width="640" height="564" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+
+# Walkthrough 4: How the filters work (server side)
+
+This video outlines how the application responds to the dynamic filters.
+
+<iframe src="https://player.vimeo.com/video/551652093" width="640" height="564" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>

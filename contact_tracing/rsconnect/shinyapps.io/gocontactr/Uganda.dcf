@@ -1,0 +1,13 @@
+name: Uganda
+title: Uganda
+username:
+account: gocontactr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4153097
+bundleId: 4641525
+url: https://gocontactr.shinyapps.io/Uganda/
+when: 1622023596.55947
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile|DESCRIPTION|private_data/Base contacts_GUINEE_2021_03_14_GLOBAL.xlsx|private_data/Niger_Contacts_COVID-19_review_27_01_2021.xlsx|docs|vignettes

@@ -1,0 +1,13 @@
+name: CotedIvoire
+title: CotedIvoire
+username:
+account: gocontactr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4019542
+bundleId: 4641465
+url: https://gocontactr.shinyapps.io/CotedIvoire/
+when: 1622022626.65808
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile|DESCRIPTION|private_data/Base contacts_GUINEE_2021_03_14_GLOBAL.xlsx|private_data/Niger_Contacts_COVID-19_review_27_01_2021.xlsx|docs|vignettes

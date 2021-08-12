@@ -1,0 +1,423 @@
+---
+title: "03.4: server_functions_for_UGA.R"
+output:
+ rmarkdown::html_document:
+   toc: yes
+   toc_depth: 2
+   toc_float: yes
+params:
+ building_docs: true
+---
+
+```{r include=FALSE}
+## for knitting into documentation file
+
+if(exists("params") && !is.null(params$building_docs) && params$building_docs == TRUE ){
+  knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+}
+```
+
+## access_token_reactive
+
+```{r }
+# ~~~~ access_token_reactive ---------------------------
+```
+
+Specific to Go.Data version Returns access token
+
+```{r }
+access_token_reactive <- reactive({
+  
+  req(input$data_to_use)
+  req(input$go_data_url)
+  req(input$go_data_username)
+  req(input$go_data_password)
+  req(input$go_data_outbreak_id)
+  req(input$go_data_request_access_button)
+  
+  url <- input$go_data_url
+  username <- input$go_data_username
+  password <- input$go_data_password
+  outbreak_id <- input$go_data_outbreak_id
+  
+  access_token <- 
+    paste0(url,"api/oauth/token?access_token=123") %>% 
+    POST(body = list(username = username,
+                     password = password),
+         encode = "json") %>% 
+    content(as = "text") %>%
+    fromJSON(flatten = TRUE) %>%
+    .$access_token
+  
+  ## return
+  access_token
+  
+})
+```
+
+# UI Outputs
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~  UI Outputs --------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+## country_specific_UI_for_loading_data
+
+```{r }
+# ~~~~ country_specific_UI_for_loading_data ---------------------------
+
+#` Here we call the function that loads all the country-specific
+```
+
+UI elements required in the "Choose dataset to analyse" box. 
+
+```{r }
+country_specific_UI_for_loading_data <- function(input, output){
+```
+
+## data_to_use_picker
+
+```{r }
+# ~~~~ data_to_use_picker ---------------------------
+```
+
+Options for data source
+
+```{r }
+output$data_to_use_picker <- renderUI({
+  radioButtons(inputId = "data_to_use", 
+               label = "Input Data", 
+               choices = c("Connect to Go.Data"))
+})
+```
+
+## data_to_use_input
+
+```{r }
+# ~~~~ data_to_use_input ---------------------------
+```
+
+Loads in the data.
+
+```{r }
+output$data_to_use_input <- 
+  renderUI({
+    tagList(textInput("go_data_url",
+                      "URL for your instance:",
+                      value = "https://godata-r13.who.int/"), 
+            textInput("go_data_username", 
+                      "Username:",
+                      value = "godata_api@who.int"),
+            passwordInput("go_data_password", 
+                          "Password:"), 
+            textInput("go_data_outbreak_id", 
+                      "Outbreak ID:", 
+                      value = "3b5554d7-2c19-41d0-b9af-475ad25a382b"),
+            actionBttn("go_data_request_access_button",
+                       "Request access", 
+                       style = "jelly", 
+                       color = "primary"
+            ), 
+            uiOutput("access_permitted_or_not"))
+  })
+```
+
+## access_permitted_or_not
+
+```{r }
+# ~~~~ access_permitted_or_not ---------------------------
+```
+
+Specific to Go.Data version.  
+If access_token is not successfully retrieded, returns error. 
+
+```{r }
+output$access_permitted_or_not <- renderUI({
+  
+  req(input$data_to_use)
+  req(input$go_data_url)
+  req(input$go_data_username)
+  req(input$go_data_password)
+  req(input$go_data_outbreak_id)
+  req(input$go_data_request_access_button)
+  
+  if(is.character(access_token_reactive())){
+    c("Successful!")
+  } else {
+    c("Access not permitted. Try again or contact developers.")
+  }
+  
+  
+})
+```
+
+## analyze_action_bttn
+
+```{r }
+# ~~~~ analyze_action_bttn ---------------------------
+```
+
+Renders when requisites elements have been loaded. 
+
+```{r }
+output$analyze_action_bttn <- renderUI({
+  
+  req(input$data_to_use)
+  req(input$go_data_url)
+  req(input$go_data_username)
+  req(input$go_data_password)
+  req(input$go_data_outbreak_id)
+  req(input$go_data_request_access_button)
+  
+  tagList(HTML("<p style='font-size:4px'>  <br><br>  </p>"),
+          
+          actionBttn(inputId = "analyze_action_bttn", label = "Analyze", 
+                     style = "jelly", color = "primary")
+  )
+})
+```
+
+## country_specific_data_to_use_section
+
+```{r }
+# ~~~~ country_specific_data_to_use_section ---------------------------
+```
+
+Combine different UI elements into single output
+
+```{r }
+output$country_specific_data_to_use_section <- 
+  renderUI({
+    tagList(column(width = 3, 
+                   uiOutput("data_to_use_picker")),
+            column(width = 6, 
+                   uiOutput("data_to_use_input")), 
+            column(width = 3,
+                   uiOutput("analyze_action_bttn"))
+    )
+  })
+
+}
+```
+
+# Read file functions
+
+```{r }
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~ Read file functions --------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+## read_file_raw
+
+```{r }
+# ~~~~ read_file_raw ---------------------------
+```
+
+The read_file_raw function does either of two things.
+- For countries using Go.Data, it takes in the input credentials, logs into a Go.Data session, and returns a list with the requisite dataframes.
+- For countries using KoboCollect, it takes in the two uploaded csv files, (contact list and follow-up list), and returns them as a list of a dataframes.
+
+```{r }
+read_file_raw <- function(){
+  
+    
+    url <- input$go_data_url
+    username <- input$go_data_username
+    password <- input$go_data_password
+    outbreak_id <- input$go_data_outbreak_id
+    # 
+    # ## here for testing
+    # url <- "https://godata-r13.who.int/"
+    # username <- "godata_api@who.int"
+    # password <- "this_is_not_the_password"
+    # outbreak_id <- "3b5554d7-2c19-41d0-b9af-475ad25a382b"
+
+
+    # ~~~~ get access token for API calls ---
+
+    access_token <- access_token_reactive()
+    
+    # ~~~~ import relevant api collections---    
+    
+    # import contact follow-ups
+    follow_up_list <- 
+      GET(paste0(url,"api/outbreaks/",outbreak_id,"/follow-ups"),
+                add_headers(Authorization = paste("Bearer", access_token, sep = " "))) %>% 
+      content(as="text") %>% 
+      fromJSON(flatten = TRUE) %>% 
+      as_tibble()
+    
+    
+    # import oubtreak Contacts 
+    ## may not be needed. redundant with follow_up_list
+    contacts_list <- 
+      GET(paste0(url,"api/outbreaks/",outbreak_id,"/contacts"), 
+          add_headers(Authorization = paste("Bearer", access_token, sep = " "))) %>% 
+      content(as = "text") %>% 
+      fromJSON(flatten = TRUE) %>%  
+      as_tibble()
+    
+  
+  
+  tracing_data_raw  <- list(follow_up_list = follow_up_list, 
+                            contacts_list = contacts_list)
+  
+  return(tracing_data_raw)
+}
+```
+
+## read_file_transformed
+
+```{r }
+# ~~~~ read_file_transformed ---------------------------
+```
+
+The 'read_file_transformed' function takes in data from read_file_raw_reactive, 
+and 'transforms' it into a single, 'long' dataframe,
+with one row per contact-follow-up-day
+
+```{r }
+read_file_transformed <- function(tracing_data_raw){
+
+  
+  needed_cols <- c(admin_1 = NA_character_, admin_2 = NA_character_)
+  
+  contacts_df_long_transformed <-
+    tracing_data_raw %>%
+    .$contacts_list %>% 
+    ## for speeding up testing
+    {if (PARAMS$testing_mode) slice_sample(., n = 10) else .} %>% 
+    mutate(counter = 1) %>%
+    # row numbers to match Excel spreadsheet
+    mutate(row_id = row_number() + 1) %>%
+    left_join(tracing_data_raw$follow_up_list, 
+              by = c("id" = "contact.id")) %>% 
+    ## drop inds with missing ids. Will diagnose properly later
+    filter(across(.cols =  any_of(c("id.y", "id") ), 
+                  .fns = ~ !is.na(.x)
+                  )) %>% 
+    ## keep important columns
+    select(any_of(c("date",
+                    "statusId",
+                    "contact.type", 
+                    "id", 
+                    "visualId", 
+                    "contact.firstName",
+                    "contact.lastName",
+                    "contact.gender", 
+                    "contact.dateOfReporting", 
+                    "contact.dateOfLastContact", 
+                    "contact.occupation",
+                    "contact.age.years", 
+                    "contact.followUp.startDate", 
+                    "contact.followUp.endDate", 
+                    "address.city", 
+                    "row_id", 
+                    "counter"))) %>% 
+    # clean admin levels
+    mutate(across(any_of("address.city"),
+                  ~ .x %>%
+                    str_to_lower() %>%
+                    str_to_title() %>%
+                    replace_na("NA") %>%
+                    str_trim() %>% 
+                    str_replace_all("  ", " "))) %>% 
+    ## rename to match columns for which scripts were originally written
+    rename_with(~
+                  case_when(.x == "visualId" ~ "contact_id",
+                            .x == "contact.gender" ~ "sex",
+                            .x == 'contact.lastName' ~ "last_name",
+                            .x == 'contact.firstName' ~ 'first_name',
+                            .x == 'contact.age.years' ~ 'age',
+                            .x == 'address.city' ~ 'admin_1',
+                            .x == 'contact.type' ~ 'type_of_contact' ,
+                            .x == 'contact.dateOfLastContact' ~ 'date_of_last_contact',
+                            .x == 'contact.followUp.startDate' ~ 'follow_up_start_date',
+                            .x == 'contact.followUp.endDate' ~ 'follow_up_end_date',
+                            .x == 'date' ~ 'follow_up_date',
+                            .x == 'statusId' ~ 'follow_up_status',
+                            .x == 'contact.occupation' ~ 'occupation',
+                            TRUE ~ .x)) %>% 
+    ## force in cols that the analysis functions require
+    force_col_to_exist(c("admin_1", "admin_2", 
+                         "sex", "linked_case_id",
+                         "link_with_the_case")) %>% 
+    ## replace NA with "missing"
+    mutate(across(.cols = any_of(c("admin_1", "admin_2",
+                                   "linked_case_id",
+                                   "follow_up_status","follow_up_status_simple")), 
+                  .fns = ~ replace_na(.x, "Missing"))) %>% 
+    ## convert dates to date
+    mutate(across(matches("date"),
+                  ~ anytime::anydate(.x))) %>% 
+    ## complete followup
+    group_split(contact_id) %>%   ## for each group
+    map(.f = 
+          ~ .x %>% 
+          ## add sequence from day after last contact to 14 days after
+          complete(follow_up_date = seq.Date(follow_up_start_date[1], 
+                                             follow_up_end_date[1], 
+                                             by = '1 days'),
+                   fill = list(follow_up_status = "Not generated")) %>% 
+          ## remove NA followups. Artifact of completion
+          filter(!is.na(follow_up_date))  %>% 
+          ## remove old out-of-range follow-ups. Assume mistaken
+          filter(follow_up_date <= (date_of_last_contact + 14) & 
+                   follow_up_date > date_of_last_contact )) %>% 
+    ## recombine
+    bind_rows() %>% 
+    ## follow up day from follow up date
+    mutate(follow_up_day = as.numeric(follow_up_date - date_of_last_contact)) %>% 
+    ## cascade down constant values 
+    group_by(contact_id) %>% 
+    mutate(across(.cols = 
+                    !matches("follow_up_date|follow_up_status|follow_up_day"),
+                  .fns = ~ first(na.omit(.x)))) %>% 
+    ungroup() %>% 
+    ## for sample df only. need cities and towns
+    { if(PARAMS$fake_data == TRUE){
+      group_split(., contact_id) %>%
+        map(.f = 
+              ~ .x %>%  
+              mutate(admin_1 = sample( paste0("CITY_", LETTERS[1:10]), size = 1)) %>% 
+              mutate(admin_2 = sample( paste0("TOWN_", LETTERS[1:10]), size = 1)) %>% 
+              mutate(admin_2 = paste(admin_1, admin_2))) %>% 
+        bind_rows()
+    }  else {.} 
+    } %>% 
+    ## remove prepended text from status
+    mutate(follow_up_status = sub('.*TYPE_' , '', follow_up_status)) %>%
+    mutate(follow_up_status = str_to_sentence(follow_up_status)) %>% 
+    ## other modifications for status
+    mutate(follow_up_status = recode(follow_up_status, 
+                                     "Seen_ok" = "Seen, Ok",
+                                     "Seen_not_ok" = "Seen, Not Ok",
+                                     "Not_attempted" = "Not attempted", 
+                                     "Not_generated" = "Not generated", 
+                                     "Not_performed" = "Not performed")) %>% 
+    ## shorten
+    mutate(follow_up_status_simple = recode(follow_up_status, 
+                                            "Seen, Ok" = "Seen",
+                                            "Seen, Not Ok" = "Seen", 
+                                            "Not attempted" = "Not seen", 
+                                            "Missed" = "Not seen", 
+                                            "Missing" = "Not seen",
+                                            "Not performed" = "Not seen",
+                                            ## just for easy reference
+                                            "Not generated" = "Not generated")) %>% 
+    ## row number for easy tracking
+    mutate(row_number = row_number()) %>% 
+    ## remove duplicates
+    group_by(contact_id, follow_up_date) %>% 
+    slice_max(order_by = follow_up_date, n = 1) %>% 
+    ungroup()
+      
+  
+  return(contacts_df_long_transformed)
+  
+}
+```
+

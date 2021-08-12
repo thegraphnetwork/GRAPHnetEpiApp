@@ -1,0 +1,12 @@
+name: Niger
+title: Niger
+username:
+account: covcontactr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3750363
+bundleId: 4314141
+url: https://covcontactr.shinyapps.io/Niger/
+when: 1615168089.72145
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,0 +1,10 @@
+ibis
+python-dotenv
+inquirer
+pandas
+geopandas
+sqlalchemy
+geoalchemy2
+psycopg2
+tqdm
+pgcli
